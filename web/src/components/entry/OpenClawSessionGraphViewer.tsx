@@ -495,7 +495,7 @@ export function OpenClawSessionGraphViewer({entry, provider}: ViewerProps) {
                 onOpenLinked={setSelectedNode}
               />
               <ToolPairPanel
-                title={i18next.t("payment:Result")}
+                title={i18next.t("general:Result")}
                 node={resultNode}
                 currentNode={node}
                 onOpenLinked={setSelectedNode}

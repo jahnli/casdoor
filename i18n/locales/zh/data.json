@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "该应用禁止采用人脸登录",
     "The login method: login with magic link is not enabled for the application": "该应用禁止使用魔法链接的登录方式",
     "The login method: login with password is not enabled for the application": "该应用禁止采用密码登录方式",
-    "The order: %s does not exist": "订单: %s 不存在",
     "The organization: %s does not exist": "组织: %s 不存在",
     "The organization: %s has disabled users to signin": "组织: %s 禁止用户登录",
-    "The plan: %s does not exist": "计划: %s不存在",
-    "The pricing: %s does not exist": "定价: %s不存在",
-    "The pricing: %s does not have plan: %s": "定价: %s没有计划: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "定价：%s 仅限受邀用户使用",
     "The provider: %s does not exist": "提供商: %s 不存在",
     "The provider: %s is not enabled for the application": "该应用的提供商: %s未被启用",
     "Unauthorized operation": "未授权的操作",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "用户的标签: %s不在该应用的标签列表中",
     "UserCode Expired": "用户代码已过期",
     "UserCode Invalid": "用户代码无效",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "付费用户 %s 没有激活或待处理的订阅，且应用 %s 没有默认定价",
     "the application for user %s is not found": "未找到用户 %s 的应用程序",
     "the organization: %s is not found": "组织: %s 不存在"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "应用不能为空",
+    "Error": "错误",
     "Failed to import groups": "导入群组失败",
     "Failed to import users": "导入用户失败",
     "Granted scopes cannot be empty": "授权范围不能为空",
-    "Insufficient balance: new balance %v would be below credit limit %v": "余额不足：新余额 %v 将低于信用限额 %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "余额不足：新组织余额 %v 将低于信用限额 %v",
     "Invalid application": "无效的应用",
     "Missing parameter": "缺少参数",
     "Multiple captcha providers are not allowed in the same application: %s": "同一应用中不允许配置多个验证码提供商：%s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "用户: %s (第 %d 行) 与第 %d 行重复",
     "The user: %s is not found": "用户: %s 未找到",
     "The users already exist: %s": "以下用户已存在: %s",
-    "User is required for User category transaction": "用户类别交易需要用户",
     "User not found": "未找到用户",
     "Wrong userId": "错误的 userId",
     "don't support captchaProvider: ": "不支持验证码提供商: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "权限: \"%s\" 不存在"
   },
-  "product": {
-    "Product list cannot be empty": "产品列表不能为空"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "初始化身份验证提供商失败",
     "Invalid application id": "无效的应用ID",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "objectKey: %s被禁止",
     "The provider type: %s is not supported": "不支持的提供商类型: %s"
-  },
-  "subscription": {
-    "Error": "错误"
   },
   "ticket": {
     "Ticket not found": "工单未找到"

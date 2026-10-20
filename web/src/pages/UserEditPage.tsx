@@ -23,7 +23,6 @@ import {EditableTable} from "@/components/crud/EditableTable";
 import {MapTable} from "@/components/crud/MapTable";
 import {FormRow, formGridClass} from "@/components/crud/FormRow";
 import {AffiliationAddressSelect, AffiliationField, useAffiliation} from "@/components/user/AffiliationSelect";
-import {CartTable} from "@/components/user/CartTable";
 import {CasdoorAppQrCode, CasdoorAppUrl, CasdoorAuthenticatorLink} from "@/components/user/CasdoorAppConnector";
 import {ConsentTable} from "@/components/user/ConsentTable";
 import {FaceIdTable} from "@/components/user/FaceIdTable";
@@ -36,7 +35,6 @@ import {MfaItemsTable} from "@/components/auth/mfa/MfaItemsTable";
 import {isAccountItemVisible} from "@/lib/account-items";
 import {PasswordModal} from "@/components/user/PasswordModal";
 import {ResetModal} from "@/components/user/ResetModal";
-import {TransactionTable} from "@/components/user/TransactionTable";
 import {WebauthnCredentialTable} from "@/components/user/WebauthnCredentialTable";
 import {useAccount} from "@/hooks/use-account";
 import {useEditRecord} from "@/hooks/use-edit-record";
@@ -45,7 +43,6 @@ import {getModeTitleKey, submitEdit} from "@/lib/crud";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
 import * as MfaBackend from "@/backend/MfaBackend";
-import * as TransactionBackend from "@/backend/TransactionBackend";
 import * as UserBackend from "@/backend/UserBackend";
 import * as Setting from "@/lib/setting";
 
@@ -87,7 +84,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   const [removingMfa, setRemovingMfa] = React.useState(false);
   // the signup application drives the 3rd-party login rows and the reset-code flow
   const [application, setApplication] = React.useState<any>(null);
-  const [transactions, setTransactions] = React.useState<any[]>([]);
 
   const organizations = useOrganizationOptions();
   const applications = useApplicationOptions(organizationName);
@@ -113,18 +109,13 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   }, [organizationName]);
 
   React.useEffect(() => {
-    // in "add" mode the user is not persisted yet, so both requests would fail
+    // in "add" mode the user is not persisted yet
     if (mode === "add" || !organizationName || !userName) {
       return;
     }
     ApplicationBackend.getUserApplication(organizationName, userName).then((res: any) => {
       if (res.status === "ok") {
         setApplication(res.data ?? null);
-      }
-    });
-    TransactionBackend.getTransactions(organizationName, "", "", "user", userName).then((res: any) => {
-      if (res.status === "ok") {
-        setTransactions(res.data ?? []);
       }
     });
   }, [mode, organizationName, userName]);
@@ -349,7 +340,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           onChange={(v) => updateField("type", v)}
           options={(userOrganization.userTypes?.length > 0
             ? userOrganization.userTypes
-            : ["normal-user", "paid-user"]
+            : ["normal-user"]
           ).map((item: string) => ({value: item, label: item}))}
         />
       </AccountItemRow>
@@ -660,16 +651,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         />
       </AccountItemRow>
     ),
-    "Balance credit": (
-      <AccountItemRow name="Balance credit" labelKey="organization:Balance credit">
-        <Input
-          type="number"
-          step="0.01"
-          value={user.balanceCredit ?? 0}
-          onChange={(e) => updateField("balanceCredit", Number(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
     "Properties": (
       <AccountItemRow name="Properties" labelKey="user:Properties" block>
         <MapTable
@@ -680,39 +661,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           keyWidth={240}
         />
       </AccountItemRow>
-    ),
-    "Balance": (
-      <AccountItemRow name="Balance" labelKey="user:Balance">
-        <Input
-          type="number"
-          step="0.01"
-          value={user.balance ?? 0}
-          onChange={(e) => updateField("balance", Number(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
-    "Balance currency": (
-      <AccountItemRow name="Balance currency" labelKey="organization:Balance currency">
-        <SearchableSelect
-          value={user.balanceCurrency || "USD"}
-          onChange={(v) => updateField("balanceCurrency", v)}
-          options={(Setting.CurrencyOptions as any[]).map((item) => ({
-            value: item.id,
-            label: Setting.getCurrencyWithFlag(item.id),
-          }))}
-        />
-      </AccountItemRow>
-    ),
-    "Cart": (
-      <AccountItemRow name="Cart" labelKey="general:Cart" block>
-        <CartTable cart={user.cart ?? []} />
-      </AccountItemRow>
-    ),
-    "Transactions": (
-      <AccountItemRow name="Transactions" labelKey="general:Transactions" block>
-        <TransactionTable transactions={transactions} />
-      </AccountItemRow>
-
     ),
     "Password": (
       <AccountItemRow name="Password" labelKey="general:Password">

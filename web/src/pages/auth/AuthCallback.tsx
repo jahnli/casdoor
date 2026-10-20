@@ -21,7 +21,7 @@ import * as Setting from "@/lib/setting";
  * `routers/lightweight_auth_filter.go` answers `/callback?state=...` with a tiny
  * static page that posts the provider's code itself, so the browser does not have
  * to download the whole bundle first. When that page meets something it cannot
- * finish — an MFA challenge, a plan to pick — it stores what it already got and
+ * finish — an MFA challenge — it stores what it already got and
  * sends the browser here with `__casdoor_callback_react=1`.
  *
  * The authorization code is single-use, so this page must continue from that
@@ -291,12 +291,6 @@ export default function AuthCallback() {
           authParams,
           onSuccess: (mfaRes: any) => checkMfa(mfaRes, authParams, onDone),
         });
-      } else if (res.data === "SelectPlan") {
-        const pricing = res.data2;
-        Setting.goToLink(`/select-plan/${pricing.owner}/${pricing.name}?user=${body.username}`);
-      } else if (res.data === "BuyPlanResult") {
-        const sub = res.data2;
-        Setting.goToLink(`/buy-plan/${sub.owner}/${sub.pricing}/result?subscription=${sub.name}`);
       } else {
         onDone(res);
       }

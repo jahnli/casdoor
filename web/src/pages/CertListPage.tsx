@@ -19,7 +19,7 @@ export default function CertListPage() {
     dateColumn(),
     textColumn({dataIndex: "displayName", title: i18next.t("general:Display name"), searchable: true, width: 170}),
     textColumn({dataIndex: "scope", title: i18next.t("provider:Scope"), width: 110, filters: valueFilters(["JWT"])}),
-    textColumn({dataIndex: "type", title: i18next.t("general:Type"), width: 110, filters: valueFilters(["x509", "Payment"])}),
+    textColumn({dataIndex: "type", title: i18next.t("general:Type"), width: 110, filters: valueFilters(["x509"])}),
     textColumn({dataIndex: "cryptoAlgorithm", title: i18next.t("cert:Crypto algorithm"), width: 150, filters: valueFilters(["RS256"])}),
     textColumn({dataIndex: "bitSize", title: i18next.t("cert:Bit size"), width: 110, searchable: true}),
     textColumn({dataIndex: "expireInYears", title: i18next.t("cert:Expire in years"), width: 140, searchable: true}),

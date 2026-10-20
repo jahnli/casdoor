@@ -197,24 +197,7 @@ func isFastAutoSigninAllowed(ctx *context.Context, user *object.User, applicatio
 		return false, nil
 	}
 
-	if user.Type == "paid-user" && !user.IsGlobalAdmin() && !user.IsAdmin {
-		return hasActiveSubscription(user)
-	}
 	return true, nil
-}
-
-func hasActiveSubscription(user *object.User) (bool, error) {
-	subscriptions, err := object.GetSubscriptionsByUser(user.Owner, user.Name)
-	if err != nil {
-		return false, err
-	}
-
-	for _, subscription := range subscriptions {
-		if subscription.State == object.SubStateActive {
-			return true, nil
-		}
-	}
-	return false, nil
 }
 
 func isSessionExpired(ctx *context.Context) bool {

@@ -270,7 +270,7 @@
   }
 
   function shouldFallbackToReact(res) {
-    return res.data === "RequiredMfa" || res.data === "NextMfa" || res.data === "SelectPlan" || res.data === "BuyPlanResult" || res.data3;
+    return res.data === "RequiredMfa" || res.data === "NextMfa" || res.data3;
   }
 
   function getFromLink() {

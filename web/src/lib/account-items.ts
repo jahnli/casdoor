@@ -4,7 +4,7 @@
  * gating in `web/src/UserEditPage.js`.
  *
  * The backend enforces none of this — it is a per-organization UI policy — but the
- * antd frontend honours it, so an organization that hides "Balance" or marks "Name"
+ * antd frontend honours it, so an organization that hides "Birthday" or marks "Name"
  * `Immutable` has to behave the same here.
  */
 export interface AccountItem {

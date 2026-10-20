@@ -368,9 +368,6 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 		application.OrganizationObj.KerberosServiceName = "***"
 		application.OrganizationObj.InitScore = -1
 		application.OrganizationObj.EnableSoftDeletion = false
-		application.OrganizationObj.OrgBalance = -1
-		application.OrganizationObj.UserBalance = -1
-		application.OrganizationObj.BalanceCredit = -1
 
 		if !isOrgUser {
 			application.OrganizationObj.MfaItems = nil

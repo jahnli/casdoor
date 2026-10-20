@@ -129,12 +129,6 @@ export default function SamlCallback() {
           authParams: {clientId, responseType, redirectUri, state},
           onSuccess: (mfaRes: any) => checkMfa(mfaRes, onDone),
         });
-      } else if (res.data === "SelectPlan") {
-        const pricing = res.data2;
-        Setting.goToLink(`/select-plan/${pricing.owner}/${pricing.name}`);
-      } else if (res.data === "BuyPlanResult") {
-        const sub = res.data2;
-        Setting.goToLink(`/buy-plan/${sub.owner}/${sub.pricing}/result?subscription=${sub.name}`);
       } else {
         onDone(res);
       }

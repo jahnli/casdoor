@@ -60,7 +60,7 @@ const defaultSmsMapping: Record<string, string> = {
 
 const CATEGORIES = [
   "Audit", "Captcha", "Email", "Face ID", "ID Verification", "Log", "MFA", "Notification",
-  "OAuth", "Payment", "SAML", "Scan", "SMS", "Storage",
+  "OAuth", "SAML", "Scan", "SMS", "Storage",
 ].sort((a, b) => a.localeCompare(b));
 
 const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE"];
@@ -232,7 +232,7 @@ function getClientId2Label(provider: any): Label {
     return label(i18next.t("provider:From address"), i18next.t("provider:From address - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
     return label(i18next.t("provider:Scene"), i18next.t("provider:Scene - Tooltip"));
-  } else if (provider.type === "WeChat Pay" || provider.type === "CUCloud") {
+  } else if (provider.type === "CUCloud") {
     return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
   }
   return label(i18next.t("provider:Client ID 2"), i18next.t("provider:Client ID 2 - Tooltip"));
@@ -322,7 +322,7 @@ function hasCredentialRows(provider: any) {
       (provider.category === "Storage" && provider.type === "Local File System") ||
       (provider.category === "SMS" && provider.type === "Custom HTTP SMS") ||
       (provider.category === "Email" && provider.type === "Custom HTTP Email") ||
-      (provider.category === "Notification" && ["Google Chat", "Custom HTTP", "Balance"].includes(provider.type))) {
+      (provider.category === "Notification" && ["Google Chat", "Custom HTTP"].includes(provider.type))) {
     return false;
   }
   return true;
@@ -330,7 +330,7 @@ function hasCredentialRows(provider: any) {
 
 function hasCredential2Rows(provider: any) {
   return provider.category === "Email" ||
-    ["WeChat", "Apple", "Aliyun Captcha", "WeChat Pay", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
+    ["WeChat", "Apple", "Aliyun Captcha", "Twitter", "Reddit", "CUCloud"].includes(provider.type);
 }
 
 function parseFindings(provider: any, scanResult: any) {
@@ -692,8 +692,6 @@ export default function ProviderEditPage() {
       defaultType = "AWS S3";
     } else if (value === "SAML") {
       defaultType = "Keycloak";
-    } else if (value === "Payment") {
-      defaultType = "PayPal";
     } else if (value === "Captcha") {
       defaultType = "Default";
     } else if (value === "Notification") {
@@ -1542,26 +1540,6 @@ export default function ProviderEditPage() {
     return null;
   };
 
-  const renderPaymentFields = () => (
-    <React.Fragment>
-      {["Alipay", "WeChat Pay", "Casdoor"].includes(provider.type) ? (
-        <FormRow labelKey="general:Cert">
-          <SearchableSelect value={provider.cert ?? ""} onChange={(v) => updateProviderField("cert", v)} options={certOptions} />
-        </FormRow>
-      ) : null}
-      {provider.type === "Alipay" ? (
-        <FormRow labelKey="general:Root cert">
-          <SearchableSelect value={provider.metadata ?? ""} onChange={(v) => updateProviderField("metadata", v)} options={certOptions} />
-        </FormRow>
-      ) : null}
-      {["GC", "FastSpring"].includes(provider.type) ? (
-        <FormRow label={i18next.t("general:Host")} tooltip={i18next.t("provider:Host - Tooltip")}>
-          <Input value={provider.host ?? ""} onChange={(e) => updateProviderField("host", e.target.value)} />
-        </FormRow>
-      ) : null}
-    </React.Fragment>
-  );
-
   const renderStorageFields = () => (
     <React.Fragment>
       {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology", "Casdoor"].includes(provider.type) ? (
@@ -1780,7 +1758,6 @@ export default function ProviderEditPage() {
       {provider.category === "Log" ? renderLogFields() : null}
       {provider.category === "Scan" ? renderScanFields() : null}
       {provider.category === "SAML" ? renderSamlFields() : null}
-      {provider.category === "Payment" ? renderPaymentFields() : null}
       {provider.category === "Storage" ? renderStorageFields() : null}
       {provider.category === "Face ID" ? renderEndpointOnlyField() : null}
       {provider.category === "ID Verification" ? renderEndpointOnlyField() : null}

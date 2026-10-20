@@ -181,9 +181,7 @@ export default function Dashboard() {
     {key: "groupCounts", name: i18next.t("general:Groups"), data: data.groupCounts, to: "/groups"},
     {key: "resourceCounts", name: i18next.t("general:Resources"), data: data.resourceCounts, to: "/resources"},
     {key: "certCounts", name: i18next.t("general:Certs"), data: data.certCounts, to: "/certs"},
-    {key: "subscriptionCounts", name: i18next.t("general:Subscriptions"), data: data.subscriptionCounts, to: "/subscriptions", hidden: true},
     {key: "modelCounts", name: i18next.t("general:Models"), data: data.modelCounts, to: "/models", hidden: true},
-    {key: "transactionCounts", name: i18next.t("general:Transactions"), data: data.transactionCounts, to: "/transactions"},
     {key: "adapterCounts", name: i18next.t("general:Adapters"), data: data.adapterCounts, to: "/adapters", hidden: true},
     {key: "enforcerCounts", name: i18next.t("general:Enforcers"), data: data.enforcerCounts, to: "/enforcers", hidden: true},
   ].filter((s) => Array.isArray(s.data));

@@ -6,9 +6,6 @@ import * as CertBackend from "@/backend/CertBackend";
 import * as GroupBackend from "@/backend/GroupBackend";
 import * as ModelBackend from "@/backend/ModelBackend";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
-import * as PlanBackend from "@/backend/PlanBackend";
-import * as ProductBackend from "@/backend/ProductBackend";
-import * as PricingBackend from "@/backend/PricingBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
 import * as RuleBackend from "@/backend/RuleBackend";
 import * as RoleBackend from "@/backend/RoleBackend";
@@ -176,27 +173,6 @@ export function useCertOptions(organizationName: string, scope?: string): Search
     () => toNameOptions(scope ? items.filter((item: any) => item.scope === scope) : items),
     [items, scope],
   );
-}
-
-export function usePlanOptions(organizationName: string): SearchableOption[] {
-  const items = useList(() => (organizationName ? PlanBackend.getPlans(organizationName, 1, PAGE_SIZE) : null), [organizationName]);
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
-
-export function useProductOptions(organizationName: string): SearchableOption[] {
-  const items = useList(
-    () => (organizationName ? ProductBackend.getProducts(organizationName, 1, PAGE_SIZE) : null),
-    [organizationName],
-  );
-  return React.useMemo(() => toNameOptions(items), [items]);
-}
-
-export function usePricingOptions(organizationName: string): SearchableOption[] {
-  const items = useList(
-    () => (organizationName ? PricingBackend.getPricings(organizationName, 1, PAGE_SIZE) : null),
-    [organizationName],
-  );
-  return React.useMemo(() => toNameOptions(items), [items]);
 }
 
 export function useRuleOptions(organizationName: string): SearchableOption[] {

@@ -29,28 +29,13 @@ export const TICKET_STATES: EnumMap = {
   "Closed": {i18nKey: "ticket:Closed", variant: "secondary"},
 };
 
-export const SUBSCRIPTION_STATES: EnumMap = {
-  "Pending": {i18nKey: "webhook:Pending", variant: "info"},
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Upcoming": {i18nKey: "subscription:Upcoming", variant: "warning"},
-  "Expired": {i18nKey: "subscription:Expired", variant: "warning"},
-  "Error": {i18nKey: "general:Error", variant: "destructive"},
-  "Suspended": {i18nKey: "subscription:Suspended", variant: "secondary"},
-};
-
 export const INVITATION_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Suspended": {i18nKey: "subscription:Suspended", variant: "secondary"},
-};
-
-export const COUPON_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
-  "Inactive": {i18nKey: "key:Inactive", variant: "secondary"},
-  "Expired": {i18nKey: "subscription:Expired", variant: "destructive"},
+  "Active": {i18nKey: "general:Active", variant: "success"},
+  "Suspended": {i18nKey: "general:Suspended", variant: "secondary"},
 };
 
 export const KEY_STATES: EnumMap = {
-  "Active": {i18nKey: "subscription:Active", variant: "success"},
+  "Active": {i18nKey: "general:Active", variant: "success"},
   "Inactive": {i18nKey: "key:Inactive", variant: "secondary"},
 };
 
@@ -81,17 +66,6 @@ export const PERMISSION_RESOURCE_TYPES: EnumMap = {
   "TreeNode": {i18nKey: "permission:TreeNode"},
   "Custom": {i18nKey: "general:Custom"},
   "API": {i18nKey: "API"},
-};
-
-export const COUPON_DISCOUNT_TYPES: EnumMap = {
-  "percentage": {i18nKey: "coupon:Percentage"},
-  "fixed": {i18nKey: "coupon:Fixed"},
-};
-
-export const COUPON_SCOPES: EnumMap = {
-  "universal": {i18nKey: "coupon:Universal", variant: "info"},
-  "product": {i18nKey: "coupon:Product specific", variant: "success"},
-  "user": {i18nKey: "coupon:User specific", variant: "warning"},
 };
 
 export const KEY_TYPES: EnumMap = {

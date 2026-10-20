@@ -105,9 +105,6 @@ func maskSecrets(recordString string) string {
 func NewRecord(ctx *context.Context) (*Record, error) {
 	clientIp := strings.Replace(util.GetClientIpFromRequest(ctx.Request), ": ", "", -1)
 	action := strings.Replace(ctx.Request.URL.Path, "/api/", "", -1)
-	if strings.HasPrefix(action, "notify-payment") {
-		action = "notify-payment"
-	}
 
 	// "id_token_hint" carries a JWT, so it is dropped instead of being persisted in the audit row.
 	requestUri := util.FilterQuery(ctx.Request.RequestURI, secretRecordQueries)
@@ -132,19 +129,6 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 		return nil, err
 	}
 
-	if action != "buy-product" && action != "notify-payment" {
-		resp.Data = nil
-	}
-
-	dataResp := ""
-	if resp.Data != nil {
-		dataByte, err := json.Marshal(resp.Data)
-		if err != nil {
-			return nil, err
-		}
-		dataResp = fmt.Sprintf(", data:%s", string(dataByte))
-	}
-
 	languageCode := conf.GetAcceptLanguage(ctx.Request.Header.Get("Accept-Language"))
 
 	record := Record{
@@ -158,7 +142,7 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 		Language:    languageCode,
 		Object:      object,
 		StatusCode:  200,
-		Response:    fmt.Sprintf("{status:\"%s\", msg:\"%s\"%s}", resp.Status, resp.Msg, dataResp),
+		Response:    fmt.Sprintf("{status:\"%s\", msg:\"%s\"}", resp.Status, resp.Msg),
 		IsTriggered: false,
 	}
 	return &record, nil

@@ -449,60 +449,6 @@ export const OtherProviderInfo = {
       url: "https://door.casdoor.com/",
     },
   },
-  Payment: {
-    "Dummy": {
-      logo: `${StaticBaseUrl}/img/payment_paypal.png`,
-      url: "",
-    },
-    "Balance": {
-      logo: `${StaticBaseUrl}/img/payment_balance.svg`,
-      url: "",
-    },
-    "Alipay": {
-      logo: `${StaticBaseUrl}/img/payment_alipay.png`,
-      url: "https://www.alipay.com/",
-    },
-    "WeChat Pay": {
-      logo: `${StaticBaseUrl}/img/payment_wechat_pay.png`,
-      url: "https://pay.weixin.qq.com/",
-    },
-    "PayPal": {
-      logo: `${StaticBaseUrl}/img/payment_paypal.png`,
-      url: "https://www.paypal.com/",
-    },
-    "Stripe": {
-      logo: `${StaticBaseUrl}/img/social_stripe.png`,
-      url: "https://stripe.com/",
-    },
-    "AirWallex": {
-      logo: `${StaticBaseUrl}/img/payment_airwallex.svg`,
-      url: "https://airwallex.com/",
-    },
-    "GC": {
-      logo: `${StaticBaseUrl}/img/payment_gc.png`,
-      url: "https://gc.org",
-    },
-    "Polar": {
-      logo: `${StaticBaseUrl}/img/payment_polar.png`,
-      url: "https://polar.sh/",
-    },
-    "Paddle": {
-      logo: `${StaticBaseUrl}/img/payment_paddle.png`,
-      url: "https://www.paddle.com/",
-    },
-    "FastSpring": {
-      logo: `${StaticBaseUrl}/img/payment_fastspring.png`,
-      url: "https://fastspring.com/",
-    },
-    "Lemon Squeezy": {
-      logo: `${StaticBaseUrl}/img/payment_lemonsqueezy.jpg`,
-      url: "https://www.lemonsqueezy.com/",
-    },
-    "Adyen": {
-      logo: `${StaticBaseUrl}/img/payment_adyen.svg`,
-      url: "https://www.adyen.com/",
-    },
-  },
   Captcha: {
     "Default": {
       logo: `${StaticBaseUrl}/img/captcha_default.png`,
@@ -691,7 +637,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "is_admin", "homepage", "birthday", "gender", "password_type", "password_salt", "external_id", "avatar", "first_name", "last_name",
   "avatar_type", "permanent_avatar", "email_verified", "region", "location", "address",
   "affiliation", "title", "id_card_type", "id_card", "real_name", "is_verified", "bio", "tag", "language",
-  "education", "score", "karma", "ranking", "balance", "balance_credit", "balance_currency", "currency", "is_default_avatar", "is_online",
+  "education", "score", "karma", "ranking", "is_default_avatar", "is_online",
   "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "hash", "pre_hash", "access_token",
   "created_ip", "last_signin_time", "last_signin_ip", "github", "google", "qq", "wechat", "facebook", "dingtalk",
   "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "casdoor", "infoflow", "apple",
@@ -752,11 +698,6 @@ export const GetTranslatedUserItems = () => {
     {name: "Gender", label: i18next.t("user:Gender")},
     {name: "Birthday", label: i18next.t("user:Birthday")},
     {name: "Education", label: i18next.t("user:Education")},
-    {name: "Balance", label: i18next.t("user:Balance")},
-    {name: "Balance currency", label: i18next.t("organization:Balance currency")},
-    {name: "Balance credit", label: i18next.t("organization:Balance credit")},
-    {name: "Cart", label: i18next.t("general:Cart")},
-    {name: "Transactions", label: i18next.t("general:Transactions")},
     {name: "UID number", label: i18next.t("general:UID number")},
     {name: "Score", label: i18next.t("user:Score")},
     {name: "Karma", label: i18next.t("user:Karma")},
@@ -1567,22 +1508,6 @@ export function getProviderTypeOptions(category) {
       {id: "Custom", name: "Custom"},
       {id: "Custom Flexible", name: "Custom Flexible"},
     ]);
-  } else if (category === "Payment") {
-    return ([
-      {id: "Dummy", name: "Dummy"},
-      {id: "Balance", name: "Balance"},
-      {id: "Alipay", name: "Alipay"},
-      {id: "WeChat Pay", name: "WeChat Pay"},
-      {id: "PayPal", name: "PayPal"},
-      {id: "Stripe", name: "Stripe"},
-      {id: "AirWallex", name: "AirWallex"},
-      {id: "GC", name: "GC"},
-      {id: "Polar", name: "Polar"},
-      {id: "Paddle", name: "Paddle"},
-      {id: "FastSpring", name: "FastSpring"},
-      {id: "Lemon Squeezy", name: "Lemon Squeezy"},
-      {id: "Adyen", name: "Adyen"},
-    ]);
   } else if (category === "Captcha") {
     return ([
       {id: "Default", name: "Default"},
@@ -1907,179 +1832,10 @@ export function builtInObject(obj) {
 }
 
 
-export const CurrencyOptions = [
-  {id: "USD", name: "USD"},
-  {id: "CNY", name: "CNY"},
-  {id: "EUR", name: "EUR"},
-  {id: "JPY", name: "JPY"},
-  {id: "GBP", name: "GBP"},
-  {id: "AUD", name: "AUD"},
-  {id: "CAD", name: "CAD"},
-  {id: "CHF", name: "CHF"},
-  {id: "HKD", name: "HKD"},
-  {id: "SGD", name: "SGD"},
-  {id: "BRL", name: "BRL"},
-  {id: "PLN", name: "PLN"},
-  {id: "KRW", name: "KRW"},
-  {id: "INR", name: "INR"},
-  {id: "RUB", name: "RUB"},
-  {id: "MXN", name: "MXN"},
-  {id: "ZAR", name: "ZAR"},
-  {id: "TRY", name: "TRY"},
-  {id: "SEK", name: "SEK"},
-  {id: "NOK", name: "NOK"},
-  {id: "DKK", name: "DKK"},
-  {id: "THB", name: "THB"},
-  {id: "MYR", name: "MYR"},
-  {id: "TWD", name: "TWD"},
-  {id: "CZK", name: "CZK"},
-  {id: "HUF", name: "HUF"},
-];
-
-export function getCurrencySymbol(currency) {
-  if (currency === "USD" || currency === "usd") {
-    return "$";
-  } else if (currency === "CNY" || currency === "cny") {
-    return "¥";
-  } else if (currency === "EUR" || currency === "eur") {
-    return "€";
-  } else if (currency === "JPY" || currency === "jpy") {
-    return "¥";
-  } else if (currency === "GBP" || currency === "gbp") {
-    return "£";
-  } else if (currency === "AUD" || currency === "aud") {
-    return "A$";
-  } else if (currency === "CAD" || currency === "cad") {
-    return "C$";
-  } else if (currency === "CHF" || currency === "chf") {
-    return "CHF";
-  } else if (currency === "HKD" || currency === "hkd") {
-    return "HK$";
-  } else if (currency === "SGD" || currency === "sgd") {
-    return "S$";
-  } else if (currency === "BRL" || currency === "brl") {
-    return "R$";
-  } else if (currency === "PLN" || currency === "pln") {
-    return "zł";
-  } else if (currency === "KRW" || currency === "krw") {
-    return "₩";
-  } else if (currency === "INR" || currency === "inr") {
-    return "₹";
-  } else if (currency === "RUB" || currency === "rub") {
-    return "₽";
-  } else if (currency === "MXN" || currency === "mxn") {
-    return "$";
-  } else if (currency === "ZAR" || currency === "zar") {
-    return "R";
-  } else if (currency === "TRY" || currency === "try") {
-    return "₺";
-  } else if (currency === "SEK" || currency === "sek") {
-    return "kr";
-  } else if (currency === "NOK" || currency === "nok") {
-    return "kr";
-  } else if (currency === "DKK" || currency === "dkk") {
-    return "kr";
-  } else if (currency === "THB" || currency === "thb") {
-    return "฿";
-  } else if (currency === "MYR" || currency === "myr") {
-    return "RM";
-  } else if (currency === "TWD" || currency === "twd") {
-    return "NT$";
-  } else if (currency === "CZK" || currency === "czk") {
-    return "Kč";
-  } else if (currency === "HUF" || currency === "huf") {
-    return "Ft";
-  } else {
-    return currency;
-  }
-}
-
-export function getCurrencyCountryCode(currency) {
-  const currencyToCountry = {
-    USD: "US",
-    CNY: "CN",
-    EUR: "EU",
-    JPY: "JP",
-    GBP: "GB",
-    AUD: "AU",
-    CAD: "CA",
-    CHF: "CH",
-    HKD: "HK",
-    SGD: "SG",
-    BRL: "BR",
-    PLN: "PL",
-    KRW: "KR",
-    INR: "IN",
-    RUB: "RU",
-    MXN: "MX",
-    ZAR: "ZA",
-    TRY: "TR",
-    SEK: "SE",
-    NOK: "NO",
-    DKK: "DK",
-    THB: "TH",
-    MYR: "MY",
-    TWD: "TW",
-    CZK: "CZ",
-    HUF: "HU",
-  };
-
-  return currencyToCountry[currency?.toUpperCase()] || null;
-}
-
-export function getCurrencyFlag(currency) {
-  const countryCode = getCurrencyCountryCode(currency);
-  if (!countryCode) {
-    return null;
-  }
-
-  return (
-    // Tailwind's preflight sets `img { height: auto }`, which beats the `height`
-    // attribute the antd frontend relies on — so the size has to be a class
-    <img
-      src={`${StaticBaseUrl}/flag-icons/${countryCode}.svg`}
-      alt={`${currency} flag`}
-      className="mr-1.5 inline-block h-5 w-auto align-text-bottom"
-    />
-  );
-}
-
-export function getCurrencyWithFlag(currency) {
-  const translationKey = `currency:${currency}`;
-  const translatedText = i18next.t(translationKey);
-  const currencyText = translatedText === translationKey ? currency : translatedText;
-
-  const countryCode = getCurrencyCountryCode(currency);
-  if (!countryCode) {
-    return currencyText;
-  }
-
-  return (
-    <span>
-      <img
-        src={`${StaticBaseUrl}/flag-icons/${countryCode}.svg`}
-        alt={`${currency} flag`}
-        className="mr-1.5 inline-block h-5 w-auto align-text-bottom"
-      />
-      {currencyText}
-    </span>
-  );
-}
-
-export function getPriceDisplay(price, currency) {
-  const priceValue = price || 0;
-  const currencyValue = currency || "USD";
-  return (
-    <>
-      {getCurrencyFlag(currencyValue)} {getCurrencySymbol(currencyValue)}{priceValue} ({getCurrencyText(currencyValue)})
-    </>
-  );
-}
-
 export function getUserCommonFields() {
   return ["Owner", "Name", "CreatedTime", "UpdatedTime", "DeletedTime", "Id", "ExternalId", "Type", "Password", "PasswordSalt", "PasswordType", "DisplayName", "FirstName", "LastName", "Avatar", "AvatarType", "PermanentAvatar",
     "Email", "EmailVerified", "Phone", "CountryCode", "Location", "Address", "Affiliation", "Title", "IdCardType", "IdCard", "RealName", "IsVerified", "Homepage", "Bio", "Tag", "Region",
-    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "Balance", "BalanceCredit", "Currency", "BalanceCurrency", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
+    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
     "SignupApplication", "RegisterType", "RegisterSource", "CreatedIp", "LastSigninTime", "LastSigninIp",
     "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaRadiusEnabled", "MfaRadiusUsername", "MfaRadiusProvider", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
     "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Ldap", "Properties", "Groups"];
@@ -2123,7 +1879,7 @@ export function getDefaultHtmlEmailContent() {
         <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
-    <p>Use this code for your transaction. It's valid for 5 minutes</p>
+    <p>Use this code to verify your account. It's valid for 5 minutes</p>
     <div class="code">
         %s
     </div>
@@ -2183,64 +1939,6 @@ export function getDefaultInvitationHtmlEmailContent() {
 </div>
 </body>
 </html>`;
-}
-
-export function getCurrencyText(currency) {
-  if (currency === "USD") {
-    return i18next.t("currency:USD");
-  } else if (currency === "CNY") {
-    return i18next.t("currency:CNY");
-  } else if (currency === "EUR") {
-    return i18next.t("currency:EUR");
-  } else if (currency === "JPY") {
-    return i18next.t("currency:JPY");
-  } else if (currency === "GBP") {
-    return i18next.t("currency:GBP");
-  } else if (currency === "AUD") {
-    return i18next.t("currency:AUD");
-  } else if (currency === "CAD") {
-    return i18next.t("currency:CAD");
-  } else if (currency === "CHF") {
-    return i18next.t("currency:CHF");
-  } else if (currency === "HKD") {
-    return i18next.t("currency:HKD");
-  } else if (currency === "SGD") {
-    return i18next.t("currency:SGD");
-  } else if (currency === "BRL") {
-    return i18next.t("currency:BRL");
-  } else if (currency === "PLN") {
-    return i18next.t("currency:PLN");
-  } else if (currency === "KRW") {
-    return i18next.t("currency:KRW");
-  } else if (currency === "INR") {
-    return i18next.t("currency:INR");
-  } else if (currency === "RUB") {
-    return i18next.t("currency:RUB");
-  } else if (currency === "MXN") {
-    return i18next.t("currency:MXN");
-  } else if (currency === "ZAR") {
-    return i18next.t("currency:ZAR");
-  } else if (currency === "TRY") {
-    return i18next.t("currency:TRY");
-  } else if (currency === "SEK") {
-    return i18next.t("currency:SEK");
-  } else if (currency === "NOK") {
-    return i18next.t("currency:NOK");
-  } else if (currency === "DKK") {
-    return i18next.t("currency:DKK");
-  } else if (currency === "THB") {
-    return i18next.t("currency:THB");
-  } else if (currency === "MYR") {
-    return i18next.t("currency:MYR");
-  } else if (currency === "TWD") {
-    return i18next.t("currency:TWD");
-  } else if (currency === "CZK") {
-    return i18next.t("currency:CZK");
-  } else if (currency === "HUF") {
-    return i18next.t("currency:HUF");
-  } else {
-    return "(Unknown currency)";
-  }
 }
 
 export function isDarkTheme(themeAlgorithm) {
@@ -2340,7 +2038,7 @@ export function getFormTypeItems(formType) {
 
 
 export function getApiPaths() {
-  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "permission", "model", "adapter", "enforcer", "session", "token", "product", "payment", "plan", "pricing", "subscription", "syncer", "webhook", "form", "invitation", "ldap", "order", "ticket", "transaction"];
+  const objects = ["organization", "group", "user", "application", "provider", "resource", "cert", "role", "permission", "model", "adapter", "enforcer", "session", "token", "syncer", "webhook", "form", "invitation", "ldap", "ticket"];
   const res = [];
 
   // Auth and user session APIs
@@ -2354,12 +2052,6 @@ export function getApiPaths() {
     ["add", "update", "delete"].forEach(action => {
       res.push(`${action}-${obj}`);
     });
-    if (obj === "payment") {
-      res.push("invoice-payment", "notify-payment");
-    }
-    if (obj === "order") {
-      res.push("place-order", "cancel-order", "pay-order");
-    }
     if (obj === "user") {
       res.push("remove-user-from-group", "upload-users");
       res.push("check-user-password", "set-password", "reset-email-or-phone");

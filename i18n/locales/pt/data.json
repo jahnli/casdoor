@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "O método de login com reconhecimento facial não está habilitado para o aplicativo",
     "The login method: login with magic link is not enabled for the application": "O método de login: login com link mágico não está habilitado para o aplicativo",
     "The login method: login with password is not enabled for the application": "O método de login com senha não está habilitado para o aplicativo",
-    "The order: %s does not exist": "O pedido: %s não existe",
     "The organization: %s does not exist": "A organização: %s não existe",
     "The organization: %s has disabled users to signin": "A organização: %s desativou o login de usuários",
-    "The plan: %s does not exist": "O plano: %s não existe",
-    "The pricing: %s does not exist": "O preço: %s não existe",
-    "The pricing: %s does not have plan: %s": "O preço: %s não tem o plano: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "O preço: %s é somente por convite, apenas usuários convidados podem usá-lo",
     "The provider: %s does not exist": "O provedor: %s não existe",
     "The provider: %s is not enabled for the application": "O provedor: %s não está habilitado para o aplicativo",
     "Unauthorized operation": "Operação não autorizada",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "A tag do usuário: %s não está listada nas tags do aplicativo",
     "UserCode Expired": "Código de usuário expirado",
     "UserCode Invalid": "Código de usuário inválido",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "O usuário pago %s não possui assinatura ativa ou pendente e o aplicativo: %s não possui preço padrão",
     "the application for user %s is not found": "o aplicativo para o usuário %s não foi encontrado",
     "the organization: %s is not found": "a organização: %s não foi encontrada"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "A aplicação não pode estar vazia",
+    "Error": "Erro",
     "Failed to import groups": "Falha ao importar grupos",
     "Failed to import users": "Falha ao importar usuários",
     "Granted scopes cannot be empty": "Os escopos concedidos não podem estar vazios",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Saldo insuficiente: o novo saldo %v estaria abaixo do limite de crédito %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Saldo insuficiente: o novo saldo da organização %v estaria abaixo do limite de crédito %v",
     "Invalid application": "Aplicação inválida",
     "Missing parameter": "Parâmetro ausente",
     "Multiple captcha providers are not allowed in the same application: %s": "Não são permitidos vários provedores de captcha na mesma aplicação: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "O usuário: %s na linha %d está duplicado com a linha %d",
     "The user: %s is not found": "O usuário: %s não foi encontrado",
     "The users already exist: %s": "Os seguintes usuários já existem: %s",
-    "User is required for User category transaction": "Usuário é obrigatório para transação de categoria de usuário",
     "User not found": "Usuário não encontrado",
     "Wrong userId": "ID de usuário incorreto",
     "don't support captchaProvider: ": "captchaProvider não suportado: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "A permissão: \"%s\" não existe"
   },
-  "product": {
-    "Product list cannot be empty": "A lista de produtos não pode estar vazia"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Falha ao inicializar provedor de verificação de ID",
     "Invalid application id": "ID de aplicativo inválido",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "A chave de objeto: %s não é permitida",
     "The provider type: %s is not supported": "O tipo de provedor: %s não é suportado"
-  },
-  "subscription": {
-    "Error": "Erro"
   },
   "ticket": {
     "Ticket not found": "Ticket não encontrado"

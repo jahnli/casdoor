@@ -1,3 +1,5 @@
+> 本地版本已移除商业模块（商品、订单、支付、套餐、订阅、交易及余额），保留身份认证与访问管理功能。已有数据库升级时，请按 [商业数据清理说明](cmd/remove-commerce/README.md) 执行迁移；详细裁剪范围见 [本地变更日志](changes/details/001-remove-commerce.md)。
+
 <div align="center">
   <a href="https://casdoor.ai">
     <img src="https://cdn.casbin.org/img/casdoor-logo_1185x256.png" alt="Casdoor" width="500">
@@ -145,6 +147,16 @@ Bundles SQLite and demo data into a single container. Ideal for a first look, bu
 
 Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
+### 本地数据库凭据与环境变量
+
+本地开发时，将根目录的 [`.env.example`](.env.example) 复制为 `.env`，填写数据库连接信息。真实凭据只放在 `.env` 或部署环境变量中，`conf/app.conf` 的 `dataSourceName` 保持为空。
+
+从项目根目录运行 `go run .` 或使用当前 IDE 的 Go 调试配置时，服务会自动读取工作目录下的 `.env`。读取优先级是 **已有进程环境变量 → `.env` → `conf/app.conf`**；已有环境变量即使为空也不会被 `.env` 覆盖。程序只自动加载 `.env`，不会加载 `.env.local` 等其他文件，也不会根据 `--config` 改变 `.env` 的查找目录。
+
+`.env` 缺失时可完全使用部署环境变量；文件不可读或语法错误时启动失败，错误信息不输出凭据。`.env` 和 `.env.*` 已加入 Git 和 Docker 构建排除规则，只有不含真实凭据的 `.env.example` 可提交。
+
+在 1Panel 的 Casdoor 容器中设置 `driverName`、`dataSourceName`、`dbName` 环境变量并重建或重启容器。单独把文件命名为 `.env` 不会让 Docker 自动向容器注入变量：直接运行镜像时使用 `docker run --env-file .env ...`；本仓库的 Compose 已显式传递这三个变量。环境文件的语法由对应启动工具解析，使用 Docker CLI `--env-file` 时不要给值额外添加外层引号。
+
 ### Docker Compose — Casdoor with MySQL
 
 [`docker-compose.yml`](docker-compose.yml) starts Casdoor next to a MySQL 8 container.
@@ -152,17 +164,9 @@ Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 > **Two things to know before running it:**
 >
 > 1. Compose **builds the image from source** (Go backend plus React frontend). The first `docker compose up` takes several minutes, so it is not the quick-trial path — use the all-in-one image above for that.
-> 2. You have to point Casdoor at the bundled database first.
+> 2. Without environment overrides, Compose connects to the bundled `db:3306` MySQL service using its demo credentials. The shell or root `.env` can override `driverName`, `dataSourceName` and `dbName`; keep real credentials out of tracked files.
 
-Set the MySQL settings in [`conf/app.conf`](conf/app.conf) to match the `db` service:
-
-```ini
-driverName = mysql
-dataSourceName = root:123456@tcp(localhost:3306)/
-dbName = casdoor
-```
-
-Use `localhost` here even though MySQL runs in a separate container: the compose file sets `RUNNING_IN_DOCKER=true`, and Casdoor rewrites `localhost` to the Docker host address at startup (see [`conf/conf.go`](conf/conf.go)). Then start everything:
+If `.env` points to an external PostgreSQL server, Casdoor connects there; this Compose stack still starts its bundled MySQL service. For an existing database deployment, configure the Casdoor container directly in 1Panel. To run the bundled stack:
 
 ```bash
 docker compose up
@@ -248,7 +252,7 @@ At this point you have a running identity provider with nothing connected to it 
 - **RBAC and beyond** — roles, permissions and Casbin policy models
 - **SCIM 2.0** — automated user provisioning and de-provisioning
 - **Social login** — Google, GitHub, Entra ID (Azure AD) and many more
-- **Custom providers** — plug in your own identity, email, SMS, storage or payment backends
+- **Custom providers** — plug in your own identity, email, SMS or storage backends
 - **Audit logs** — a record of sign-ins and administrative changes
 
 **🤖 AI and agents**

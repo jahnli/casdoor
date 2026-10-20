@@ -592,14 +592,6 @@ export default function LoginPage({type = "login", application: applicationProp,
     }],
     // hand over every enabled factor: MfaVerify starts on the preferred one and lets the user switch
     [NextMfa, (res, values, authParams) => setMfa({props: res.data2, values: {...values, providerBack: values.provider, provider: ""}, authParams})],
-    ["SelectPlan", (res, values) => {
-      const pricing = res.data2;
-      Setting.goToLink(`/select-plan/${pricing.owner}/${pricing.name}?user=${values.username}`);
-    }],
-    ["BuyPlanResult", (res) => {
-      const sub = res.data2;
-      Setting.goToLink(`/buy-plan/${sub.owner}/${sub.pricing}/result?subscription=${sub.name}`);
-    }],
   ]);
 
   const checkMfa = (res: any, values: any, authParams: any, onDone: (res: any) => void) => {
@@ -1144,7 +1136,7 @@ export default function LoginPage({type = "login", application: applicationProp,
     return (
       <AuthLayout preview={!!preview}>
         <Alert variant="destructive">
-          <AlertDescription>{`Code ${i18next.t("subscription:Expired")}`}</AlertDescription>
+          <AlertDescription>{`Code ${i18next.t("general:Expired")}`}</AlertDescription>
         </Alert>
       </AuthLayout>
     );

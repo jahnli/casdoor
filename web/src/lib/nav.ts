@@ -1,7 +1,6 @@
 import i18next from "i18next";
 import {
   Bot,
-  DollarSign,
   Home,
   LayoutGrid,
   Lock,
@@ -121,25 +120,6 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
       {key: "/records", label: i18next.t("general:Records")},
       {key: "/tokens", label: i18next.t("general:Tokens")},
       {key: "/verifications", label: i18next.t("general:Verifications")},
-    ],
-  });
-
-  groups.push({
-    key: "/business",
-    label: i18next.t("general:Business"),
-    icon: DollarSign,
-    to: "/products",
-    items: [
-      {key: "/product-store", label: i18next.t("general:Product Store")},
-      {key: "/products", label: i18next.t("general:Products")},
-      {key: "/coupons", label: i18next.t("general:Coupons")},
-      {key: "/cart", label: i18next.t("general:Cart")},
-      {key: "/orders", label: i18next.t("general:Orders")},
-      {key: "/payments", label: i18next.t("general:Payments")},
-      {key: "/plans", label: i18next.t("general:Plans")},
-      {key: "/pricings", label: i18next.t("general:Pricings")},
-      {key: "/subscriptions", label: i18next.t("general:Subscriptions")},
-      {key: "/transactions", label: i18next.t("general:Transactions")},
     ],
   });
 

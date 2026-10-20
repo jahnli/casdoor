@@ -96,7 +96,7 @@ export default function EntryListPage() {
     textColumn({dataIndex: "userAgent", title: i18next.t("general:User agent"), width: 200, searchable: true}),
     {
       dataIndex: "message",
-      title: i18next.t("payment:Message"),
+      title: i18next.t("general:Message"),
       width: 220,
       sortable: true,
       searchable: true,

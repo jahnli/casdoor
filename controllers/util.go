@@ -54,7 +54,7 @@ func (c *ApiController) ResponseError(error string, data ...interface{}) {
 func (c *ApiController) ResponseErrorWithCode(code string, error string, data ...interface{}) {
 	enableErrorMask2 := conf.GetConfigBool("enableErrorMask2")
 	if enableErrorMask2 {
-		error = c.T("subscription:Error")
+		error = c.T("general:Error")
 
 		resp := &Response{Status: "error", Msg: error}
 		c.ResponseJsonData(resp, data...)

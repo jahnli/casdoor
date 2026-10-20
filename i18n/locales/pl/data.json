@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "Metoda logowania: logowanie przez twarz nie jest włączona dla aplikacji",
     "The login method: login with magic link is not enabled for the application": "Metoda logowania: logowanie za pomocą magicznego linku nie jest włączona dla tej aplikacji",
     "The login method: login with password is not enabled for the application": "Metoda logowania: logowanie przez hasło nie jest włączone dla aplikacji",
-    "The order: %s does not exist": "Zamówienie: %s nie istnieje",
     "The organization: %s does not exist": "Organizacja: %s nie istnieje",
     "The organization: %s has disabled users to signin": "Organizacja: %s wyłączyła logowanie użytkowników",
-    "The plan: %s does not exist": "Plan: %s nie istnieje",
-    "The pricing: %s does not exist": "Cennik: %s nie istnieje",
-    "The pricing: %s does not have plan: %s": "Cennik: %s nie ma planu: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "Cennik: %s jest tylko na zaproszenie, mogą z niego korzystać wyłącznie zaproszeni użytkownicy",
     "The provider: %s does not exist": "Dostawca: %s nie istnieje",
     "The provider: %s is not enabled for the application": "Dostawca: %s nie jest włączony dla aplikacji",
     "Unauthorized operation": "Nieautoryzowana operacja",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "Tag użytkownika: %s nie znajduje się na liście tagów aplikacji",
     "UserCode Expired": "Kod użytkownika wygasł",
     "UserCode Invalid": "Nieprawidłowy kod użytkownika",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "płatny użytkownik %s nie ma aktywnej lub oczekującej subskrypcji, a aplikacja: %s nie ma domyślnego cennika",
     "the application for user %s is not found": "aplikacja dla użytkownika %s nie została znaleziona",
     "the organization: %s is not found": "organizacja: %s nie została znaleziona"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "Aplikacja nie może być pusta",
+    "Error": "Błąd",
     "Failed to import groups": "Nie udało się zaimportować grup",
     "Failed to import users": "Nie udało się zaimportować użytkowników",
     "Granted scopes cannot be empty": "Przyznane zakresy nie mogą być puste",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Niewystarczające saldo: nowe saldo %v byłoby poniżej limitu kredytowego %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Niewystarczające saldo: nowe saldo organizacji %v byłoby poniżej limitu kredytowego %v",
     "Invalid application": "Nieprawidłowa aplikacja",
     "Missing parameter": "Brakujący parametr",
     "Multiple captcha providers are not allowed in the same application: %s": "W jednej aplikacji nie można używać wielu dostawców captcha: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "Użytkownik: %s w wierszu %d jest zduplikowany z wierszem %d",
     "The user: %s is not found": "Użytkownik: %s nie został znaleziony",
     "The users already exist: %s": "Następujący użytkownicy już istnieją: %s",
-    "User is required for User category transaction": "Użytkownik jest wymagany do transakcji kategorii użytkownika",
     "User not found": "Nie znaleziono użytkownika",
     "Wrong userId": "Nieprawidłowy userId",
     "don't support captchaProvider: ": "nie obsługuje captchaProvider: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "Uprawnienie: \"%s\" nie istnieje"
   },
-  "product": {
-    "Product list cannot be empty": "Lista produktów nie może być pusta"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Nie udało się zainicjować dostawcy weryfikacji ID",
     "Invalid application id": "Nieprawidłowe id aplikacji",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "Klucz obiektu: %s jest niedozwolony",
     "The provider type: %s is not supported": "Typ dostawcy: %s nie jest obsługiwany"
-  },
-  "subscription": {
-    "Error": "Błąd"
   },
   "ticket": {
     "Ticket not found": "Nie znaleziono biletu"

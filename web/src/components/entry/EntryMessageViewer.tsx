@@ -163,8 +163,8 @@ export function EntryMessageViewer({entry, provider: providerProp}: EntryMessage
         {label: i18next.t("entry:Span ID"), children: span?.spanId || "-"},
         {label: i18next.t("entry:Parent Span ID"), children: span?.parentSpanId || "-"},
         {label: i18next.t("general:Status"), children: getSpanStatus(span)},
-        {label: i18next.t("subscription:Start time"), children: formatTraceTimestamp(span?.startTimeUnixNano)},
-        {label: i18next.t("subscription:End time"), children: formatTraceTimestamp(span?.endTimeUnixNano)},
+        {label: i18next.t("general:Start time"), children: formatTraceTimestamp(span?.startTimeUnixNano)},
+        {label: i18next.t("general:End time"), children: formatTraceTimestamp(span?.endTimeUnixNano)},
         {label: i18next.t("entry:Duration"), children: getSpanDuration(span)},
         {label: i18next.t("entry:Resource schema URL"), children: traceSpan.resourceSchemaUrl || "-"},
         {label: i18next.t("entry:Scope schema URL"), children: traceSpan.scopeSchemaUrl || "-"},
@@ -210,7 +210,7 @@ export function EntryMessageViewer({entry, provider: providerProp}: EntryMessage
                     <TableHead className="w-[220px]">{i18next.t("general:Name")}</TableHead>
                     <TableHead className="w-[180px]">{i18next.t("entry:Service")}</TableHead>
                     <TableHead className="w-[180px]">{i18next.t("entry:Span ID")}</TableHead>
-                    <TableHead className="w-[220px]">{i18next.t("subscription:Start time")}</TableHead>
+                    <TableHead className="w-[220px]">{i18next.t("general:Start time")}</TableHead>
                     <TableHead className="w-[120px]">{i18next.t("entry:Duration")}</TableHead>
                     <TableHead className="w-[100px]">{i18next.t("general:Action")}</TableHead>
                   </TableRow>
@@ -283,7 +283,7 @@ export function EntryMessageViewer({entry, provider: providerProp}: EntryMessage
   return (
     <>
       {renderSpecializedViewer()}
-      <FormRow label={`${i18next.t("payment:Message")}:`} block>
+      <FormRow label={`${i18next.t("general:Message")}:`} block>
         <CodeEditor
           value={message}
           language={getMessageEditorLang(entry?.message)}

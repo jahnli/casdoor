@@ -253,8 +253,6 @@ export default function SignupPage({application: applicationProp}: {application?
       ...values,
       application: application.name,
       organization: application.organization,
-      plan: searchParams.get("plan"),
-      pricing: searchParams.get("pricing"),
       agreement: agreed,
       language: userLang,
     };
@@ -292,11 +290,7 @@ export default function SignupPage({application: applicationProp}: {application?
     submitSignup(payload);
   };
 
-  const getResultPath = (payload: Record<string, any>, username: string) => {
-    if (payload.plan && payload.pricing) {
-      // the prompt page needs the user to be signed in, so a paid signup goes to buy-plan
-      return `/buy-plan/${application.organization}/${payload.pricing}?user=${username}&plan=${payload.plan}`;
-    }
+  const getResultPath = () => {
     if (authConfig.appName === application.name) {
       return "/result";
     }
@@ -332,9 +326,9 @@ export default function SignupPage({application: applicationProp}: {application?
         if (typeof res.data === "string") {
           username = res.data.split("/")[1];
         }
-        const path = getResultPath(payload, username);
+        const path = getResultPath();
         // the prompt page renders the signed-in account, so it has to be loaded first
-        if (Setting.hasPromptPage(application) && (!payload.plan || !payload.pricing)) {
+        if (Setting.hasPromptPage(application)) {
           reload().then(() => navigate(path, {state: {username}}));
           return;
         }

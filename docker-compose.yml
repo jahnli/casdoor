@@ -13,6 +13,9 @@ services:
         condition: service_healthy
     environment:
       RUNNING_IN_DOCKER: "true"
+      driverName: ${driverName:-mysql}
+      dataSourceName: ${dataSourceName:-root:123456@tcp(db:3306)/}
+      dbName: ${dbName:-casdoor}
     volumes:
       - ./conf:/conf/
   db:

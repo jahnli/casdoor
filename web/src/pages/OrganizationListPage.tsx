@@ -1,12 +1,10 @@
 import i18next from "i18next";
 import dayjs from "dayjs";
-import {Badge} from "@/components/ui/badge";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {boolColumn, dateColumn, linkColumn, textColumn, valueFilters} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
-import * as Setting from "@/lib/setting";
 import {newOrganization} from "@/pages/organization-defaults";
 
 export default function OrganizationListPage({formItems}: {formItems?: any[]} = {}) {
@@ -55,30 +53,6 @@ export default function OrganizationListPage({formItems}: {formItems?: any[]} = 
           </a>
         ) : null,
     },
-    {
-      dataIndex: "orgBalance",
-      title: i18next.t("organization:Org balance"),
-      width: 130,
-      sortable: true,
-      render: (value, record) => (
-        <Badge variant="secondary">{Setting.getPriceDisplay(value ?? 0, record.balanceCurrency)}</Badge>
-      ),
-    },
-    {
-      dataIndex: "userBalance",
-      title: i18next.t("organization:User balance"),
-      width: 130,
-      sortable: true,
-      render: (value, record) => Setting.getPriceDisplay(value ?? 0, record.balanceCurrency),
-    },
-    {
-      dataIndex: "balanceCredit",
-      title: i18next.t("organization:Balance credit"),
-      width: 130,
-      sortable: true,
-      render: (value, record) => Setting.getPriceDisplay(value ?? 0, record.balanceCurrency),
-    },
-    textColumn({dataIndex: "balanceCurrency", title: i18next.t("organization:Balance currency"), width: 130}),
     boolColumn({dataIndex: "enableSoftDeletion", title: i18next.t("organization:Soft deletion"), width: 120}),
   ];
 

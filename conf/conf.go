@@ -23,12 +23,17 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/server/web"
+	"github.com/joho/godotenv"
 )
 
 //go:embed waf.conf
 var WafConf string
 
 func init() {
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		panic("cannot load .env: check file permissions and dotenv syntax (contents suppressed)")
+	}
+
 	// this array contains the beego configuration items that may be modified via env
 	presetConfigItems := []string{"httpport", "appname"}
 	for _, key := range presetConfigItems {

@@ -53,7 +53,7 @@ func isValidVerificationMethod(method string) bool {
 // @Description get verifications
 // @Param   owner     query    string  true        "The owner of verifications"
 // @Success 200 {array} object.Verification The Response object
-// @router /get-payments [get]
+// @router /get-verifications [get]
 func (c *ApiController) GetVerifications() {
 	organization, ok := c.RequireAdmin()
 	if !ok {
@@ -75,13 +75,13 @@ func (c *ApiController) GetVerifications() {
 	}
 
 	if limit == "" || page == "" {
-		payments, err := object.GetVerifications(organization)
+		verifications, err := object.GetVerifications(organization)
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
 		}
 
-		c.ResponseOk(payments)
+		c.ResponseOk(verifications)
 	} else {
 		limit := util.ParseInt(limit)
 		count, err := object.GetVerificationCount(organization, field, value)
@@ -91,13 +91,13 @@ func (c *ApiController) GetVerifications() {
 		}
 
 		paginator := pagination.NewPaginator(c.Ctx.Request, limit, count)
-		payments, err := object.GetPaginationVerifications(organization, paginator.Offset(), limit, field, value, sortField, sortOrder)
+		verifications, err := object.GetPaginationVerifications(organization, paginator.Offset(), limit, field, value, sortField, sortOrder)
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
 		}
 
-		c.ResponseOk(payments, paginator.Nums())
+		c.ResponseOk(verifications, paginator.Nums())
 	}
 }
 
@@ -109,18 +109,18 @@ func (c *ApiController) GetVerifications() {
 // @Param   organization    query   string  true   "The organization of the user"
 // @Param   user    query   string  true           "The username of the user"
 // @Success 200 {array} object.Verification The Response object
-// @router /get-user-payments [get]
+// @router /get-user-verifications [get]
 func (c *ApiController) GetUserVerifications() {
 	owner := c.Ctx.Input.Query("owner")
 	user := c.Ctx.Input.Query("user")
 
-	payments, err := object.GetUserVerifications(owner, user)
+	verifications, err := object.GetUserVerifications(owner, user)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return
 	}
 
-	c.ResponseOk(payments)
+	c.ResponseOk(verifications)
 }
 
 // GetVerification
@@ -129,17 +129,17 @@ func (c *ApiController) GetUserVerifications() {
 // @Description get verification
 // @Param   id     query    string  true        "The id ( owner/name ) of the verification"
 // @Success 200 {object} object.Verification The Response object
-// @router /get-payment [get]
+// @router /get-verification [get]
 func (c *ApiController) GetVerification() {
 	id := c.Ctx.Input.Query("id")
 
-	payment, err := object.GetVerification(id)
+	verification, err := object.GetVerification(id)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return
 	}
 
-	c.ResponseOk(payment)
+	c.ResponseOk(verification)
 }
 
 // getUserByEmail resolves the address the way object.GetUserByFields() does for the

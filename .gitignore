@@ -22,6 +22,10 @@ bin/
 .vscode/settings.json
 .claude
 
+.env
+.env.*
+!.env.example
+
 tmp/
 tmpFiles/
 *.tmp

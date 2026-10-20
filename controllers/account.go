@@ -218,22 +218,12 @@ func (c *ApiController) Signup() {
 		return
 	}
 
-	userType := "normal-user"
-	if authForm.Plan != "" && authForm.Pricing != "" {
-		err = object.CheckPricingAndPlan(authForm.Organization, authForm.Pricing, authForm.Plan, c.GetAcceptLanguage())
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
-		}
-		userType = "paid-user"
-	}
-
 	user := &object.User{
 		Owner:             authForm.Organization,
 		Name:              username,
 		CreatedTime:       util.GetCurrentTime(),
 		Id:                id,
-		Type:              userType,
+		Type:              "normal-user",
 		Password:          authForm.Password,
 		DisplayName:       authForm.Name,
 		Gender:            authForm.Gender,
@@ -316,12 +306,8 @@ func (c *ApiController) Signup() {
 		}
 	}
 
-	if user.Type == "normal-user" {
-		c.renewSessionIdForUser(user.GetId())
-		c.SetSessionUsername(user.GetId())
-	} else if user.Type == "paid-user" {
-		c.SetSession("paidUsername", user.GetId())
-	}
+	c.renewSessionIdForUser(user.GetId())
+	c.SetSessionUsername(user.GetId())
 
 	if authForm.Email != "" {
 		err = object.DisableVerificationCode(authForm.Email)

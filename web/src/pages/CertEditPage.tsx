@@ -10,7 +10,7 @@ import {useOrganizationOptions} from "@/hooks/use-options";
 import * as CertBackend from "@/backend/CertBackend";
 import * as Setting from "@/lib/setting";
 
-const TYPES = ["SSL", "x509", "Payment"];
+const TYPES = ["SSL", "x509"];
 
 /** SSL certs are issued by an ACME provider, so they only pick the key family */
 const SSL_ALGORITHMS = [

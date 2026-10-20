@@ -36,7 +36,6 @@ import (
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/xorm-io/builder"
 	"github.com/xorm-io/core"
-	"github.com/xorm-io/xorm"
 )
 
 const (
@@ -102,10 +101,6 @@ type User struct {
 	Score                int        `json:"score"`
 	Karma                int        `json:"karma"`
 	Ranking              int        `json:"ranking"`
-	Balance              float64    `json:"balance"`
-	BalanceCredit        float64    `json:"balanceCredit"`
-	Currency             string     `xorm:"varchar(100)" json:"currency"`
-	BalanceCurrency      string     `xorm:"varchar(100)" json:"balanceCurrency"`
 	IsDefaultAvatar      bool       `json:"isDefaultAvatar"`
 	IsOnline             bool       `json:"isOnline"`
 	IsAdmin              bool       `json:"isAdmin"`
@@ -228,7 +223,6 @@ type User struct {
 	Invitation          string                `xorm:"varchar(100) index" json:"invitation"`
 	InvitationCode      string                `xorm:"varchar(100) index" json:"invitationCode"`
 	FaceIds             []*FaceId             `json:"faceIds"`
-	Cart                []ProductInfo         `xorm:"mediumtext" json:"cart"`
 
 	Ldap string `xorm:"ldap varchar(100)" json:"ldap"`
 	// UidNumber is the POSIX uid published by the built-in LDAP server, 0 when unassigned.
@@ -821,7 +815,7 @@ var userSelfColumns = []string{
 	"hash", "is_default_avatar", "properties", "webauthnCredentials", "mfa_items", "last_change_password_time", "managedAccounts", "face_ids", "mfaAccounts",
 	"signin_wrong_times", "last_signin_wrong_time", "groups", "mfa_phone_enabled", "mfa_email_enabled",
 	"type", "need_update_password", "ip_whitelist", "mfa_remember_deadline",
-	"cart", "application_scopes",
+	"application_scopes",
 }
 
 // userProviderColumns hold the IDs the sign-in by a provider looks the user up with, only the
@@ -840,7 +834,7 @@ var userProviderColumns = []string{
 func GetDefaultUserUpdateColumns(isAdmin bool) []string {
 	columns := append([]string{}, userSelfColumns...)
 	if isAdmin {
-		columns = append(columns, "name", "id", "email", "phone", "country_code", "type", "balance", "balance_credit", "balance_currency", "mfa_items", "register_type", "register_source",
+		columns = append(columns, "name", "id", "email", "phone", "country_code", "type", "mfa_items", "register_type", "register_source",
 			"is_admin", "is_forbidden", "is_deleted", "uid_number", "email_verified")
 		columns = append(columns, userProviderColumns...)
 	}
@@ -1067,14 +1061,6 @@ func AddUser(user *User, lang string) (bool, error) {
 
 	if organization.Name == "built-in" && !organization.HasPrivilegeConsent && user.Name != "admin" {
 		return false, errors.New(i18n.Translate(lang, "organization:adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Casdoor. Refer to the docs: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option."))
-	}
-
-	if user.BalanceCurrency == "" {
-		if organization.BalanceCurrency != "" {
-			user.BalanceCurrency = organization.BalanceCurrency
-		} else {
-			user.BalanceCurrency = "USD"
-		}
 	}
 
 	if user.Avatar == "" {
@@ -1810,72 +1796,4 @@ func GenerateIdForNewUser(application *Application) (string, error) {
 
 	res := strconv.Itoa(lastUserId + 1)
 	return res, nil
-}
-
-func UpdateUserBalance(owner string, name string, balance float64, currency string, lang string) error {
-	user, err := getUser(owner, name)
-	if err != nil {
-		return err
-	}
-	if user == nil {
-		return fmt.Errorf(i18n.Translate(lang, "general:The user: %s is not found"), fmt.Sprintf("%s/%s", owner, name))
-	}
-
-	// Convert the balance amount from transaction currency to user's balance currency
-	balanceCurrency := user.BalanceCurrency
-	var org *Organization
-	if balanceCurrency == "" {
-		// Get organization's balance currency as fallback
-		org, err = getOrganization("admin", owner)
-		if err == nil && org != nil && org.BalanceCurrency != "" {
-			balanceCurrency = org.BalanceCurrency
-		} else {
-			balanceCurrency = "USD"
-		}
-	}
-	convertedBalance := ConvertCurrency(balance, currency, balanceCurrency)
-
-	// Calculate new balance
-	newBalance := AddPrices(user.Balance, convertedBalance)
-
-	// Check balance credit limit
-	// User.BalanceCredit takes precedence over Organization.BalanceCredit
-	var balanceCredit float64
-	if user.BalanceCredit != 0 {
-		balanceCredit = user.BalanceCredit
-	} else {
-		// Get organization's balance credit as fallback
-		if org == nil {
-			org, err = getOrganization("admin", owner)
-			if err != nil {
-				return err
-			}
-		}
-		if org != nil {
-			balanceCredit = org.BalanceCredit
-		}
-	}
-
-	affected, err := incrBalance(ormer.Engine.ID(core.PK{owner, name}), "balance", convertedBalance, balanceCredit, &User{UpdatedTime: util.GetCurrentTime()})
-	if err != nil {
-		return err
-	}
-	if !affected {
-		return fmt.Errorf(i18n.Translate(lang, "general:Insufficient balance: new balance %v would be below credit limit %v"), newBalance, balanceCredit)
-	}
-	return nil
-}
-
-// incrBalance adds amount to the column in one statement, a spending is only applied while the
-// column stays at or above the credit, so concurrent payments cannot both spend the same balance
-func incrBalance(session *xorm.Session, column string, amount float64, credit float64, bean interface{}) (bool, error) {
-	if amount == 0 {
-		return true, nil
-	}
-	if amount < 0 {
-		session = session.Where(fmt.Sprintf("%s + ? >= ?", column), amount, credit)
-	}
-
-	affected, err := session.Incr(column, amount).Update(bean)
-	return affected != 0, err
 }

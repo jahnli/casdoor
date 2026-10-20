@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "El método de inicio de sesión: inicio de sesión con reconocimiento facial no está habilitado para la aplicación",
     "The login method: login with magic link is not enabled for the application": "El método de inicio de sesión: inicio de sesión con enlace mágico no está habilitado para la aplicación",
     "The login method: login with password is not enabled for the application": "El método de inicio de sesión: inicio de sesión con contraseña no está habilitado para la aplicación",
-    "The order: %s does not exist": "El pedido: %s no existe",
     "The organization: %s does not exist": "La organización: %s no existe",
     "The organization: %s has disabled users to signin": "La organización: %s ha desactivado el inicio de sesión de usuarios",
-    "The plan: %s does not exist": "El plan: %s no existe",
-    "The pricing: %s does not exist": "El precio: %s no existe",
-    "The pricing: %s does not have plan: %s": "El precio: %s no tiene el plan: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "El precio: %s es solo por invitación, solo los usuarios invitados pueden usarlo",
     "The provider: %s does not exist": "El proveedor: %s no existe",
     "The provider: %s is not enabled for the application": "El proveedor: %s no está habilitado para la aplicación",
     "Unauthorized operation": "Operación no autorizada",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "La etiqueta del usuario: %s no está incluida en las etiquetas de la aplicación",
     "UserCode Expired": "Código de usuario expirado",
     "UserCode Invalid": "Código de usuario inválido",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "El usuario de pago %s no tiene una suscripción activa o pendiente y la aplicación %s no tiene precios predeterminados",
     "the application for user %s is not found": "no se encontró la aplicación para el usuario %s",
     "the organization: %s is not found": "no se encontró la organización: %s"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "La aplicación no puede estar vacía",
+    "Error": "Error",
     "Failed to import groups": "Error al importar grupos",
     "Failed to import users": "Error al importar usuarios",
     "Granted scopes cannot be empty": "Los alcances concedidos no pueden estar vacíos",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Saldo insuficiente: el nuevo saldo %v estaría por debajo del límite de crédito %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Saldo insuficiente: el nuevo saldo de la organización %v estaría por debajo del límite de crédito %v",
     "Invalid application": "Aplicación no válida",
     "Missing parameter": "Parámetro faltante",
     "Multiple captcha providers are not allowed in the same application: %s": "No se permiten varios proveedores de captcha en la misma aplicación: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "El usuario: %s en la línea %d está duplicado con la línea %d",
     "The user: %s is not found": "El usuario: %s no encontrado",
     "The users already exist: %s": "Los siguientes usuarios ya existen: %s",
-    "User is required for User category transaction": "El usuario es obligatorio para la transacción de la categoría Usuario",
     "User not found": "Usuario no encontrado",
     "Wrong userId": "ID de usuario incorrecto",
     "don't support captchaProvider: ": "No apoyo a captchaProvider",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "El permiso: \"%s\" no existe"
   },
-  "product": {
-    "Product list cannot be empty": "La lista de productos no puede estar vacía"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Error al inicializar el proveedor de verificación de ID",
     "Invalid application id": "Identificación de aplicación no válida",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "El objectKey: %s no está permitido",
     "The provider type: %s is not supported": "El tipo de proveedor: %s no es compatible"
-  },
-  "subscription": {
-    "Error": "Error"
   },
   "ticket": {
     "Ticket not found": "Ticket no encontrado"

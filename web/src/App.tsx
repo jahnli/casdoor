@@ -85,28 +85,6 @@ const TokenListPage = React.lazy(() => import("@/pages/TokenListPage"));
 const TokenEditPage = React.lazy(() => import("@/pages/TokenEditPage"));
 const VerificationListPage = React.lazy(() => import("@/pages/VerificationListPage"));
 
-const ProductListPage = React.lazy(() => import("@/pages/ProductListPage"));
-const ProductStorePage = React.lazy(() => import("@/pages/ProductStorePage"));
-const ProductBuyPage = React.lazy(() => import("@/pages/ProductBuyPage"));
-const CartListPage = React.lazy(() => import("@/pages/CartListPage"));
-const OrderPayPage = React.lazy(() => import("@/pages/OrderPayPage"));
-const PaymentResultPage = React.lazy(() => import("@/pages/PaymentResultPage"));
-const ProductEditPage = React.lazy(() => import("@/pages/ProductEditPage"));
-const CouponListPage = React.lazy(() => import("@/pages/CouponListPage"));
-const CouponEditPage = React.lazy(() => import("@/pages/CouponEditPage"));
-const OrderListPage = React.lazy(() => import("@/pages/OrderListPage"));
-const OrderEditPage = React.lazy(() => import("@/pages/OrderEditPage"));
-const PaymentListPage = React.lazy(() => import("@/pages/PaymentListPage"));
-const PaymentEditPage = React.lazy(() => import("@/pages/PaymentEditPage"));
-const PlanListPage = React.lazy(() => import("@/pages/PlanListPage"));
-const PlanEditPage = React.lazy(() => import("@/pages/PlanEditPage"));
-const PricingListPage = React.lazy(() => import("@/pages/PricingListPage"));
-const PricingEditPage = React.lazy(() => import("@/pages/PricingEditPage"));
-const SubscriptionListPage = React.lazy(() => import("@/pages/SubscriptionListPage"));
-const SubscriptionEditPage = React.lazy(() => import("@/pages/SubscriptionEditPage"));
-const TransactionListPage = React.lazy(() => import("@/pages/TransactionListPage"));
-const TransactionEditPage = React.lazy(() => import("@/pages/TransactionEditPage"));
-
 const FormListPage = React.lazy(() => import("@/pages/FormListPage"));
 const FormEditPage = React.lazy(() => import("@/pages/FormEditPage"));
 const SyncerListPage = React.lazy(() => import("@/pages/SyncerListPage"));
@@ -129,8 +107,6 @@ const AuthCallback = React.lazy(() => import("@/pages/auth/AuthCallback"));
 const SamlCallback = React.lazy(() => import("@/pages/auth/SamlCallback"));
 const ResultPage = React.lazy(() => import("@/pages/auth/ResultPage"));
 const ConsentPage = React.lazy(() => import("@/pages/auth/ConsentPage"));
-const PricingPage = React.lazy(() => import("@/pages/PricingPage"));
-const QrCodePage = React.lazy(() => import("@/pages/QrCodePage"));
 const ThemePreviewPage = React.lazy(() => import("@/pages/ThemePreviewPage"));
 const PromptPage = React.lazy(() => import("@/pages/auth/PromptPage"));
 const TelegramLogin = React.lazy(() => import("@/pages/auth/TelegramLogin"));
@@ -245,11 +221,6 @@ export default function App() {
         <Route path="/result" element={<ResultPage />} />
         <Route path="/result/:applicationName" element={<ResultPage />} />
 
-        {/* Pricing / checkout pages reachable without the console chrome */}
-        <Route path="/select-plan/:owner/:pricingName" element={<PricingPage />} />
-        <Route path="/buy-plan/:owner/:pricingName" element={<ProductBuyPage />} />
-        <Route path="/buy-plan/:owner/:pricingName/result" element={<PaymentResultPage />} />
-        <Route path="/qrcode/:owner/:paymentName" element={<QrCodePage />} />
         <Route path="/marketplace/theme-preview" element={<ThemePreviewPage />} />
 
         {/* Console */}
@@ -323,28 +294,6 @@ export default function App() {
           <Route path="/tokens" element={<TokenListPage />} />
           <Route path="/tokens/:tokenName" element={<TokenEditPage />} />
           <Route path="/verifications" element={<VerificationListPage />} />
-
-          <Route path="/product-store" element={<ProductStorePage />} />
-          <Route path="/products" element={<ProductListPage />} />
-          <Route path="/products/:organizationName/:productName" element={<ProductEditPage />} />
-          <Route path="/products/:organizationName/:productName/buy" element={<ProductBuyPage />} />
-          <Route path="/cart" element={<CartListPage />} />
-          <Route path="/coupons" element={<CouponListPage />} />
-          <Route path="/coupons/:organizationName/:couponName" element={<CouponEditPage />} />
-          <Route path="/orders" element={<OrderListPage />} />
-          <Route path="/orders/:organizationName/:orderName" element={<OrderEditPage />} />
-          <Route path="/orders/:organizationName/:orderName/pay" element={<OrderPayPage />} />
-          <Route path="/payments" element={<PaymentListPage />} />
-          <Route path="/payments/:organizationName/:paymentName" element={<PaymentEditPage />} />
-          <Route path="/payments/:organizationName/:paymentName/result" element={<PaymentResultPage />} />
-          <Route path="/plans" element={<PlanListPage />} />
-          <Route path="/plans/:organizationName/:planName" element={<PlanEditPage />} />
-          <Route path="/pricings" element={<PricingListPage />} />
-          <Route path="/pricings/:organizationName/:pricingName" element={<PricingEditPage />} />
-          <Route path="/subscriptions" element={<SubscriptionListPage />} />
-          <Route path="/subscriptions/:organizationName/:subscriptionName" element={<SubscriptionEditPage />} />
-          <Route path="/transactions" element={<TransactionListPage />} />
-          <Route path="/transactions/:organizationName/:transactionName" element={<TransactionEditPage />} />
 
           <Route path="/forms" element={<FormListPage />} />
           <Route path="/forms/:formName" element={<FormEditPage />} />

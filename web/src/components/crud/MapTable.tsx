@@ -25,7 +25,7 @@ interface MapTableProps {
 }
 
 /**
- * Edits a `map[string]string` column (user/group/product properties, LDAP
+ * Edits a `map[string]string` column (user/group properties, LDAP
  * custom attributes, provider HTTP headers) as a two-column table.
  *
  * The rows are kept here rather than rebuilt from the map on every render: a

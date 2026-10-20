@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "Phương thức đăng nhập bằng khuôn mặt chưa được bật cho ứng dụng",
     "The login method: login with magic link is not enabled for the application": "Phương thức đăng nhập: đăng nhập bằng liên kết ma thuật chưa được bật cho ứng dụng",
     "The login method: login with password is not enabled for the application": "Phương thức đăng nhập: đăng nhập bằng mật khẩu không được kích hoạt cho ứng dụng",
-    "The order: %s does not exist": "Đơn hàng: %s không tồn tại",
     "The organization: %s does not exist": "Tổ chức: %s không tồn tại",
     "The organization: %s has disabled users to signin": "Tổ chức: %s đã vô hiệu hóa đăng nhập của người dùng",
-    "The plan: %s does not exist": "Kế hoạch: %s không tồn tại",
-    "The pricing: %s does not exist": "Giá: %s không tồn tại",
-    "The pricing: %s does not have plan: %s": "Giá: %s không có kế hoạch: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "Bảng giá: %s chỉ dành cho người được mời, chỉ người dùng được mời mới có thể sử dụng",
     "The provider: %s does not exist": "Nhà cung cấp: %s không tồn tại",
     "The provider: %s is not enabled for the application": "Nhà cung cấp: %s không được kích hoạt cho ứng dụng",
     "Unauthorized operation": "Hoạt động không được ủy quyền",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "Thẻ của người dùng: %s không nằm trong danh sách thẻ của ứng dụng",
     "UserCode Expired": "Mã người dùng đã hết hạn",
     "UserCode Invalid": "Mã người dùng không hợp lệ",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "người dùng trả phí %s không có đăng ký đang hoạt động hoặc đang chờ và ứng dụng: %s không có giá mặc định",
     "the application for user %s is not found": "không tìm thấy ứng dụng cho người dùng %s",
     "the organization: %s is not found": "không tìm thấy tổ chức: %s"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "Ứng dụng không được để trống",
+    "Error": "Lỗi",
     "Failed to import groups": "Không thể nhập nhóm",
     "Failed to import users": "Không thể nhập người dùng",
     "Granted scopes cannot be empty": "Phạm vi được cấp không được để trống",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Số dư không đủ: số dư mới %v sẽ thấp hơn giới hạn tín dụng %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Số dư không đủ: số dư tổ chức mới %v sẽ thấp hơn giới hạn tín dụng %v",
     "Invalid application": "Ứng dụng không hợp lệ",
     "Missing parameter": "Thiếu tham số",
     "Multiple captcha providers are not allowed in the same application: %s": "Không cho phép nhiều nhà cung cấp captcha trong cùng một ứng dụng: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "Người dùng: %s ở dòng %d bị trùng với dòng %d",
     "The user: %s is not found": "Người dùng: %s không được tìm thấy",
     "The users already exist: %s": "Những người dùng sau đã tồn tại: %s",
-    "User is required for User category transaction": "Người dùng được yêu cầu cho giao dịch danh mục Người dùng",
     "User not found": "Không tìm thấy người dùng",
     "Wrong userId": "ID người dùng sai",
     "don't support captchaProvider: ": "không hỗ trợ captchaProvider: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "Quyền: \"%s\" không tồn tại"
   },
-  "product": {
-    "Product list cannot be empty": "Danh sách sản phẩm không thể trống"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Không thể khởi tạo nhà cung cấp Xác minh ID",
     "Invalid application id": "Sai ID ứng dụng",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "Khóa đối tượng: %s không được phép",
     "The provider type: %s is not supported": "Loại nhà cung cấp: %s không được hỗ trợ"
-  },
-  "subscription": {
-    "Error": "Lỗi"
   },
   "ticket": {
     "Ticket not found": "Không tìm thấy vé"

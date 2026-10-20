@@ -274,24 +274,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/add-order:
-    post:
-      tags:
-      - Order API
-      description: add order
-      operationId: ApiController.AddOrder
-      parameters:
-      - in: body
-        name: body
-        description: The details of the order
-        required: true
-        schema:
-          $ref: '#/definitions/object.Order'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/add-organization:
     post:
       tags:
@@ -310,24 +292,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/add-payment:
-    post:
-      tags:
-      - Payment API
-      description: add payment
-      operationId: ApiController.AddPayment
-      parameters:
-      - in: body
-        name: body
-        description: The details of the payment
-        required: true
-        schema:
-          $ref: '#/definitions/object.Payment'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/add-permission:
     post:
       tags:
@@ -341,24 +305,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Permission'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/add-plan:
-    post:
-      tags:
-      - Plan API
-      description: add plan
-      operationId: ApiController.AddPlan
-      parameters:
-      - in: body
-        name: body
-        description: The details of the plan
-        required: true
-        schema:
-          $ref: '#/definitions/object.Plan'
       responses:
         "200":
           description: The Response object
@@ -387,42 +333,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/Response'
-  /api/add-pricing:
-    post:
-      tags:
-      - Pricing API
-      description: add pricing
-      operationId: ApiController.AddPricing
-      parameters:
-      - in: body
-        name: body
-        description: The details of the pricing
-        required: true
-        schema:
-          $ref: '#/definitions/object.Pricing'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/add-product:
-    post:
-      tags:
-      - Product API
-      description: add product
-      operationId: ApiController.AddProduct
-      parameters:
-      - in: body
-        name: body
-        description: The details of the product
-        required: true
-        schema:
-          $ref: '#/definitions/object.Product'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/add-provider:
     post:
       tags:
@@ -512,24 +422,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/add-subscription:
-    post:
-      tags:
-      - Subscription API
-      description: add subscription
-      operationId: ApiController.AddSubscription
-      parameters:
-      - in: body
-        name: body
-        description: The details of the subscription
-        required: true
-        schema:
-          $ref: '#/definitions/object.Subscription'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/add-syncer:
     post:
       tags:
@@ -602,28 +494,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Token'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/add-transaction:
-    post:
-      tags:
-      - Transaction API
-      description: add transaction
-      operationId: ApiController.AddTransaction
-      parameters:
-      - in: body
-        name: body
-        description: The details of the transaction
-        required: true
-        schema:
-          $ref: '#/definitions/object.Transaction'
-      - in: query
-        name: dryRun
-        description: 'Dry run mode: set to ''true'' or ''1'' to validate without committing'
-        type: string
       responses:
         "200":
           description: The Response object
@@ -707,23 +577,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/cancel-order:
-    post:
-      tags:
-      - Order API
-      description: cancel an order
-      operationId: ApiController.CancelOrder
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the order
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/check-user-password:
     post:
       tags:
@@ -734,49 +587,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/object.Userinfo'
-  /api/buy-product:
-    post:
-      tags:
-      - Product API
-      description: buy product using the deprecated compatibility endpoint, prefer place-order plus pay-order for new integrations
-      operationId: ApiController.BuyProduct
-      deprecated: true
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the product
-        required: true
-        type: string
-      - in: query
-        name: providerName
-        description: The name of the provider
-        required: true
-        type: string
-      - in: query
-        name: pricingName
-        description: The name of the pricing (for subscription)
-        type: string
-      - in: query
-        name: planName
-        description: The name of the plan (for subscription)
-        type: string
-      - in: query
-        name: userName
-        description: The username to buy product for (admin only)
-        type: string
-      - in: query
-        name: paymentEnv
-        description: The payment environment
-        type: string
-      - in: query
-        name: customPrice
-        description: Custom price for recharge products
-        type: number
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/delete-adapter:
     post:
       tags:
@@ -950,24 +760,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/delete-order:
-    post:
-      tags:
-      - Order API
-      description: delete order
-      operationId: ApiController.DeleteOrder
-      parameters:
-      - in: body
-        name: body
-        description: The details of the order
-        required: true
-        schema:
-          $ref: '#/definitions/object.Order'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/delete-organization:
     post:
       tags:
@@ -986,24 +778,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/delete-payment:
-    post:
-      tags:
-      - Payment API
-      description: delete payment
-      operationId: ApiController.DeletePayment
-      parameters:
-      - in: body
-        name: body
-        description: The details of the payment
-        required: true
-        schema:
-          $ref: '#/definitions/object.Payment'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/delete-permission:
     post:
       tags:
@@ -1017,60 +791,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Permission'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/delete-plan:
-    post:
-      tags:
-      - Plan API
-      description: delete plan
-      operationId: ApiController.DeletePlan
-      parameters:
-      - in: body
-        name: body
-        description: The details of the plan
-        required: true
-        schema:
-          $ref: '#/definitions/object.Plan'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/delete-pricing:
-    post:
-      tags:
-      - Pricing API
-      description: delete pricing
-      operationId: ApiController.DeletePricing
-      parameters:
-      - in: body
-        name: body
-        description: The details of the pricing
-        required: true
-        schema:
-          $ref: '#/definitions/object.Pricing'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/delete-product:
-    post:
-      tags:
-      - Product API
-      description: delete product
-      operationId: ApiController.DeleteProduct
-      parameters:
-      - in: body
-        name: body
-        description: The details of the product
-        required: true
-        schema:
-          $ref: '#/definitions/object.Product'
       responses:
         "200":
           description: The Response object
@@ -1147,24 +867,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/delete-subscription:
-    post:
-      tags:
-      - Subscription API
-      description: delete subscription
-      operationId: ApiController.DeleteSubscription
-      parameters:
-      - in: body
-        name: body
-        description: The details of the subscription
-        required: true
-        schema:
-          $ref: '#/definitions/object.Subscription'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/delete-syncer:
     post:
       tags:
@@ -1214,24 +916,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Token'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/delete-transaction:
-    post:
-      tags:
-      - Transaction API
-      description: delete transaction
-      operationId: ApiController.DeleteTransaction
-      parameters:
-      - in: body
-        name: body
-        description: The details of the transaction
-        required: true
-        schema:
-          $ref: '#/definitions/object.Transaction'
       responses:
         "200":
           description: The Response object
@@ -1956,42 +1640,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/object.Model'
-  /api/get-order:
-    get:
-      tags:
-      - Order API
-      description: get order
-      operationId: ApiController.GetOrder
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the order
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Order'
-  /api/get-orders:
-    get:
-      tags:
-      - Order API
-      description: get orders
-      operationId: ApiController.GetOrders
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of orders
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Order'
   /api/get-organization:
     get:
       tags:
@@ -2066,42 +1714,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/object.Organization'
-  /api/get-payment:
-    get:
-      tags:
-      - Verification API
-      description: get payment
-      operationId: ApiController.GetVerification
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the payment
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Verification'
-  /api/get-payments:
-    get:
-      tags:
-      - Verification API
-      description: get payments
-      operationId: ApiController.GetVerifications
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of payments
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Verification'
   /api/get-permission:
     get:
       tags:
@@ -2170,46 +1782,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/object.Permission'
-  /api/get-plan:
-    get:
-      tags:
-      - Plan API
-      description: get plan
-      operationId: ApiController.GetPlan
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the plan
-        required: true
-        type: string
-      - in: query
-        name: includeOption
-        description: Should include plan's option
-        type: boolean
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Plan'
-  /api/get-plans:
-    get:
-      tags:
-      - Plan API
-      description: get plans
-      operationId: ApiController.GetPlans
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of plans
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Plan'
   /api/get-policies:
     get:
       tags:
@@ -2233,78 +1805,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/xormadapter.CasbinRule'
-  /api/get-pricing:
-    get:
-      tags:
-      - Pricing API
-      description: get pricing
-      operationId: ApiController.GetPricing
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the pricing
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Pricing'
-  /api/get-pricings:
-    get:
-      tags:
-      - Pricing API
-      description: get pricings
-      operationId: ApiController.GetPricings
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of pricings
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Pricing'
-  /api/get-product:
-    get:
-      tags:
-      - Product API
-      description: get product
-      operationId: ApiController.GetProduct
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the product
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Product'
-  /api/get-products:
-    get:
-      tags:
-      - Product API
-      description: get products
-      operationId: ApiController.GetProducts
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of products
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Product'
   /api/get-prometheus-info:
     get:
       tags:
@@ -2576,42 +2076,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/object.User'
-  /api/get-subscription:
-    get:
-      tags:
-      - Subscription API
-      description: get subscription
-      operationId: ApiController.GetSubscription
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the subscription
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Subscription'
-  /api/get-subscriptions:
-    get:
-      tags:
-      - Subscription API
-      description: get subscriptions
-      operationId: ApiController.GetSubscriptions
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of subscriptions
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Subscription'
   /api/get-syncer:
     get:
       tags:
@@ -2741,42 +2205,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/object.Token'
-  /api/get-transaction:
-    get:
-      tags:
-      - Transaction API
-      description: get transaction
-      operationId: ApiController.GetTransaction
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the transaction
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Transaction'
-  /api/get-transactions:
-    get:
-      tags:
-      - Transaction API
-      description: get transactions
-      operationId: ApiController.GetTransactions
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of transactions
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Transaction'
   /api/get-user:
     get:
       tags:
@@ -2845,59 +2273,6 @@ paths:
       responses:
         "200":
           description: '{int} int The count of filtered users for an organization'
-  /api/get-user-orders:
-    get:
-      tags:
-      - Order API
-      description: get orders for a user
-      operationId: ApiController.GetUserOrders
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of orders
-        required: true
-        type: string
-      - in: query
-        name: user
-        description: The username of the user
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Order'
-  /api/get-user-payments:
-    get:
-      tags:
-      - Verification API
-      description: get payments for a user
-      operationId: ApiController.GetUserVerifications
-      parameters:
-      - in: query
-        name: owner
-        description: The owner of payments
-        required: true
-        type: string
-      - in: query
-        name: organization
-        description: The organization of the user
-        required: true
-        type: string
-      - in: query
-        name: user
-        description: The username of the user
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/object.Verification'
   /api/get-users:
     get:
       tags:
@@ -3004,23 +2379,6 @@ paths:
       - in: formData
         name: username
         description: The username to impersonate (owner/name)
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/invoice-payment:
-    post:
-      tags:
-      - Payment API
-      description: invoice payment
-      operationId: ApiController.InvoicePayment
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the payment
         required: true
         type: string
       responses:
@@ -3285,79 +2643,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/notify-payment:
-    post:
-      tags:
-      - Payment API
-      description: notify payment
-      operationId: ApiController.NotifyPayment
-      parameters:
-      - in: body
-        name: body
-        description: The details of the payment
-        required: true
-        schema:
-          $ref: '#/definitions/object.Payment'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/pay-order:
-    post:
-      tags:
-      - Order API
-      description: pay an existing order
-      operationId: ApiController.PayOrder
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the order
-        required: true
-        type: string
-      - in: query
-        name: providerName
-        description: The name of the provider
-        required: true
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/place-order:
-    post:
-      tags:
-      - Order API
-      description: place an order for a product
-      operationId: ApiController.PlaceOrder
-      parameters:
-      - in: query
-        name: productId
-        description: The id ( owner/name ) of the product
-        required: true
-        type: string
-      - in: query
-        name: pricingName
-        description: The name of the pricing (for subscription)
-        type: string
-      - in: query
-        name: planName
-        description: The name of the plan (for subscription)
-        type: string
-      - in: query
-        name: customPrice
-        description: Custom price for recharge products
-        type: number
-      - in: query
-        name: userName
-        description: The username to place order for (admin only)
-        type: string
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/object.Order'
   /api/remove-policy:
     post:
       tags:
@@ -3843,29 +3128,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/update-order:
-    post:
-      tags:
-      - Order API
-      description: update order
-      operationId: ApiController.UpdateOrder
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the order
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the order
-        required: true
-        schema:
-          $ref: '#/definitions/object.Order'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/update-organization:
     post:
       tags:
@@ -3889,29 +3151,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/update-payment:
-    post:
-      tags:
-      - Payment API
-      description: update payment
-      operationId: ApiController.UpdatePayment
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the payment
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the payment
-        required: true
-        schema:
-          $ref: '#/definitions/object.Payment'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/update-permission:
     post:
       tags:
@@ -3930,29 +3169,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Permission'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/update-plan:
-    post:
-      tags:
-      - Plan API
-      description: update plan
-      operationId: ApiController.UpdatePlan
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the plan
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the plan
-        required: true
-        schema:
-          $ref: '#/definitions/object.Plan'
       responses:
         "200":
           description: The Response object
@@ -3983,52 +3199,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/Response'
-  /api/update-pricing:
-    post:
-      tags:
-      - Pricing API
-      description: update pricing
-      operationId: ApiController.UpdatePricing
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the pricing
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the pricing
-        required: true
-        schema:
-          $ref: '#/definitions/object.Pricing'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/update-product:
-    post:
-      tags:
-      - Product API
-      description: update product
-      operationId: ApiController.UpdateProduct
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the product
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the product
-        required: true
-        schema:
-          $ref: '#/definitions/object.Product'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/update-provider:
     post:
       tags:
@@ -4116,29 +3286,6 @@ paths:
           description: The Response object
           schema:
             $ref: '#/definitions/controllers.Response'
-  /api/update-subscription:
-    post:
-      tags:
-      - Subscription API
-      description: update subscription
-      operationId: ApiController.UpdateSubscription
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the subscription
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the subscription
-        required: true
-        schema:
-          $ref: '#/definitions/object.Subscription'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
   /api/update-syncer:
     post:
       tags:
@@ -4203,29 +3350,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/object.Token'
-      responses:
-        "200":
-          description: The Response object
-          schema:
-            $ref: '#/definitions/controllers.Response'
-  /api/update-transaction:
-    post:
-      tags:
-      - Transaction API
-      description: update transaction
-      operationId: ApiController.UpdateTransaction
-      parameters:
-      - in: query
-        name: id
-        description: The id ( owner/name ) of the transaction
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: The details of the transaction
-        required: true
-        schema:
-          $ref: '#/definitions/object.Transaction'
       responses:
         "200":
           description: The Response object
@@ -5368,41 +4492,6 @@ definitions:
         type: string
       userinfo_endpoint:
         type: string
-  object.Order:
-    title: Order
-    type: object
-    properties:
-      createdTime:
-        type: string
-      currency:
-        type: string
-      displayName:
-        type: string
-      message:
-        type: string
-      name:
-        type: string
-      owner:
-        type: string
-      payment:
-        type: string
-      price:
-        type: number
-        format: double
-      productInfos:
-        type: array
-        items:
-          $ref: '#/definitions/object.ProductInfo'
-      products:
-        type: array
-        items:
-          type: string
-      state:
-        type: string
-      updateTime:
-        type: string
-      user:
-        type: string
   object.Organization:
     title: Organization
     type: object
@@ -5412,11 +4501,6 @@ definitions:
         items:
           $ref: '#/definitions/object.AccountItem'
       accountMenu:
-        type: string
-      balanceCredit:
-        type: number
-        format: double
-      balanceCurrency:
         type: string
       countryCodes:
         type: array
@@ -5476,9 +4560,6 @@ definitions:
         type: array
         items:
           type: string
-      orgBalance:
-        type: number
-        format: double
       owner:
         type: string
       passwordExpireDays:
@@ -5504,9 +4585,6 @@ definitions:
         $ref: '#/definitions/object.ThemeData'
       useEmailAsUsername:
         type: boolean
-      userBalance:
-        type: number
-        format: double
       userNavItems:
         type: array
         items:
@@ -5534,69 +4612,6 @@ definitions:
       dbName:
         type: string
       driverName:
-        type: string
-  object.Payment:
-    title: Payment
-    type: object
-    properties:
-      createdTime:
-        type: string
-      currency:
-        type: string
-      detail:
-        type: string
-      displayName:
-        type: string
-      invoiceRemark:
-        type: string
-      invoiceTaxId:
-        type: string
-      invoiceTitle:
-        type: string
-      invoiceType:
-        type: string
-      invoiceUrl:
-        type: string
-      message:
-        type: string
-      name:
-        type: string
-      order:
-        type: string
-      orderObj:
-        $ref: '#/definitions/object.Order'
-      outOrderId:
-        type: string
-      owner:
-        type: string
-      payUrl:
-        type: string
-      personEmail:
-        type: string
-      personIdCard:
-        type: string
-      personName:
-        type: string
-      personPhone:
-        type: string
-      price:
-        type: number
-        format: double
-      products:
-        type: array
-        items:
-          type: string
-      productsDisplayName:
-        type: string
-      provider:
-        type: string
-      state:
-        $ref: '#/definitions/pp.PaymentState'
-      successUrl:
-        type: string
-      type:
-        type: string
-      user:
         type: string
   object.Permission:
     title: Permission
@@ -5654,146 +4669,6 @@ definitions:
         type: array
         items:
           type: string
-  object.Plan:
-    title: Plan
-    type: object
-    properties:
-      createdTime:
-        type: string
-      currency:
-        type: string
-      description:
-        type: string
-      displayName:
-        type: string
-      isEnabled:
-        type: boolean
-      name:
-        type: string
-      options:
-        type: array
-        items:
-          type: string
-      owner:
-        type: string
-      paymentProviders:
-        type: array
-        items:
-          type: string
-      period:
-        type: string
-      price:
-        type: number
-        format: double
-      product:
-        type: string
-      role:
-        type: string
-  object.Pricing:
-    title: Pricing
-    type: object
-    properties:
-      application:
-        type: string
-      createdTime:
-        type: string
-      description:
-        type: string
-      displayName:
-        type: string
-      isEnabled:
-        type: boolean
-      name:
-        type: string
-      owner:
-        type: string
-      plans:
-        type: array
-        items:
-          type: string
-      trialDuration:
-        type: integer
-        format: int64
-  object.Product:
-    title: Product
-    type: object
-    properties:
-      createdTime:
-        type: string
-      currency:
-        type: string
-      description:
-        type: string
-      detail:
-        type: string
-      disableCustomRecharge:
-        type: boolean
-      displayName:
-        type: string
-      image:
-        type: string
-      isRecharge:
-        type: boolean
-      name:
-        type: string
-      owner:
-        type: string
-      price:
-        type: number
-        format: double
-      providerObjs:
-        type: array
-        items:
-          $ref: '#/definitions/object.Provider'
-      providers:
-        type: array
-        items:
-          type: string
-      quantity:
-        type: integer
-        format: int64
-      rechargeOptions:
-        type: array
-        items:
-          type: number
-          format: double
-      sold:
-        type: integer
-        format: int64
-      state:
-        type: string
-      successUrl:
-        type: string
-      tag:
-        type: string
-  object.ProductInfo:
-    title: ProductInfo
-    type: object
-    properties:
-      currency:
-        type: string
-      detail:
-        type: string
-      displayName:
-        type: string
-      image:
-        type: string
-      isRecharge:
-        type: boolean
-      name:
-        type: string
-      owner:
-        type: string
-      planName:
-        type: string
-      price:
-        type: number
-        format: double
-      pricingName:
-        type: string
-      quantity:
-        type: integer
-        format: int64
   object.PrometheusInfo:
     title: PrometheusInfo
     type: object
@@ -6080,47 +4955,6 @@ definitions:
         type: string
       visible:
         type: boolean
-  object.Subscription:
-    title: Subscription
-    type: object
-    properties:
-      createdTime:
-        type: string
-      description:
-        type: string
-      displayName:
-        type: string
-      endTime:
-        type: string
-      name:
-        type: string
-      owner:
-        type: string
-      payment:
-        type: string
-      period:
-        type: string
-      plan:
-        type: string
-      pricing:
-        type: string
-      startTime:
-        type: string
-      state:
-        $ref: '#/definitions/object.SubscriptionState'
-      user:
-        type: string
-  object.SubscriptionState:
-    title: SubscriptionState
-    type: string
-    enum:
-    - SubStatePending = "Pending"
-    - SubStateError = "Error"
-    - SubStateSuspended = "Suspended"
-    - SubStateActive = "Active"
-    - SubStateUpcoming = "Upcoming"
-    - SubStateExpired = "Expired"
-    example: Pending
   object.Syncer:
     title: Syncer
     type: object
@@ -6318,50 +5152,6 @@ definitions:
         type: string
       token_type:
         type: string
-  object.Transaction:
-    title: Transaction
-    type: object
-    properties:
-      amount:
-        type: number
-        format: double
-      application:
-        type: string
-      category:
-        $ref: '#/definitions/object.TransactionCategory'
-      createdTime:
-        type: string
-      currency:
-        type: string
-      displayName:
-        type: string
-      domain:
-        type: string
-      name:
-        type: string
-      owner:
-        type: string
-      payment:
-        type: string
-      provider:
-        type: string
-      state:
-        type: string
-      subtype:
-        type: string
-      tag:
-        type: string
-      type:
-        type: string
-      user:
-        type: string
-  object.TransactionCategory:
-    title: TransactionCategory
-    type: string
-    enum:
-    - TransactionCategoryPurchase = "Purchase"
-    - TransactionCategoryRecharge = "Recharge"
-    example: Purchase
   object.User:
     title: User
     type: object
@@ -6402,14 +5192,6 @@ definitions:
         type: string
       baidu:
         type: string
-      balance:
-        type: number
-        format: double
-      balanceCredit:
-        type: number
-        format: double
-      balanceCurrency:
-        type: string
       battlenet:
         type: string
       bilibili:
@@ -6422,10 +5204,6 @@ definitions:
         type: string
       box:
         type: string
-      cart:
-        type: array
-        items:
-          $ref: '#/definitions/object.ProductInfo'
       casdoor:
         type: string
       cloudfoundry:
@@ -6862,16 +5640,6 @@ definitions:
           type: string
       url:
         type: string
-  pp.PaymentState:
-    title: PaymentState
-    type: string
-    enum:
-    - PaymentStatePaid = "Paid"
-    - PaymentStateCreated = "Created"
-    - PaymentStateCanceled = "Canceled"
-    - PaymentStateTimeout = "Timeout"
-    - PaymentStateError = "Error"
-    example: Paid
   protocol.CredentialAssertion:
     title: CredentialAssertion
     type: object

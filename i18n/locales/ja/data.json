@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "このアプリケーションでは顔認証ログインは有効になっていません",
     "The login method: login with magic link is not enabled for the application": "このアプリケーションではマジックリンクによるログインが有効になっていません",
     "The login method: login with password is not enabled for the application": "ログイン方法：パスワードでのログインはアプリケーションで有効になっていません",
-    "The order: %s does not exist": "注文：%s は存在しません",
     "The organization: %s does not exist": "組織「%s」は存在しません",
     "The organization: %s has disabled users to signin": "組織: %s はユーザーのサインインを無効にしました",
-    "The plan: %s does not exist": "プラン: %sは存在しません",
-    "The pricing: %s does not exist": "料金: %sは存在しません",
-    "The pricing: %s does not have plan: %s": "料金: %sにはプラン%sがありません",
-    "The pricing: %s is invite-only, only invited users can use it": "価格設定：%s は招待制のため、招待されたユーザーのみ利用できます",
     "The provider: %s does not exist": "プロバイダ「%s」は存在しません",
     "The provider: %s is not enabled for the application": "プロバイダー：%sはアプリケーションでは有効化されていません",
     "Unauthorized operation": "不正操作",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "ユーザータグ「%s」はアプリケーションのタグに含まれていません",
     "UserCode Expired": "ユーザーコードの有効期限が切れています",
     "UserCode Invalid": "ユーザーコードが無効です",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "有料ユーザー「%s」には有効または保留中のサブスクリプションがなく、アプリケーション「%s」にはデフォルトの価格設定がありません",
     "the application for user %s is not found": "ユーザー「%s」のアプリケーションが見つかりません",
     "the organization: %s is not found": "組織「%s」が見つかりません"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "アプリケーションは空にできません",
+    "Error": "エラー",
     "Failed to import groups": "グループのインポートに失敗しました",
     "Failed to import users": "ユーザーのインポートに失敗しました",
     "Granted scopes cannot be empty": "付与されたスコープは空にできません",
-    "Insufficient balance: new balance %v would be below credit limit %v": "残高不足：新しい残高 %v がクレジット制限 %v を下回ります",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "残高不足：新しい組織残高 %v がクレジット制限 %v を下回ります",
     "Invalid application": "無効なアプリケーションです",
     "Missing parameter": "不足しているパラメーター",
     "Multiple captcha providers are not allowed in the same application: %s": "同じアプリケーションに複数の CAPTCHA プロバイダーは設定できません：%s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "ユーザー: %s (%d 行目) は %d 行目と重複しています",
     "The user: %s is not found": "ユーザー：%s が見つかりません",
     "The users already exist: %s": "次のユーザーは既に存在します: %s",
-    "User is required for User category transaction": "ユーザーカテゴリトランザクションにはユーザーが必要です",
     "User not found": "ユーザーが見つかりません",
     "Wrong userId": "無効なユーザーIDです",
     "don't support captchaProvider: ": "captchaProviderをサポートしないでください",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "権限「%s」は存在しません"
   },
-  "product": {
-    "Product list cannot be empty": "商品リストは空にできません"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "ID認証プロバイダーの初期化に失敗しました",
     "Invalid application id": "アプリケーションIDが無効です",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "オブジェクトキー %s は許可されていません",
     "The provider type: %s is not supported": "プロバイダータイプ：%sはサポートされていません"
-  },
-  "subscription": {
-    "Error": "エラー"
   },
   "ticket": {
     "Ticket not found": "チケットが見つかりません"

@@ -176,29 +176,10 @@ func (c *ApiController) DeleteInvitation() {
 	c.ServeJSON()
 }
 
-// VerifyInvitation
-// @Title VerifyInvitation
-// @Tag Invitation API
-// @Description verify invitation
-// @Param   id     query    string  true        "The id ( owner/name ) of the invitation"
-// @Success 200 {object} controllers.Response The Response object
-// @router /verify-invitation [get]
-func (c *ApiController) VerifyInvitation() {
-	id := c.Ctx.Input.Query("id")
-
-	payment, attachInfo, err := object.VerifyInvitation(id)
-	if err != nil {
-		c.ResponseError(err.Error())
-		return
-	}
-
-	c.ResponseOk(payment, attachInfo)
-}
-
 // SendInvitation
-// @Title VerifyInvitation
+// @Title SendInvitation
 // @Tag Invitation API
-// @Description verify invitation
+// @Description send invitation
 // @Param   id     query    string	true        "The id ( owner/name ) of the invitation"
 // @Param   body    body	[]string  true        "The details of the invitation"
 // @Success 200 {object} controllers.Response The Response object

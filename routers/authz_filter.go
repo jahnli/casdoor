@@ -559,10 +559,6 @@ func ApiFilter(ctx *context.Context) {
 	}
 	objOwner, objName := objects[0].Owner, objects[0].Name
 
-	if strings.HasPrefix(urlPath, "/api/notify-payment") {
-		urlPath = "/api/notify-payment"
-	}
-
 	isAllowed := true
 	for _, obj := range objects {
 		allowed, err := authz.IsAllowed(subOwner, subName, method, urlPath, obj.Owner, obj.Name, extraInfo)

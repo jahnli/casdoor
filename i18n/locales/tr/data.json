@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "Uygulama için yüz ile giriş yöntemi etkin değil",
     "The login method: login with magic link is not enabled for the application": "Oturum açma yöntemi: sihirli bağlantı ile oturum açma bu uygulama için etkin değil",
     "The login method: login with password is not enabled for the application": "Şifre ile giriş yöntemi bu uygulama için etkin değil",
-    "The order: %s does not exist": "Sipariş: %s mevcut değil",
     "The organization: %s does not exist": "Organizasyon: %s mevcut değil",
     "The organization: %s has disabled users to signin": "Organizasyon: %s kullanıcıların oturum açmasını devre dışı bıraktı",
-    "The plan: %s does not exist": "Plan: %s mevcut değil",
-    "The pricing: %s does not exist": "Fiyatlandırma: %s mevcut değil",
-    "The pricing: %s does not have plan: %s": "Fiyatlandırma: %s planı yok: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "Fiyatlandırma: %s yalnızca davetle kullanılabilir, yalnızca davet edilen kullanıcılar kullanabilir",
     "The provider: %s does not exist": "Sağlayıcı: %s mevcut değil",
     "The provider: %s is not enabled for the application": "Provider: %s bu uygulama için etkin değil",
     "Unauthorized operation": "Yetkisiz işlem",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "Kullanıcı etiketi: %s uygulamanın etiketlerinde listelenmiyor",
     "UserCode Expired": "Kullanıcı Kodu Süresi Doldu",
     "UserCode Invalid": "Kullanıcı Kodu Geçersiz",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "Ücretli kullanıcı %s aktif veya bekleyen bir aboneliğe sahip değil ve uygulama: %s varsayılan fiyatlandırmaya sahip değil",
     "the application for user %s is not found": "%s kullanıcısı için uygulama bulunamadı",
     "the organization: %s is not found": "Organizasyon: %s bulunamadı"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "Uygulama boş olamaz",
+    "Error": "Hata",
     "Failed to import groups": "Gruplar içe aktarılamadı",
     "Failed to import users": "Kullanıcılar içe aktarılamadı",
     "Granted scopes cannot be empty": "Verilen kapsamlar boş olamaz",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Yetersiz bakiye: yeni bakiye %v kredi limitinin altında olacak %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Yetersiz bakiye: yeni organizasyon bakiyesi %v kredi limitinin altında olacak %v",
     "Invalid application": "Geçersiz uygulama",
     "Missing parameter": "Eksik parametre",
     "Multiple captcha providers are not allowed in the same application: %s": "Aynı uygulamada birden fazla captcha sağlayıcısına izin verilmez: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "Kullanıcı: %s (%d. satır), %d. satır ile tekrarlanıyor",
     "The user: %s is not found": "Kullanıcı: %s bulunamadı",
     "The users already exist: %s": "Şu kullanıcılar zaten mevcut: %s",
-    "User is required for User category transaction": "Kullanıcı kategorisi işlemi için kullanıcı gerekli",
     "User not found": "Kullanıcı bulunamadı",
     "Wrong userId": "Yanlış kullanıcı kimliği",
     "don't support captchaProvider: ": "captchaProvider desteklenmiyor: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "İzin: \"%s\" mevcut değil"
   },
-  "product": {
-    "Product list cannot be empty": "Ürün listesi boş olamaz"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Kimlik Doğrulama sağlayıcısı başlatılamadı",
     "Invalid application id": "Geçersiz uygulama id",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "objectKey: %s izin verilmiyor",
     "The provider type: %s is not supported": "provider türü: %s desteklenmiyor"
-  },
-  "subscription": {
-    "Error": "Hata"
   },
   "ticket": {
     "Ticket not found": "Bilet bulunamadı"

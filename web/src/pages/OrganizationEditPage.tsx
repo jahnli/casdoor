@@ -25,9 +25,7 @@ import * as Obfuscator from "@/auth/Obfuscator";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
 import * as LdapBackend from "@/backend/LdapBackend";
 import {ConfirmButton} from "@/components/common/ConfirmButton";
-import {TransactionTable} from "@/components/user/TransactionTable";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
-import * as TransactionBackend from "@/backend/TransactionBackend";
 import * as Setting from "@/lib/setting";
 
 const PASSWORD_TYPES = ["plain", "salt", "sha512-salt", "md5-salt", "bcrypt", "pbkdf2-salt", "argon2id", "pbkdf2-django"];
@@ -62,7 +60,6 @@ export default function OrganizationEditPage() {
   const [saving, setSaving] = React.useState(false);
   const [applications, setApplications] = React.useState<any[]>([]);
   const [ldaps, setLdaps] = React.useState<any[] | null>(null);
-  const [transactions, setTransactions] = React.useState<any[]>([]);
 
   const {record: organization, setRecord, updateField, loading, denied, mode, setMode} = useEditRecord<any>({
     fetch: () => OrganizationBackend.getOrganization("admin", organizationName),
@@ -78,13 +75,6 @@ export default function OrganizationEditPage() {
     });
     LdapBackend.getLdaps(organizationName).then((res: any) => {
       setLdaps(res.status === "ok" ? res.data ?? [] : []);
-    });
-    TransactionBackend.getTransactions(organizationName).then((res: any) => {
-      if (res.status === "ok") {
-        setTransactions(res.data ?? []);
-      } else {
-        Setting.showMessage("error", `${i18next.t("general:Failed to load")}: ${res.msg}`);
-      }
     });
   }, [organizationName]);
 
@@ -571,20 +561,6 @@ export default function OrganizationEditPage() {
               onChange={(e) => update("initScore", Setting.myParseInt(e.target.value))}
             />
           </FormRow>
-          <FormRow labelKey="organization:Balance currency">
-            <SelectField
-              value={organization.balanceCurrency || "USD"}
-              onChange={(value) => update("balanceCurrency", value)}
-              options={(Setting.CurrencyOptions as any[]).map((item) => ({id: item.id, name: item.name}))}
-            />
-          </FormRow>
-          <FormRow labelKey="organization:Balance credit">
-            <Input
-              type="number"
-              value={organization.balanceCredit ?? 0}
-              onChange={(e) => update("balanceCredit", Number(e.target.value))}
-            />
-          </FormRow>
           <FormRow labelKey="organization:Record retention days">
             <Input
               type="number"
@@ -598,17 +574,6 @@ export default function OrganizationEditPage() {
               value={organization.tokenRetentionDays ?? 0}
               onChange={(e) => update("tokenRetentionDays", Setting.myParseInt(e.target.value))}
             />
-          </FormRow>
-          <FormRow labelKey="organization:Org balance">
-            <Input
-              type="number"
-              value={organization.orgBalance ?? 0}
-              onChange={(e) => update("orgBalance", Number(e.target.value))}
-            />
-          </FormRow>
-          <FormRow block labelKey="organization:User balance">
-            {/* maintained by the backend, the antd page shows it read-only too */}
-            <Input type="number" value={organization.userBalance ?? 0} disabled />
           </FormRow>
           <FormRow block labelKey="organization:Account menu">
             <SelectField
@@ -784,11 +749,6 @@ export default function OrganizationEditPage() {
               ) : null}
             </div>
           </FormRow>
-          {mode !== "add" && transactions.length > 0 ? (
-            <FormRow labelKey="general:Transactions" block>
-              <TransactionTable transactions={transactions} includeTag includeUser />
-            </FormRow>
-          ) : null}
         </TabsContent>
       </Tabs>
     </EditPageShell>

@@ -58,7 +58,7 @@ export default function SiteEditPage() {
       name: "status",
       labelKey: "general:Status",
       options: () => [
-        {value: "Active", label: i18next.t("subscription:Active")},
+        {value: "Active", label: i18next.t("general:Active")},
         {value: "Inactive", label: i18next.t("key:Inactive")},
       ],
     },

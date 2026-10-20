@@ -113,11 +113,6 @@ type Organization struct {
 	KerberosKdcHost     string `xorm:"varchar(200)" json:"kerberosKdcHost"`
 	KerberosKeytab      string `xorm:"mediumtext" json:"kerberosKeytab"`
 	KerberosServiceName string `xorm:"varchar(100)" json:"kerberosServiceName"`
-
-	OrgBalance      float64 `json:"orgBalance"`
-	UserBalance     float64 `json:"userBalance"`
-	BalanceCredit   float64 `json:"balanceCredit"`
-	BalanceCurrency string  `xorm:"varchar(100)" json:"balanceCurrency"`
 }
 
 func GetOrganizationCount(owner, name, field, value string) (int64, error) {
@@ -299,10 +294,6 @@ func UpdateOrganization(id string, organization *Organization, isGlobalAdmin boo
 		organization.NavItems = org.NavItems
 		organization.UserNavItems = org.UserNavItems
 		organization.WidgetItems = org.WidgetItems
-		organization.OrgBalance = org.OrgBalance
-		organization.UserBalance = org.UserBalance
-		organization.BalanceCredit = org.BalanceCredit
-		organization.BalanceCurrency = org.BalanceCurrency
 		organization.EnableLdapPassword = org.EnableLdapPassword
 		organization.EnableRadius = org.EnableRadius
 		organization.DcrPolicy = org.DcrPolicy
@@ -698,13 +689,6 @@ func organizationChangeTrigger(oldName string, newName string) error {
 		return err
 	}
 
-	payment := new(Payment)
-	payment.Owner = newName
-	_, err = session.Where("owner=?", oldName).Update(payment)
-	if err != nil {
-		return err
-	}
-
 	record := new(Record)
 	record.Owner = newName
 	record.Organization = newName
@@ -807,38 +791,4 @@ func (org *Organization) GetInitScore() (int, error) {
 	} else {
 		return strconv.Atoi(conf.GetConfigString("initScore"))
 	}
-}
-
-func UpdateOrganizationBalance(owner string, name string, balance float64, currency string, isOrgBalance bool, lang string) error {
-	organization, err := getOrganization(owner, name)
-	if err != nil {
-		return err
-	}
-	if organization == nil {
-		return fmt.Errorf(i18n.Translate(lang, "auth:the organization: %s is not found"), fmt.Sprintf("%s/%s", owner, name))
-	}
-
-	// Convert the balance amount from transaction currency to organization's balance currency
-	balanceCurrency := organization.BalanceCurrency
-	if balanceCurrency == "" {
-		balanceCurrency = "USD"
-	}
-	convertedBalance := ConvertCurrency(balance, currency, balanceCurrency)
-
-	if !isOrgBalance {
-		// User balance is just a sum of all users' balances, no credit limit check here
-		// Individual user credit limits are checked in UpdateUserBalance
-		_, err = ormer.Engine.ID(core.PK{owner, name}).Incr("user_balance", convertedBalance).Update(&Organization{})
-		return err
-	}
-
-	affected, err := incrBalance(ormer.Engine.ID(core.PK{owner, name}), "org_balance", convertedBalance, organization.BalanceCredit, &Organization{})
-	if err != nil {
-		return err
-	}
-	if !affected {
-		newBalance := AddPrices(organization.OrgBalance, convertedBalance)
-		return fmt.Errorf(i18n.Translate(lang, "general:Insufficient balance: new organization balance %v would be below credit limit %v"), newBalance, organization.BalanceCredit)
-	}
-	return nil
 }

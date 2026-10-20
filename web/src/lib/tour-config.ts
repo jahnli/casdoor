@@ -71,36 +71,6 @@ export const TourObj: Record<string, TourStep[]> = {
       id: "about-card",
     },
   ],
-  subscriptions: [
-    {
-      title: "Subscription List",
-      description: "Subscription helps to manage user's selected plan that make easy to control application's features access.",
-    },
-  ],
-  pricings: [
-    {
-      title: "Price List",
-      description: "Casdoor can be used as subscription management system via plan, pricing and subscription.",
-    },
-  ],
-  plans: [
-    {
-      title: "Plan List",
-      description: "Plan  describe list of application's features with own name and price. Plan features depends on Casdoor role with set of permissions.That allow to describe plan's features independ on naming and price. For example: plan may has diffrent prices depends on county or date.",
-    },
-  ],
-  payments: [
-    {
-      title: "Payment List",
-      description: "After the payment is successful, you can see the transaction information of the products in Payment, such as organization, user, purchase time, product name, etc.",
-    },
-  ],
-  products: [
-    {
-      title: "Session List",
-      description: "You can add the product (or service) you want to sell. The following will tell you how to add a product.",
-    },
-  ],
   sessions: [
     {
       title: "Session List",
@@ -167,7 +137,7 @@ export const TourObj: Record<string, TourStep[]> = {
   providers: [
     {
       title: "Provider List",
-      description: "We have 6 kinds of providers:OAuth providers、SMS Providers、Email Providers、Storage Providers、Payment Provider、Captcha Provider.",
+      description: "Configure providers for authentication, messaging, storage and verification.",
     },
     {
       title: "Provider Add",
@@ -206,7 +176,7 @@ export const TourObj: Record<string, TourStep[]> = {
   ],
 };
 
-export const TourUrlList = ["home", "organizations", "groups", "users", "applications", "providers", "resources", "roles", "permissions", "models", "adapters", "enforcers", "tokens", "sessions", "products", "payments", "plans", "pricings", "subscriptions", "sysinfo", "syncers", "webhooks"];
+export const TourUrlList = ["home", "organizations", "groups", "users", "applications", "providers", "resources", "roles", "permissions", "models", "adapters", "enforcers", "tokens", "sessions", "sysinfo", "syncers", "webhooks"];
 
 export function getNextUrl(pathName = window.location.pathname) {
   return TourUrlList[TourUrlList.indexOf(pathName.replace("/", "")) + 1] || "";

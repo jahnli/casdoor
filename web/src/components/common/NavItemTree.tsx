@@ -79,22 +79,6 @@ function getNavItemNodes(): TreeNode[] {
           ],
         },
         {
-          key: "/business-top",
-          title: i18next.t("general:Business"),
-          children: [
-            {key: "/product-store", title: i18next.t("general:Product Store")},
-            {key: "/products", title: i18next.t("general:Products")},
-            {key: "/coupons", title: i18next.t("general:Coupons")},
-            {key: "/cart", title: i18next.t("general:Cart")},
-            {key: "/orders", title: i18next.t("general:Orders")},
-            {key: "/payments", title: i18next.t("general:Payments")},
-            {key: "/plans", title: i18next.t("general:Plans")},
-            {key: "/pricings", title: i18next.t("general:Pricings")},
-            {key: "/subscriptions", title: i18next.t("general:Subscriptions")},
-            {key: "/transactions", title: i18next.t("general:Transactions")},
-          ],
-        },
-        {
           key: "/admin-top",
           title: i18next.t("general:Admin"),
           children: [

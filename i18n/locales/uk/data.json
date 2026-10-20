@@ -27,13 +27,8 @@
     "The login method: login with face is not enabled for the application": "Метод входу через обличчя не увімкнено для цього додатка",
     "The login method: login with magic link is not enabled for the application": "Метод входу: вхід за магічним посиланням не увімкнено для цього застосунку",
     "The login method: login with password is not enabled for the application": "Метод входу через пароль не увімкнено для цього додатка",
-    "The order: %s does not exist": "Замовлення: %s не існує",
     "The organization: %s does not exist": "Організація: %s не існує",
     "The organization: %s has disabled users to signin": "Організація: %s вимкнула вхід користувачів",
-    "The plan: %s does not exist": "План: %s не існує",
-    "The pricing: %s does not exist": "Тариф: %s не існує",
-    "The pricing: %s does not have plan: %s": "Тариф: %s не має план: %s",
-    "The pricing: %s is invite-only, only invited users can use it": "Тариф: %s доступний лише за запрошенням, ним можуть користуватися тільки запрошені користувачі",
     "The provider: %s does not exist": "Провайдер: %s не існує",
     "The provider: %s is not enabled for the application": "Провайдер: %s не увімкнено для цього додатка",
     "Unauthorized operation": "Неавторизована операція",
@@ -41,7 +36,6 @@
     "User's tag: %s is not listed in the application's tags": "Тег користувача: %s відсутній у тегах додатка",
     "UserCode Expired": "UserCode застарів",
     "UserCode Invalid": "UserCode недійсний",
-    "paid-user %s does not have active or pending subscription and the application: %s does not have default pricing": "Користувач %s не має активної або очікуваної підписки, а додаток: %s не має типової ціни",
     "the application for user %s is not found": "Додаток для користувача %s не знайдено",
     "the organization: %s is not found": "Організація: %s не знайдена"
   },
@@ -116,11 +110,10 @@
   },
   "general": {
     "Application cannot be empty": "Застосунок не може бути порожнім",
+    "Error": "Помилка",
     "Failed to import groups": "Не вдалося імпортувати групи",
     "Failed to import users": "Не вдалося імпортувати користувачів",
     "Granted scopes cannot be empty": "Надані області не можуть бути порожніми",
-    "Insufficient balance: new balance %v would be below credit limit %v": "Недостатній баланс: новий баланс %v буде нижче кредитного ліміту %v",
-    "Insufficient balance: new organization balance %v would be below credit limit %v": "Недостатній баланс: новий баланс організації %v буде нижче кредитного ліміту %v",
     "Invalid application": "Недійсний застосунок",
     "Missing parameter": "Відсутній параметр",
     "Multiple captcha providers are not allowed in the same application: %s": "В одному застосунку не можна використовувати кілька постачальників captcha: %s",
@@ -140,7 +133,6 @@
     "The user: %s in line %d is duplicated with line %d": "Користувач: %s у рядку %d дублюється з рядком %d",
     "The user: %s is not found": "Користувач: %s не знайдено",
     "The users already exist: %s": "Наступні користувачі вже існують: %s",
-    "User is required for User category transaction": "Користувач обов'язковий для транзакції категорії користувача",
     "User not found": "Користувача не знайдено",
     "Wrong userId": "Неправильний userId",
     "don't support captchaProvider: ": "не підтримується captchaProvider: ",
@@ -171,9 +163,6 @@
   "permission": {
     "The permission: \"%s\" doesn't exist": "Дозвіл: \"%s\" не існує"
   },
-  "product": {
-    "Product list cannot be empty": "Список товарів не може бути порожнім"
-  },
   "provider": {
     "Failed to initialize ID Verification provider": "Не вдалося ініціалізувати провайдера верифікації ID",
     "Invalid application id": "Недійсний id додатка",
@@ -203,9 +192,6 @@
   "storage": {
     "The objectKey: %s is not allowed": "objectKey: %s не дозволено",
     "The provider type: %s is not supported": "Тип провайдера: %s не підтримується"
-  },
-  "subscription": {
-    "Error": "Помилка"
   },
   "ticket": {
     "Ticket not found": "Квиток не знайдено"
