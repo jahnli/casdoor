@@ -8,7 +8,7 @@ import {ConsoleTour} from "@/components/common/ConsoleTour";
 import {GithubCorner} from "@/components/common/GithubCorner";
 import {Loading} from "@/components/common/Loading";
 import {Header} from "@/components/layout/Header";
-import {PoweredBy} from "@/components/layout/PoweredBy";
+import * as Conf from "@/Conf";
 import {AppSidebar} from "@/components/layout/Sidebar";
 import {useAccount} from "@/hooks/use-account";
 import {useThemeData} from "@/hooks/use-application-chrome";
@@ -100,14 +100,14 @@ export function AppLayout() {
           className="shrink-0 border-t bg-background py-3 text-center text-xs text-muted-foreground"
           dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml, false)}}
         />
-      ) : (
+      ) : Conf.CustomFooter !== null ? (
         <footer
           id="footer"
           className="shrink-0 border-t bg-background py-3 text-center text-xs text-muted-foreground"
         >
-          <PoweredBy />
+          {Conf.CustomFooter}
         </footer>
-      )}
+      ) : null}
     </div>
   );
 }
