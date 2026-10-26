@@ -151,7 +151,7 @@ export default function PromptPage({application: applicationProp}: {application?
                   options={affiliation.addressOptions}
                   onChange={(value) => {
                     // a new address invalidates the affiliation picked under the old one
-                    update({address: value, affiliation: "", score: 0});
+                    update({address: value, affiliation: ""});
                     affiliation.loadAffiliationOptions(value);
                   }}
                 />
@@ -163,9 +163,7 @@ export default function PromptPage({application: applicationProp}: {application?
                 enabled={affiliation.enabled}
                 value={user?.affiliation}
                 options={affiliation.affiliationOptions}
-                onChange={(name, score) =>
-                  score === undefined ? update({affiliation: name}) : update({affiliation: name, score})
-                }
+                onChange={(name) => update({affiliation: name})}
               />
             </div>
           </div>

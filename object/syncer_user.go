@@ -37,7 +37,7 @@ func (syncer *Syncer) addUser(user *OriginalUser) (bool, error) {
 func (syncer *Syncer) getCasdoorColumns() []string {
 	res := []string{}
 	for _, tableColumn := range syncer.TableColumns {
-		if tableColumn.CasdoorName != "Id" {
+		if tableColumn.CasdoorName != "Id" && !isRemovedUserMetric(tableColumn.CasdoorName) {
 			v := util.CamelToSnakeCase(tableColumn.CasdoorName)
 			// CasdoorName is org-admin controlled and these values become column names in
 			// an UPDATE SET clause, so drop anything that is not a plain SQL identifier.
@@ -130,6 +130,11 @@ func (syncer *Syncer) calculateHash(user *OriginalUser) string {
 }
 
 func (syncer *Syncer) initAdapter() error {
+	for _, column := range syncer.TableColumns {
+		if isRemovedUserMetric(column.CasdoorName) {
+			return fmt.Errorf("syncer %s references removed user field %s; update its column mappings", syncer.GetId(), column.CasdoorName)
+		}
+	}
 	provider := GetSyncerProvider(syncer)
 	return provider.InitAdapter()
 }

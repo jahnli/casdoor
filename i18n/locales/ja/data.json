@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "ユーザーの追加に失敗しました",
-    "Get init score failed, error: %w": "イニットスコアの取得に失敗しました。エラー：%w",
     "The application does not allow to sign up new account": "アプリケーションは新しいアカウントの登録を許可しません"
   },
   "auth": {

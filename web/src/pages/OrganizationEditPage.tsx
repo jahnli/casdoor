@@ -554,13 +554,6 @@ export default function OrganizationEditPage() {
               onChange={(e) => update("trustedDbHosts", e.target.value)}
             />
           </FormRow>
-          <FormRow labelKey="organization:Init score">
-            <Input
-              type="number"
-              value={organization.initScore ?? 0}
-              onChange={(e) => update("initScore", Setting.myParseInt(e.target.value))}
-            />
-          </FormRow>
           <FormRow labelKey="organization:Record retention days">
             <Input
               type="number"

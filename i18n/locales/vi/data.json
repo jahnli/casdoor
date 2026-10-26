@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "Không thể thêm người dùng",
-    "Get init score failed, error: %w": "Lấy điểm khởi đầu thất bại, lỗi: %w",
     "The application does not allow to sign up new account": "Ứng dụng không cho phép đăng ký tài khoản mới"
   },
   "auth": {

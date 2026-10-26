@@ -131,11 +131,6 @@ func (c *ApiController) addMagicLinkUser(application *object.Application, magicL
 		return nil, err
 	}
 
-	initScore, err := organization.GetInitScore()
-	if err != nil {
-		return nil, err
-	}
-
 	email := strings.ToLower(magicLink.Email)
 	username := id
 	if organization.UseEmailAsUsername {
@@ -158,7 +153,6 @@ func (c *ApiController) addMagicLinkUser(application *object.Application, magicL
 		Avatar:            organization.DefaultAvatar,
 		Email:             email,
 		Address:           []string{},
-		Score:             initScore,
 		SignupApplication: application.Name,
 		Properties:        map[string]string{},
 		EmailVerified:     true,

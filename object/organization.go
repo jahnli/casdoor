@@ -16,10 +16,8 @@ package object
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
-	"github.com/casdoor/casdoor/conf"
 	"github.com/casdoor/casdoor/cred"
 	"github.com/casdoor/casdoor/i18n"
 	"github.com/casdoor/casdoor/util"
@@ -84,7 +82,6 @@ type Organization struct {
 	MasterVerificationCode string     `xorm:"varchar(100)" json:"masterVerificationCode"`
 	IpWhitelist            string     `xorm:"varchar(200)" json:"ipWhitelist"`
 	TrustedDbHosts         string     `xorm:"varchar(500)" json:"trustedDbHosts"`
-	InitScore              int        `json:"initScore"`
 	EnableSoftDeletion     bool       `json:"enableSoftDeletion"`
 	IsProfilePublic        bool       `json:"isProfilePublic"`
 	UseEmailAsUsername     bool       `json:"useEmailAsUsername"`
@@ -134,6 +131,9 @@ func GetOrganizations(owner string, name ...string) ([]*Organization, error) {
 		}
 	}
 
+	for _, organization := range organizations {
+		organization.removeUserMetricItems()
+	}
 	return organizations, nil
 }
 
@@ -144,6 +144,9 @@ func GetOrganizationsByFields(owner string, fields ...string) ([]*Organization, 
 		return nil, err
 	}
 
+	for _, organization := range organizations {
+		organization.removeUserMetricItems()
+	}
 	return organizations, nil
 }
 
@@ -160,6 +163,9 @@ func GetPaginationOrganizations(owner string, name string, offset, limit int, fi
 		return nil, err
 	}
 
+	for _, organization := range organizations {
+		organization.removeUserMetricItems()
+	}
 	return organizations, nil
 }
 
@@ -175,6 +181,7 @@ func getOrganization(owner string, name string) (*Organization, error) {
 	}
 
 	if existed {
+		organization.removeUserMetricItems()
 		return &organization, nil
 	}
 
@@ -248,6 +255,7 @@ func (organization *Organization) hashMasterPassword() {
 }
 
 func UpdateOrganization(id string, organization *Organization, isGlobalAdmin bool, lang string) (bool, error) {
+	organization.removeUserMetricItems()
 	owner, name, err := util.GetOwnerAndNameFromIdWithError(id)
 	if err != nil {
 		return false, err
@@ -351,6 +359,7 @@ func checkReservedOrganizationName(name string) error {
 }
 
 func AddOrganization(organization *Organization) (bool, error) {
+	organization.removeUserMetricItems()
 	err := checkReservedOrganizationName(organization.Name)
 	if err != nil {
 		return false, err
@@ -783,12 +792,4 @@ func IsNeedPromptMfa(org *Organization, user *User) bool {
 		}
 	}
 	return false
-}
-
-func (org *Organization) GetInitScore() (int, error) {
-	if org != nil {
-		return org.InitScore, nil
-	} else {
-		return strconv.Atoi(conf.GetConfigString("initScore"))
-	}
 }

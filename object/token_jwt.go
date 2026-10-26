@@ -111,9 +111,6 @@ type UserWithoutThirdIdp struct {
 	Gender            string   `xorm:"varchar(100)" json:"gender"`
 	Birthday          string   `xorm:"varchar(100)" json:"birthday"`
 	Education         string   `xorm:"varchar(100)" json:"education"`
-	Score             int      `json:"score"`
-	Karma             int      `json:"karma"`
-	Ranking           int      `json:"ranking"`
 	IsDefaultAvatar   bool     `json:"isDefaultAvatar"`
 	IsOnline          bool     `json:"isOnline"`
 	IsAdmin           bool     `json:"isAdmin"`
@@ -275,9 +272,6 @@ func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
 		Gender:            user.Gender,
 		Birthday:          user.Birthday,
 		Education:         user.Education,
-		Score:             user.Score,
-		Karma:             user.Karma,
-		Ranking:           user.Ranking,
 		IsDefaultAvatar:   user.IsDefaultAvatar,
 		IsOnline:          user.IsOnline,
 		IsAdmin:           user.IsAdmin,

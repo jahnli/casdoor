@@ -366,7 +366,6 @@ func GetMaskedApplication(application *Application, userId string) *Application 
 		application.OrganizationObj.KerberosKdcHost = "***"
 		application.OrganizationObj.KerberosKeytab = "***"
 		application.OrganizationObj.KerberosServiceName = "***"
-		application.OrganizationObj.InitScore = -1
 		application.OrganizationObj.EnableSoftDeletion = false
 
 		if !isOrgUser {

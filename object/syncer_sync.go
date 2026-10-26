@@ -67,7 +67,9 @@ func (syncer *Syncer) syncUsers() error {
 			newUsers = append(newUsers, newUser)
 		} else {
 			user := myUsers[primary]
-			oHash := syncer.calculateHash(oUser)
+			hashUser := *oUser
+			hashUser.Affiliation = getAffiliationName(oUser.Affiliation, affiliationMap)
+			oHash := syncer.calculateHash(&hashUser)
 			if user.Hash == user.PreHash {
 				if user.Hash != oHash {
 					updatedUser := syncer.createUserFromOriginalUser(oUser, affiliationMap)
@@ -83,7 +85,10 @@ func (syncer *Syncer) syncUsers() error {
 			} else {
 				if user.PreHash == oHash {
 					if !syncer.IsReadOnly {
-						updatedOUser := syncer.createOriginalUserFromUser(user)
+						updatedOUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
+						if err != nil {
+							return err
+						}
 
 						fmt.Printf("Update from user to oUser: %v\n", updatedOUser)
 						_, err = syncer.updateUser(updatedOUser)
@@ -138,7 +143,10 @@ func (syncer *Syncer) syncUsers() error {
 		for _, user := range users {
 			primary := syncer.getUserValue(user, key)
 			if _, ok := myOUsers[primary]; !ok {
-				newOUser := syncer.createOriginalUserFromUser(user)
+				newOUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
+				if err != nil {
+					return err
+				}
 
 				fmt.Printf("New oUser: %v\n", newOUser)
 				_, err = syncer.addUser(newOUser)

@@ -6888,10 +6888,6 @@
                 "hasPrivilegeConsent": {
                     "type": "boolean"
                 },
-                "initScore": {
-                    "type": "integer",
-                    "format": "int64"
-                },
                 "ipRestriction": {
                     "type": "string"
                 },
@@ -8088,10 +8084,6 @@
                 "kakao": {
                     "type": "string"
                 },
-                "karma": {
-                    "type": "integer",
-                    "format": "int64"
-                },
                 "kwai": {
                     "type": "string"
                 },
@@ -8262,10 +8254,6 @@
                 "qq": {
                     "type": "string"
                 },
-                "ranking": {
-                    "type": "integer",
-                    "format": "int64"
-                },
                 "realName": {
                     "type": "string"
                 },
@@ -8292,10 +8280,6 @@
                 },
                 "salesforce": {
                     "type": "string"
-                },
-                "score": {
-                    "type": "integer",
-                    "format": "int64"
                 },
                 "shopify": {
                     "type": "string"

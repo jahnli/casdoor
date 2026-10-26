@@ -637,7 +637,7 @@ export const UserFields = ["owner", "name", "password", "display_name", "id", "t
   "is_admin", "homepage", "birthday", "gender", "password_type", "password_salt", "external_id", "avatar", "first_name", "last_name",
   "avatar_type", "permanent_avatar", "email_verified", "region", "location", "address",
   "affiliation", "title", "id_card_type", "id_card", "real_name", "is_verified", "bio", "tag", "language",
-  "education", "score", "karma", "ranking", "is_default_avatar", "is_online",
+  "education", "is_default_avatar", "is_online",
   "is_forbidden", "is_deleted", "signup_application", "register_type", "register_source", "hash", "pre_hash", "access_token",
   "created_ip", "last_signin_time", "last_signin_ip", "github", "google", "qq", "wechat", "facebook", "dingtalk",
   "weibo", "gitee", "linkedin", "wecom", "lark", "gitlab", "adfs", "baidu", "alipay", "casdoor", "infoflow", "apple",
@@ -699,9 +699,6 @@ export const GetTranslatedUserItems = () => {
     {name: "Birthday", label: i18next.t("user:Birthday")},
     {name: "Education", label: i18next.t("user:Education")},
     {name: "UID number", label: i18next.t("general:UID number")},
-    {name: "Score", label: i18next.t("user:Score")},
-    {name: "Karma", label: i18next.t("user:Karma")},
-    {name: "Ranking", label: i18next.t("user:Ranking")},
     {name: "Signup application", label: i18next.t("general:Signup application")},
     {name: "Register type", label: i18next.t("user:Register type")},
     {name: "Register source", label: i18next.t("user:Register source")},
@@ -1835,7 +1832,7 @@ export function builtInObject(obj) {
 export function getUserCommonFields() {
   return ["Owner", "Name", "CreatedTime", "UpdatedTime", "DeletedTime", "Id", "ExternalId", "Type", "Password", "PasswordSalt", "PasswordType", "DisplayName", "FirstName", "LastName", "Avatar", "AvatarType", "PermanentAvatar",
     "Email", "EmailVerified", "Phone", "CountryCode", "Location", "Address", "Affiliation", "Title", "IdCardType", "IdCard", "RealName", "IsVerified", "Homepage", "Bio", "Tag", "Region",
-    "Language", "Gender", "Birthday", "Education", "UidNumber", "Score", "Karma", "Ranking", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
+    "Language", "Gender", "Birthday", "Education", "UidNumber", "IsDefaultAvatar", "IsOnline", "IsAdmin", "IsForbidden", "IsDeleted",
     "SignupApplication", "RegisterType", "RegisterSource", "CreatedIp", "LastSigninTime", "LastSigninIp",
     "PreferredMfaType", "TotpSecret", "RecoveryCodes", "MfaPhoneEnabled", "MfaEmailEnabled", "MfaRadiusEnabled", "MfaRadiusUsername", "MfaRadiusProvider", "MfaPushEnabled", "MfaPushReceiver", "MfaPushProvider",
     "WebauthnCredentials", "FaceIds", "Invitation", "InvitationCode", "Ldap", "Properties", "Groups"];

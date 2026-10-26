@@ -539,11 +539,6 @@ func SyncLdapUsers(owner string, syncUsers []LdapUser, ldapId string, lang strin
 			}
 
 		} else {
-			score, err := organization.GetInitScore()
-			if err != nil {
-				return nil, nil, err
-			}
-
 			name, err := syncUser.buildLdapUserName(owner)
 			if err != nil {
 				return nil, nil, err
@@ -564,7 +559,6 @@ func SyncLdapUsers(owner string, syncUsers []LdapUser, ldapId string, lang strin
 				Region:            util.ReturnAnyNotEmpty(syncUser.Country, syncUser.CountryName),
 				Affiliation:       affiliation,
 				Tag:               tag,
-				Score:             score,
 				Ldap:              syncUser.Uuid,
 				UidNumber:         parsePosixNumber(syncUser.UidNumber),
 				Properties:        syncUser.Attributes,

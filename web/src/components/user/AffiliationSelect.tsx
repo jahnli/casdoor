@@ -18,7 +18,7 @@ interface AffiliationOption {
 /**
  * When the application sets `affiliationUrl` ("<addressUrl>|<affiliationUrl>"),
  * the address becomes a cascader fed by that endpoint and the affiliation becomes
- * a select scoped to the picked address, which also carries the numeric `score`.
+ * a select scoped to the picked address.
  * Port of web/src/common/select/AffiliationSelect.js.
  */
 export function useAffiliation(application: any, user: any) {
@@ -115,8 +115,7 @@ export function AffiliationField({
   enabled: boolean;
   value: string | undefined;
   options: AffiliationOption[];
-  /** `score` is the affiliation's id, only set when picked from the options */
-  onChange: (affiliation: string, score?: number) => void;
+  onChange: (affiliation: string) => void;
 }) {
   if (!enabled) {
     return <Input value={value ?? ""} onChange={(e) => onChange(e.target.value)} />;
@@ -126,7 +125,7 @@ export function AffiliationField({
     <SearchableSelect
       value={value ?? ""}
       allowUnknownValue={false}
-      onChange={(name) => onChange(name, options.find((item) => item.name === name)?.id ?? 0)}
+      onChange={onChange}
       options={[
         {value: "", label: `(${i18next.t("general:empty")})`},
         ...options.map((item) => ({value: item.name, label: item.name})),

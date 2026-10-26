@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "No se pudo agregar el usuario",
-    "Get init score failed, error: %w": "Error al obtener el puntaje de inicio, error: %w",
     "The application does not allow to sign up new account": "La aplicación no permite registrarse con una cuenta nueva"
   },
   "auth": {

@@ -287,6 +287,8 @@ Casdoor is a frontend–backend separated application:
 
 ## 📖 Documentation
 
+This fork omits user points, karma, ranking, and initial-score settings from the UI, API, tokens, and new database schemas. For existing databases, use the [user-metrics cleanup tool](cmd/remove-user-metrics/README.md) to preview and apply the removal of old columns and configuration.
+
 The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/overview)**. Common starting points:
 
 | I want to… | Go to |

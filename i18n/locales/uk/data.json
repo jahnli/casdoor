@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "Не вдалося додати користувача",
-    "Get init score failed, error: %w": "Не вдалося отримати початковий бал, помилка: %w",
     "The application does not allow to sign up new account": "Додаток не дозволяє реєструвати нові облікові записи"
   },
   "auth": {

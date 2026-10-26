@@ -63,7 +63,17 @@ func AddUserToOriginalDatabase(user *User) error {
 		return nil
 	}
 
-	updatedOUser := syncer.createOriginalUserFromUser(user)
+	var affiliationMap map[int]string
+	if syncer.AffiliationTable != "" {
+		_, affiliationMap, err = syncer.getAffiliationMap()
+		if err != nil {
+			return err
+		}
+	}
+	updatedOUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
+	if err != nil {
+		return err
+	}
 	_, err = syncer.addUser(updatedOUser)
 	if err != nil {
 		return err
@@ -91,7 +101,17 @@ func UpdateUserToOriginalDatabase(user *User) error {
 		return err
 	}
 
-	updatedOUser := syncer.createOriginalUserFromUser(newUser)
+	var affiliationMap map[int]string
+	if syncer.AffiliationTable != "" {
+		_, affiliationMap, err = syncer.getAffiliationMap()
+		if err != nil {
+			return err
+		}
+	}
+	updatedOUser, err := syncer.createOriginalUserFromUser(newUser, affiliationMap)
+	if err != nil {
+		return err
+	}
 	_, err = syncer.updateUser(updatedOUser)
 	if err != nil {
 		return err

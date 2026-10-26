@@ -1,7 +1,6 @@
 {
   "account": {
     "Failed to add user": "Failed to add user",
-    "Get init score failed, error: %w": "Get init score failed, error: %w",
     "The application does not allow to sign up new account": "The application does not allow to sign up new account"
   },
   "auth": {

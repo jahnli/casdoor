@@ -115,15 +115,7 @@ func (syncer *Syncer) createUserFromOriginalUser(originalUser *OriginalUser, aff
 
 	user.Avatar = syncer.getFullAvatarUrl(user.Avatar)
 
-	if affiliationMap != nil {
-		if originalUser.Score != 0 {
-			affiliation, ok := affiliationMap[originalUser.Score]
-			if !ok {
-				panic(fmt.Sprintf("Affiliation not found: %d", originalUser.Score))
-			}
-			user.Affiliation = affiliation
-		}
-	}
+	user.Affiliation = getAffiliationName(originalUser.Affiliation, affiliationMap)
 
 	if user.Properties == nil {
 		user.Properties = map[string]string{}
@@ -137,10 +129,28 @@ func (syncer *Syncer) createUserFromOriginalUser(originalUser *OriginalUser, aff
 	return &user
 }
 
-func (syncer *Syncer) createOriginalUserFromUser(user *User) *OriginalUser {
+func (syncer *Syncer) createOriginalUserFromUser(user *User, affiliationMap map[int]string) (*OriginalUser, error) {
 	originalUser := *user
 	originalUser.Avatar = syncer.getPartialAvatarUrl(user.Avatar)
-	return &originalUser
+	if affiliationMap != nil {
+		id := ""
+		for key, name := range affiliationMap {
+			if name == user.Affiliation {
+				if id != "" {
+					return nil, fmt.Errorf("ambiguous affiliation: %s", user.Affiliation)
+				}
+				id = strconv.Itoa(key)
+			}
+		}
+		if user.Affiliation == "" {
+			id = "0"
+		}
+		if id == "" {
+			return nil, fmt.Errorf("affiliation not found: %s", user.Affiliation)
+		}
+		originalUser.Affiliation = id
+	}
+	return &originalUser, nil
 }
 
 func (syncer *Syncer) setUserByKeyValue(user *User, key string, value string) {
@@ -207,10 +217,6 @@ func (syncer *Syncer) setUserByKeyValue(user *User, key string, value string) {
 		user.Education = value
 	case "UidNumber":
 		user.UidNumber = util.ParseInt(value)
-	case "Score":
-		user.Score = util.ParseInt(value)
-	case "Ranking":
-		user.Ranking = util.ParseInt(value)
 	case "IsDefaultAvatar":
 		user.IsDefaultAvatar = util.ParseBool(value)
 	case "IsOnline":
@@ -415,8 +421,6 @@ func (syncer *Syncer) getMapFromOriginalUser(user *OriginalUser) map[string]stri
 	m["Birthday"] = user.Birthday
 	m["Education"] = user.Education
 	m["UidNumber"] = strconv.Itoa(user.UidNumber)
-	m["Score"] = strconv.Itoa(user.Score)
-	m["Ranking"] = strconv.Itoa(user.Ranking)
 	m["IsDefaultAvatar"] = util.BoolToString(user.IsDefaultAvatar)
 	m["IsOnline"] = util.BoolToString(user.IsOnline)
 	m["IsAdmin"] = util.BoolToString(user.IsAdmin)
@@ -460,7 +464,9 @@ func (syncer *Syncer) getMapFromOriginalUser(user *OriginalUser) map[string]stri
 
 	m2 := map[string]string{}
 	for _, tableColumn := range syncer.TableColumns {
-		m2[tableColumn.Name] = m[tableColumn.CasdoorName]
+		if value, ok := m[tableColumn.CasdoorName]; ok {
+			m2[tableColumn.Name] = value
+		}
 	}
 
 	return m2

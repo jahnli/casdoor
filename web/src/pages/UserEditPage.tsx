@@ -407,7 +407,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
             options={affiliation.addressOptions}
             onChange={(value) => {
               // a new address invalidates the affiliation picked under the old one
-              updateFields({address: value, affiliation: "", score: 0});
+              updateFields({address: value, affiliation: ""});
               affiliation.loadAffiliationOptions(value);
             }}
           />
@@ -510,9 +510,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           enabled={affiliation.enabled}
           value={user.affiliation}
           options={affiliation.affiliationOptions}
-          onChange={(name, score) =>
-            score === undefined ? updateField("affiliation", name) : updateFields({affiliation: name, score})
-          }
+          onChange={(name) => updateField("affiliation", name)}
         />
       </AccountItemRow>
     ),
@@ -613,15 +611,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         <Input value={user.language ?? ""} onChange={(e) => updateField("language", e.target.value)} />
       </AccountItemRow>
     ),
-    "Score": (
-      <AccountItemRow name="Score" labelKey="user:Score">
-        <Input
-          type="number"
-          value={user.score ?? 0}
-          onChange={(e) => updateField("score", Setting.myParseInt(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
     "UID number": (
       <AccountItemRow name="UID number" labelKey="general:UID number">
         <Input
@@ -630,24 +619,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           step={1}
           value={user.uidNumber ?? 0}
           onChange={(e) => updateField("uidNumber", Setting.myParseInt(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
-    "Ranking": (
-      <AccountItemRow name="Ranking" labelKey="user:Ranking">
-        <Input
-          type="number"
-          value={user.ranking ?? 0}
-          onChange={(e) => updateField("ranking", Setting.myParseInt(e.target.value))}
-        />
-      </AccountItemRow>
-    ),
-    "Karma": (
-      <AccountItemRow name="Karma" labelKey="user:Karma">
-        <Input
-          type="number"
-          value={user.karma ?? 0}
-          onChange={(e) => updateField("karma", Setting.myParseInt(e.target.value))}
         />
       </AccountItemRow>
     ),

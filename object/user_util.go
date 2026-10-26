@@ -209,6 +209,9 @@ func GetUserByFieldsForSharedApp(application *Application, organization string, 
 }
 
 func SetUserField(user *User, field string, value string) (bool, error) {
+	if isRemovedUserMetric(field) {
+		return false, fmt.Errorf("user field %s has been removed", field)
+	}
 	bean := make(map[string]interface{})
 	if field == "password" {
 		organization, err := GetOrganizationByUser(user)
@@ -806,33 +809,6 @@ func CheckPermissionForUpdateUser(oldUser, newUser *User, isAdmin bool, allowDis
 		item := GetAccountItemByName("UID number", organization)
 		if !userVisible(isAdmin, item) {
 			newUser.UidNumber = oldUser.UidNumber
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
-	if oldUser.Score != newUser.Score {
-		item := GetAccountItemByName("Score", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Score = oldUser.Score
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
-	if oldUser.Karma != newUser.Karma {
-		item := GetAccountItemByName("Karma", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Karma = oldUser.Karma
-		} else {
-			itemsChanged = append(itemsChanged, item)
-		}
-	}
-
-	if oldUser.Ranking != newUser.Ranking {
-		item := GetAccountItemByName("Ranking", organization)
-		if !userVisible(isAdmin, item) {
-			newUser.Ranking = oldUser.Ranking
 		} else {
 			itemsChanged = append(itemsChanged, item)
 		}

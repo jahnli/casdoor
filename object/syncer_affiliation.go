@@ -14,6 +14,22 @@
 
 package object
 
+import "strconv"
+
+func getAffiliationName(value string, affiliations map[int]string) string {
+	if affiliations != nil {
+		if id, err := strconv.Atoi(value); err == nil {
+			if id == 0 {
+				return ""
+			}
+			if name, ok := affiliations[id]; ok {
+				return name
+			}
+		}
+	}
+	return value
+}
+
 type Affiliation struct {
 	Id   int    `xorm:"int notnull pk autoincr" json:"id"`
 	Name string `xorm:"varchar(128)" json:"name"`

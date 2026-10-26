@@ -444,7 +444,6 @@ export function newUser(account: Account, organization: Record<string, any>, org
     isVerified: false,
     isAdmin: owner === "built-in",
     isForbidden: false,
-    score: organization?.initScore,
     isDeleted: false,
     properties: {},
     signupApplication: organization?.defaultApplication,

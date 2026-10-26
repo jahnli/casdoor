@@ -98,9 +98,6 @@ type User struct {
 	Gender               string     `xorm:"varchar(100)" json:"gender"`
 	Birthday             string     `xorm:"varchar(100)" json:"birthday"`
 	Education            string     `xorm:"varchar(100)" json:"education"`
-	Score                int        `json:"score"`
-	Karma                int        `json:"karma"`
-	Ranking              int        `json:"ranking"`
 	IsDefaultAvatar      bool       `json:"isDefaultAvatar"`
 	IsOnline             bool       `json:"isOnline"`
 	IsAdmin              bool       `json:"isAdmin"`
@@ -811,7 +808,7 @@ func getLastUser(owner string) (*User, error) {
 
 var userSelfColumns = []string{
 	"owner", "display_name", "avatar", "first_name", "last_name",
-	"location", "address", "addresses", "country_code", "region", "language", "affiliation", "title", "id_card_type", "id_card", "homepage", "bio", "tag", "language", "gender", "birthday", "education", "score", "karma", "ranking", "signup_application", "register_type", "register_source",
+	"location", "address", "addresses", "country_code", "region", "language", "affiliation", "title", "id_card_type", "id_card", "homepage", "bio", "tag", "language", "gender", "birthday", "education", "signup_application", "register_type", "register_source",
 	"hash", "is_default_avatar", "properties", "webauthnCredentials", "mfa_items", "last_change_password_time", "managedAccounts", "face_ids", "mfaAccounts",
 	"signin_wrong_times", "last_signin_wrong_time", "groups", "mfa_phone_enabled", "mfa_email_enabled",
 	"type", "need_update_password", "ip_whitelist", "mfa_remember_deadline",
@@ -852,6 +849,11 @@ func FilterUserSelfColumns(columns []string) []string {
 }
 
 func UpdateUser(id string, user *User, columns []string, isAdmin bool) (bool, error) {
+	for _, column := range columns {
+		if isRemovedUserMetric(column) {
+			return false, fmt.Errorf("user field %s has been removed", column)
+		}
+	}
 	var err error
 	owner, name := util.GetOwnerAndNameFromIdNoCheck(id)
 	oldUser, err := getUser(owner, name)
@@ -1100,15 +1102,6 @@ func AddUser(user *User, lang string) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-	}
-
-	rankingItem := GetAccountItemByName("Ranking", organization)
-	if rankingItem != nil {
-		count, err := GetUserCount(user.Owner, "", "", "")
-		if err != nil {
-			return false, err
-		}
-		user.Ranking = int(count + 1)
 	}
 
 	if user.Groups != nil && len(user.Groups) > 0 {
