@@ -1,7 +1,7 @@
 import * as React from "react";
 import i18next from "i18next";
 import {AlertCircle, ArrowLeft} from "lucide-react";
-import {PoweredBy} from "@/components/layout/PoweredBy";
+import * as Conf from "@/Conf";
 import {Button} from "@/components/ui/button";
 import {LanguageSelect} from "@/components/common/LanguageSelect";
 import {ThemeToggle} from "@/components/common/ThemeToggle";
@@ -338,11 +338,11 @@ export function AuthLayout({
           className={footerClassName}
           dangerouslySetInnerHTML={{__html: getSafeHtml(footerHtml, trusted)}}
         />
-      ) : (
+      ) : Conf.CustomFooter !== null ? (
         <footer id="footer" className={footerClassName}>
-          <PoweredBy />
+          {Conf.CustomFooter}
         </footer>
-      )}
+      ) : null}
     </div>
   );
 }
