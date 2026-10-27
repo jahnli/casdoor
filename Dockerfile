@@ -1,13 +1,16 @@
 FROM --platform=$BUILDPLATFORM node:20.20.1 AS FRONT
 WORKDIR /web
 
-# Copy only dependency files first for better caching
-COPY ./web/package.json ./web/yarn.lock ./
-RUN yarn install --frozen-lockfile --network-timeout 1000000
+# Keep the package manager version fixed for reproducible builds.
+RUN npm install --global pnpm@12.15.0
 
-# Copy source files and build
+# Copy dependency files and pnpm build-script settings first for better caching.
+COPY ./web/package.json ./web/pnpm-lock.yaml ./web/pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# postbuild moves Vite's build-temp output to /web/build for the runtime stages.
 COPY ./web .
-RUN NODE_OPTIONS="--max-old-space-size=4096" yarn run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
 FROM --platform=$BUILDPLATFORM golang:1.25.8 AS BACK
 WORKDIR /go/src/casdoor
