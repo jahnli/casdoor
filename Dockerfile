@@ -12,7 +12,7 @@ RUN pnpm install --frozen-lockfile
 COPY ./web .
 RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 
-FROM --platform=$BUILDPLATFORM golang:1.25.8 AS BACK
+FROM --platform=$BUILDPLATFORM golang:1.26.10 AS BACK
 WORKDIR /go/src/casdoor
 
 # Copy only go.mod and go.sum first for dependency caching

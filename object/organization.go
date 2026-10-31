@@ -105,6 +105,7 @@ type Organization struct {
 	LdapAttributes     []string `xorm:"mediumtext" json:"ldapAttributes"`
 	EnableLdapPassword bool     `xorm:"bool" json:"enableLdapPassword"`
 	EnableRadius       bool     `xorm:"bool" json:"enableRadius"`
+	DisableRadiusMfa   bool     `xorm:"bool" json:"disableRadiusMfa"`
 
 	KerberosRealm       string `xorm:"varchar(200)" json:"kerberosRealm"`
 	KerberosKdcHost     string `xorm:"varchar(200)" json:"kerberosKdcHost"`
@@ -304,6 +305,7 @@ func UpdateOrganization(id string, organization *Organization, isGlobalAdmin boo
 		organization.WidgetItems = org.WidgetItems
 		organization.EnableLdapPassword = org.EnableLdapPassword
 		organization.EnableRadius = org.EnableRadius
+		organization.DisableRadiusMfa = org.DisableRadiusMfa
 		organization.DcrPolicy = org.DcrPolicy
 	}
 
@@ -768,17 +770,37 @@ func IsSigninPending(user *User) (bool, error) {
 	return IsNeedPromptMfa(organization, user), nil
 }
 
+// GetUserMfaItems returns the user's own MFA items, or the organization's when the user has none
+func GetUserMfaItems(org *Organization, user *User) []*MfaItem {
+	if user != nil && len(user.MfaItems) > 0 {
+		return user.MfaItems
+	}
+	if org != nil {
+		return org.MfaItems
+	}
+	return nil
+}
+
+// IsMfaTypeAllowed reports whether the user may set up the MFA type, an empty MFA items list allows all types
+func IsMfaTypeAllowed(org *Organization, user *User, mfaType string) bool {
+	mfaItems := GetUserMfaItems(org, user)
+	if len(mfaItems) == 0 {
+		return true
+	}
+	for _, item := range mfaItems {
+		if item != nil && item.Name == mfaType {
+			return true
+		}
+	}
+	return false
+}
+
 func IsNeedPromptMfa(org *Organization, user *User) bool {
 	if org == nil || user == nil {
 		return false
 	}
 
-	mfaItems := org.MfaItems
-
-	if len(user.MfaItems) > 0 {
-		mfaItems = user.MfaItems
-	}
-	for _, item := range mfaItems {
+	for _, item := range GetUserMfaItems(org, user) {
 		if item.Rule == "Required" {
 			if item.Name == EmailType && !user.MfaEmailEnabled {
 				return true

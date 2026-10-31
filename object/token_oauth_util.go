@@ -188,20 +188,25 @@ type DeviceAuthCache struct {
 	ExpiresIn     int
 }
 
+func (cache DeviceAuthCache) GetExpiresIn() int {
+	if cache.ExpiresIn <= 0 {
+		return DeviceAuthExpiresIn
+	}
+	return cache.ExpiresIn
+}
+
+func (cache DeviceAuthCache) IsExpired() bool {
+	return cache.RequestAt.Add(time.Duration(cache.GetExpiresIn()) * time.Second).Before(time.Now())
+}
+
 func InitCleanupDeviceAuthMap() {
 	InitDeviceAuthStore()
 	util.SafeGoroutine(func() {
 		ticker := time.NewTicker(time.Minute)
 		defer ticker.Stop()
 		for range ticker.C {
-			now := time.Now()
 			DeviceAuthMap.Range(func(key, value any) bool {
-				cache := value.(DeviceAuthCache)
-				expiresIn := cache.ExpiresIn
-				if expiresIn == 0 {
-					expiresIn = DeviceAuthExpiresIn
-				}
-				if cache.RequestAt.Add(time.Duration(expiresIn) * time.Second).Before(now) {
+				if value.(DeviceAuthCache).IsExpired() {
 					DeviceAuthMap.Delete(key)
 				}
 				return true
@@ -361,13 +366,40 @@ func ExpireToken(token *Token) (bool, error) {
 	return affected != 0, nil
 }
 
-func CheckOAuthLogin(clientId string, responseType string, redirectUri string, scope string, state string, nonce string, lang string) (string, *Application, error) {
+// RevokeToken expires the client's access or refresh token (RFC 7009), an unknown token or one of another client is left alone
+func RevokeToken(application *Application, clientSecret string, tokenValue string, tokenTypeHint string) (*TokenError, error) {
+	token, err := GetTokenByTokenValue(tokenValue, tokenTypeHint)
+	if err != nil {
+		return nil, err
+	}
+
+	if token == nil || token.Owner != application.Owner || token.Application != application.Name {
+		return nil, nil
+	}
+
+	isClientAuthenticated := util.InSlice(clientAuthenticatedGrantTypes, token.GrantType) || token.GrantType == "client_credentials"
+	if clientSecret == "" && isClientAuthenticated && token.CodeChallenge == "" {
+		return &TokenError{
+			Error:            InvalidClient,
+			ErrorDescription: "client_secret is required",
+		}, nil
+	}
+
+	if token.ExpiresIn <= 0 {
+		return nil, nil
+	}
+
+	_, err = ExpireToken(token)
+	return nil, err
+}
+
+func CheckOAuthLogin(clientId string, organization string, responseType string, redirectUri string, scope string, state string, nonce string, lang string) (string, *Application, error) {
 	rt, ok := ParseResponseType(responseType)
 	if !ok {
 		return fmt.Sprintf(i18n.Translate(lang, "token:Grant_type: %s is not supported in this application"), responseType), nil, nil
 	}
 
-	application, err := GetApplicationByClientId(clientId)
+	application, err := GetApplicationByClientIdMetadata(clientId, organization, lang)
 	if err != nil {
 		return "", nil, err
 	}
@@ -431,7 +463,7 @@ func GetOAuthCode(userId string, clientId string, provider string, signinMethod 
 		}, nil
 	}
 
-	msg, application, err := CheckOAuthLogin(clientId, responseType, redirectUri, scope, state, nonce, lang)
+	msg, application, err := CheckOAuthLogin(clientId, "", responseType, redirectUri, scope, state, nonce, lang)
 	if err != nil {
 		return nil, err
 	}
@@ -453,6 +485,8 @@ func GetOAuthCode(userId string, clientId string, provider string, signinMethod 
 			Code:    "",
 		}, nil
 	}
+
+	scope = GetConsentedScope(user, application, scope)
 
 	// Expand regex/wildcard scopes to concrete scope names.
 	expandedScope, ok := IsScopeValidAndExpand(scope, application)
@@ -525,7 +559,7 @@ func GetOAuthCode(userId string, clientId string, provider string, signinMethod 
 	}, nil
 }
 
-func RefreshToken(application *Application, grantType string, refreshToken string, scope string, clientId string, clientSecret string, resource string, host string, dpopProof string) (interface{}, error) {
+func RefreshToken(application *Application, grantType string, refreshToken string, scope string, clientId string, clientSecret string, resource string, host string, dpopProof string, dpopPath string) (interface{}, error) {
 	if grantType != "refresh_token" {
 		return &TokenError{
 			Error:            UnsupportedGrantType,
@@ -590,7 +624,7 @@ func RefreshToken(application *Application, grantType string, refreshToken strin
 	}
 	resource = token.Resource
 
-	dpopJkt, tokenError := getRefreshDPoPJkt(token, dpopProof, host)
+	dpopJkt, tokenError := getRefreshDPoPJkt(token, dpopProof, host, dpopPath)
 	if tokenError != nil {
 		return tokenError, nil
 	}
@@ -668,7 +702,7 @@ func RefreshToken(application *Application, grantType string, refreshToken strin
 		return nil, err
 	}
 
-	newAccessToken, newRefreshToken, newIdToken, tokenName, err := generateJwtToken(application, user, "", "", "", scope, resource, host)
+	newAccessToken, newRefreshToken, newIdToken, tokenName, err := generateJwtTokenWithOptions(application, user, "", "", "", scope, resource, host, jwtTokenOptions{RefreshScope: oldTokenScope})
 	if err != nil {
 		return &TokenError{
 			Error:            EndpointError,

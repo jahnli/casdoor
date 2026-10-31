@@ -78,17 +78,6 @@
 
 > [Want to appear here?](mailto:admin@casdoor.org)
 
-<table>
-  <tr>
-    <td width="300" align="center">
-      <a href="https://go.apimart.ai/gh-casdoor" target="_blank"><img src="https://cdn.openagentai.org/img/sponsor_apimart.png" alt="APIMart" width="280"></a>
-    </td>
-    <td>
-      Thanks to APIMart for sponsoring this project! APIMart is a low-cost API platform for AI image &amp; video generation &mdash; GPT-Image-2 from $0.006/image, 160+ images per dollar. One async API covers both image and video: submit a task, get an ID, fetch results via polling or callback. Batch tens of thousands of images without timeouts, switch models without changing code. Pay-as-you-go with no monthly fee &mdash; <a href="https://go.apimart.ai/gh-casdoor" target="_blank">sign up here</a> to get started.
-    </td>
-  </tr>
-</table>
-
 ## 🚀 Try it in 30 seconds
 
 No database and no config file needed. This runs Casdoor on SQLite with sample data:
@@ -207,7 +196,7 @@ Organizations, applications, users, providers, roles and permissions can be kept
 
 ### From source — for development
 
-Use this if you intend to modify Casdoor. Prerequisites: **Go 1.25+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
+Use this if you intend to modify Casdoor. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
 
 ```bash
 git clone https://github.com/casdoor/casdoor.git

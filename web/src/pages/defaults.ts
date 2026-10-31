@@ -82,6 +82,7 @@ export function newApplication(account: Account) {
     ],
     signupItems: [
       {name: "ID", visible: false, required: true, rule: "Random"},
+      {name: "Logo", visible: true, required: false, rule: "None", customCss: SignupTableDefaultCssMap["Logo"]},
       {name: "Username", visible: true, required: true, rule: "None"},
       {name: "Display name", visible: true, required: true, rule: "None"},
       {name: "Password", visible: true, required: true, rule: "None"},
@@ -258,7 +259,6 @@ export function newPermission(account: Account) {
     state: Setting.isLocalAdminUser(account) ? "Approved" : "Pending",
   };
 }
-
 export function newProvider(account: Account, ownerOverride?: string) {
   const randomName = Setting.getRandomName();
   const owner = Setting.isDefaultOrganizationSelected(account) ? ownerOverride ?? "admin" : Setting.getRequestOrganization(account);
@@ -354,7 +354,6 @@ export function newSite(account: Account) {
     organizations: [],
   };
 }
-
 export function newSyncer(account: Account) {
   const randomName = Setting.getRandomName();
   const organizationName = Setting.getRequestOrganization(account);

@@ -204,6 +204,7 @@ func extendApplicationWithSignupItems(application *Application) (err error) {
 	if len(application.SignupItems) == 0 {
 		application.SignupItems = []*SignupItem{
 			{Name: "ID", Visible: false, Required: true, Prompted: false, Rule: "Random"},
+			{Name: "Logo", Visible: true, Required: false, Prompted: false, Rule: "None"},
 			{Name: "Username", Visible: true, Required: true, Prompted: false, Rule: "None"},
 			{Name: "Display name", Visible: true, Required: true, Prompted: false, Rule: "None"},
 			{Name: "Password", Visible: true, Required: true, Prompted: false, Rule: "None"},
@@ -467,17 +468,27 @@ func checkMultipleCaptchaProviders(application *Application, lang string) error 
 
 // CheckApplicationCustomHtml keeps what an organization admin may put on the sign-in pages to layout
 // and branding: custom HTML or CSS that could collect or send out what users type is refused unless
-// it is the one oldApplication (nil for a new application) already has. A global admin is not held
-// to this.
+// it is the one oldApplication (nil for a new application) already has. The sign-in pages render the
+// custom HTML of an application with custom scripts enabled as it is, so an organization admin can
+// neither enable them nor change that HTML. A global admin is not held to this.
 func CheckApplicationCustomHtml(application *Application, oldApplication *Application) error {
 	if oldApplication == nil {
 		oldApplication = &Application{}
 	}
 
+	if application.EnableCustomScript && !oldApplication.EnableCustomScript {
+		return fmt.Errorf("only a global admin can enable custom scripts of the application")
+	}
+
 	var prefixes []string
 	var unsafeFields []string
+	var scriptFields []string
 	checkHtml := func(field string, text string, oldText string) {
 		if text == oldText || text == "" {
+			return
+		}
+		if application.EnableCustomScript {
+			scriptFields = append(scriptFields, field)
 			return
 		}
 		if prefixes == nil {
@@ -543,6 +554,9 @@ func CheckApplicationCustomHtml(application *Application, oldApplication *Applic
 		}
 	}
 
+	if len(scriptFields) > 0 {
+		return fmt.Errorf("the %s of the application runs as it is because custom scripts are enabled, so only a global admin can change it", strings.Join(scriptFields, ", "))
+	}
 	if len(unsafeFields) > 0 {
 		return fmt.Errorf("the %s of the application uses HTML or loads files that this Casdoor only lets a global admin set: scripts, forms and event handlers are not allowed, and images and fonts must come from this Casdoor, its storage providers or a URL in formCssAllowedUrls", strings.Join(unsafeFields, ", "))
 	}
@@ -826,6 +840,23 @@ func (application *Application) IsMagicLinkSignupEnabled() bool {
 	}
 
 	return false
+}
+
+// NextSignup answers a verification-code sign-in of an email or phone that has no account yet
+const NextSignup = "NextSignup"
+
+// IsCodeSigninSignupEnabled tells whether a verification-code sign-in of an email or phone
+// that has no account may go on to the application's own signup page, which takes the
+// address the code proved and asks for the rest of the signup items
+func (application *Application) IsCodeSigninSignupEnabled(verifyType string) bool {
+	if !application.IsSelfSignupEnabled() || application.SignupUrl != "" {
+		return false
+	}
+
+	if verifyType == VerifyTypeEmail {
+		return application.IsCodeSigninViaEmailEnabled() && application.IsSignupFieldVisible("Email")
+	}
+	return application.IsCodeSigninViaSmsEnabled() && application.IsSignupFieldVisible("Phone")
 }
 
 // IsSelfSignupEnabled tells whether users may sign themselves up on the signup page, by a

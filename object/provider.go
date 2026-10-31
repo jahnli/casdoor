@@ -65,6 +65,7 @@ type Provider struct {
 	RegionId     string `xorm:"varchar(100)" json:"regionId"`
 	SignName     string `xorm:"varchar(100)" json:"signName"`
 	TemplateCode string `xorm:"varchar(100)" json:"templateCode"`
+	BodyTemplate string `xorm:"mediumtext" json:"bodyTemplate"` // If provider type is Custom HTTP SMS, BodyTemplate is the request body with {phoneNumber}, {code} and {content} placeholders
 	AppId        string `xorm:"varchar(100)" json:"appId"`
 
 	Endpoint         string `xorm:"varchar(1000)" json:"endpoint"`
@@ -406,7 +407,6 @@ func DeleteProvider(provider *Provider) (bool, error) {
 
 	return affected != 0, nil
 }
-
 func (p *Provider) GetId() string {
 	return fmt.Sprintf("%s/%s", p.Owner, p.Name)
 }
@@ -611,7 +611,7 @@ func FromProviderToIdpInfo(ctx *context.Context, provider *Provider) (*idp.Provi
 	} else if provider.Type == "ADFS" || provider.Type == "AzureAD" || provider.Type == "AzureADB2C" || provider.Type == "Casdoor" || provider.Type == "Okta" || provider.Type == "OIDC" {
 		providerInfo.HostUrl = provider.Domain
 	} else if provider.Type == "Alipay" && provider.Cert != "" {
-		cert, err := GetCert(util.GetId(provider.Owner, provider.Cert))
+		cert, err := GetCertEx(util.GetId(provider.Owner, provider.Cert))
 		if err != nil {
 			return nil, fmt.Errorf("failed to load certificate for Alipay provider %s: %w", provider.Name, err)
 		}
@@ -621,7 +621,7 @@ func FromProviderToIdpInfo(ctx *context.Context, provider *Provider) (*idp.Provi
 		providerInfo.ClientSecret = cert.PrivateKey
 		providerInfo.AppCertificate = cert.Certificate
 		if provider.Metadata != "" {
-			rootCert, err := GetCert(util.GetId(provider.Owner, provider.Metadata))
+			rootCert, err := GetCertEx(util.GetId(provider.Owner, provider.Metadata))
 			if err != nil {
 				return nil, fmt.Errorf("failed to load root certificate for Alipay provider %s: %w", provider.Name, err)
 			}

@@ -15,9 +15,13 @@
 package object
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"mime"
+	"mime/multipart"
 	"regexp"
 	"strings"
 
@@ -102,6 +106,41 @@ func maskSecrets(recordString string) string {
 	return secretMultipartRegex.ReplaceAllString(recordString, "${1}***")
 }
 
+// summarizeMultipartBody keeps the form fields of a multipart request and replaces the content
+// of each uploaded file with its size, so that uploads do not store whole files in "record".
+func summarizeMultipartBody(contentType string, body []byte) (string, bool) {
+	mediaType, params, err := mime.ParseMediaType(contentType)
+	if err != nil || !strings.HasPrefix(mediaType, "multipart/") || params["boundary"] == "" {
+		return "", false
+	}
+
+	var sb strings.Builder
+	reader := multipart.NewReader(bytes.NewReader(body), params["boundary"])
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return "", false
+		}
+
+		content, err := io.ReadAll(part)
+		if err != nil {
+			return "", false
+		}
+
+		sb.WriteString("--" + params["boundary"] + "\r\n")
+		if part.FileName() != "" {
+			sb.WriteString(fmt.Sprintf("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n\r\n[%d bytes]\r\n", part.FormName(), part.FileName(), len(content)))
+		} else {
+			sb.WriteString(fmt.Sprintf("Content-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n", part.FormName(), content))
+		}
+	}
+	sb.WriteString("--" + params["boundary"] + "--\r\n")
+	return sb.String(), true
+}
+
 func NewRecord(ctx *context.Context) (*Record, error) {
 	clientIp := strings.Replace(util.GetClientIpFromRequest(ctx.Request), ": ", "", -1)
 	action := strings.Replace(ctx.Request.URL.Path, "/api/", "", -1)
@@ -115,6 +154,9 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 	object := ""
 	if ctx.Input.RequestBody != nil && len(ctx.Input.RequestBody) != 0 {
 		object = string(ctx.Input.RequestBody)
+		if summary, ok := summarizeMultipartBody(ctx.Request.Header.Get("Content-Type"), ctx.Input.RequestBody); ok {
+			object = summary
+		}
 		object = maskSecrets(object)
 	}
 
@@ -149,17 +191,18 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 }
 
 // SetUser sets the record's organization and user from the subject's user ID. An M2M
-// credential ("app/<name>") is recorded in the application's organization, because the
-// pseudo organization "app" is shown by no organization's audit log.
+// credential ("app/<name>" or "app-dcr/<name>") is recorded in the application's organization,
+// because the pseudo organizations "app" and "app-dcr" are shown by no organization's audit log.
 func (record *Record) SetUser(userId string) error {
 	if IsAppUser(userId) {
-		appUser, err := GetAppUser(userId)
+		_, name := util.GetOwnerAndNameFromIdNoCheck(userId)
+		application, err := getAppUserApplication(name)
 		if err != nil {
 			return err
 		}
 
-		if appUser != nil {
-			record.Organization, record.User = appUser.Owner, appUser.Name
+		if application != nil {
+			record.Organization, record.User = application.Organization, userId
 			return nil
 		}
 	}

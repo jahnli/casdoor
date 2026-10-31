@@ -14,6 +14,15 @@
 
 package conf
 
+import "sync/atomic"
+
+// hideCloudPromotion mirrors the global setting of the same name, which lives in the database this package cannot read
+var hideCloudPromotion atomic.Bool
+
+func SetHideCloudPromotion(hide bool) {
+	hideCloudPromotion.Store(hide)
+}
+
 type WebConfig struct {
 	ShowGithubCorner    bool   `json:"showGithubCorner"`
 	ForceLanguage       string `json:"forceLanguage"`
@@ -22,6 +31,9 @@ type WebConfig struct {
 	StaticBaseUrl       string `json:"staticBaseUrl"`
 	DefaultApplication  string `json:"defaultApplication"`
 	MaxItemsForFlatMenu int64  `json:"maxItemsForFlatMenu"`
+	ThemeShowcase       bool   `json:"themeShowcase"`
+	MarketplaceUrl      string `json:"marketplaceUrl"`
+	ShowCloudPromotion  bool   `json:"showCloudPromotion"`
 }
 
 func GetWebConfig() *WebConfig {
@@ -46,6 +58,13 @@ func GetWebConfig() *WebConfig {
 		maxItemsForFlatMenu = 7
 	}
 	config.MaxItemsForFlatMenu = maxItemsForFlatMenu
+
+	config.ThemeShowcase = GetConfigBool("themeShowcase") || IsDemoMode() || IsDemoDatabase()
+	if config.ThemeShowcase {
+		config.MarketplaceUrl = GetConfigString("marketplaceUrl")
+	}
+
+	config.ShowCloudPromotion = !hideCloudPromotion.Load()
 
 	return config
 }

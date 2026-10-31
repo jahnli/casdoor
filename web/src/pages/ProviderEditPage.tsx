@@ -30,7 +30,7 @@ import {authConfig} from "@/auth/Auth";
 import copy from "copy-to-clipboard";
 
 const defaultUserMapping: Record<string, string> = {
-  id: "id",
+  id: "sub",
   username: "username",
   displayName: "displayName",
   email: "email",
@@ -66,8 +66,8 @@ const CATEGORIES = [
 const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE"];
 const CONTENT_TYPES = ["application/json", "application/x-www-form-urlencoded"];
 
-const SMS_PROVIDERS_WITHOUT_SIGN_NAME = ["Custom HTTP SMS", "Twilio SMS", "Amazon SNS", "Msg91 SMS", "Infobip SMS"];
-const SMS_PROVIDERS_WITHOUT_TEMPLATE_CODE = ["Infobip SMS"];
+const SMS_PROVIDERS_WITHOUT_SIGN_NAME = ["Custom HTTP SMS", "Twilio SMS", "Twilio Verify", "Amazon SNS", "Msg91 SMS", "Infobip SMS"];
+const SMS_PROVIDERS_WITHOUT_TEMPLATE_CODE = ["Infobip SMS", "Twilio Verify"];
 
 const SYSLOG_PROTOCOLS = ["UDP", "TCP", "TLS"];
 const SYSLOG_FACILITIES = [
@@ -247,6 +247,8 @@ function getClientSecret2Label(provider: any): Label {
     return label(i18next.t("provider:From name"), i18next.t("provider:From name - Tooltip"));
   } else if (provider.type === "Aliyun Captcha") {
     return label(i18next.t("provider:App key"), i18next.t("provider:App key - Tooltip"));
+  } else if (provider.type === "WeChat Pay") {
+    return label(i18next.t("provider:Public key ID"), i18next.t("provider:Public key ID - Tooltip"));
   }
   return label(i18next.t("provider:Client secret 2"), i18next.t("provider:Client secret 2 - Tooltip"));
 }
@@ -262,6 +264,8 @@ function getAppIdLabel(provider: any): Label | null {
   } else if (provider.category === "SMS") {
     if (provider.type === "Twilio SMS" || provider.type === "Azure ACS") {
       return label(i18next.t("provider:Sender number"), i18next.t("provider:Sender number - Tooltip"));
+    } else if (provider.type === "Twilio Verify") {
+      return label(i18next.t("provider:Service SID"), i18next.t("provider:Service SID - Tooltip"));
     } else if (provider.type === "Tencent Cloud SMS") {
       return label(i18next.t("provider:App ID"), i18next.t("provider:App ID - Tooltip"));
     } else if (provider.type === "Volc Engine SMS") {
@@ -536,7 +540,7 @@ export default function ProviderEditPage() {
           navigate("/providers");
         } else {
           const next = `/providers/${provider.owner}/${provider.name}`;
-          if (next !== window.location.pathname) {
+          if (next !== Setting.getRoutePath()) {
             navigate(next, {replace: true});
           }
         }
@@ -1131,6 +1135,16 @@ export default function ProviderEditPage() {
               {renderSmsMappingInput()}
             </FormRow>
           ) : null}
+          {provider.method !== "GET" ? (
+            <FormRow labelKey="provider:HTTP body template" tooltip={i18next.t("provider:HTTP body template - Tooltip")} block>
+              <Textarea
+                rows={4}
+                value={provider.bodyTemplate ?? ""}
+                placeholder={"{\"to\": \"{phoneNumber}\", \"text\": \"{content}\", \"sender\": \"10004346\", \"templateId\": 5821}"}
+                onChange={(e) => updateProviderField("bodyTemplate", e.target.value)}
+              />
+            </FormRow>
+          ) : null}
           <FormRow labelKey="provider:Parameter">
             <Input value={provider.title ?? ""} onChange={(e) => updateProviderField("title", e.target.value)} />
           </FormRow>
@@ -1539,7 +1553,6 @@ export default function ProviderEditPage() {
 
     return null;
   };
-
   const renderStorageFields = () => (
     <React.Fragment>
       {!["Local File System", "MinIO", "Tencent Cloud COS", "Google Cloud Storage", "Qiniu Cloud Kodo", "Synology", "Casdoor"].includes(provider.type) ? (
@@ -1732,7 +1745,7 @@ export default function ProviderEditPage() {
           <FormRow label={getClientId2Label(provider).label} tooltip={getClientId2Label(provider).tooltip}>
             <Input value={provider.clientId2 ?? ""} onChange={(e) => updateProviderField("clientId2", e.target.value)} />
           </FormRow>
-          {["WeChat Pay", "CUCloud"].includes(provider.type) || (provider.category === "Email" && provider.type === "Azure ACS") ? null : (
+          {provider.type === "CUCloud" || (provider.category === "Email" && provider.type === "Azure ACS") ? null : (
             <FormRow label={getClientSecret2Label(provider).label} tooltip={getClientSecret2Label(provider).tooltip}>
               {provider.category === "OAuth" && provider.type === "Apple" ? (
                 <Textarea rows={4} value={provider.clientSecret2 ?? ""} onChange={(e) => updateProviderField("clientSecret2", e.target.value)} />

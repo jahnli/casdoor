@@ -39,6 +39,7 @@ const RESOURCE_LABELS: Record<string, string> = {
   "tokens": "general:Tokens",
   "verifications": "general:Verifications",
   "sysinfo": "general:System Info",
+  "settings": "general:Global Settings",
   "forms": "general:Forms",
   "syncers": "general:Syncers",
   "webhooks": "general:Webhooks",

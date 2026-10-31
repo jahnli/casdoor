@@ -34,6 +34,14 @@ import (
 )
 
 func main() {
+	if util.RunAsService(runServer) {
+		return
+	}
+
+	runServer()
+}
+
+func runServer() {
 	web.BConfig.WebConfig.Session.SessionOn = true
 	web.BConfig.WebConfig.Session.SessionName = "casdoor_session_id"
 	if redisConfig := conf.GetRedisConfig(); redisConfig == nil {
@@ -56,6 +64,7 @@ func main() {
 	object.CreateTables()
 
 	object.InitDb()
+	object.InitSetting()
 
 	// Handle export command
 	if object.ShouldExportData() {
@@ -153,5 +162,5 @@ func main() {
 		service.Start()
 	}
 
-	web.Run(fmt.Sprintf(":%v", port))
+	web.RunWithMiddleWares(fmt.Sprintf(":%v", port), routers.BasePathMiddleware)
 }

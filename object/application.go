@@ -115,6 +115,7 @@ type Application struct {
 	DefaultTag                   string          `xorm:"varchar(100)" json:"defaultTag"`
 	HeaderHtml                   string          `xorm:"mediumtext" json:"headerHtml"`
 	PageHtml                     string          `xorm:"mediumtext" json:"pageHtml"`
+	EnableCustomScript           bool            `json:"enableCustomScript"`
 	EnablePassword               bool            `json:"enablePassword"`
 	EnableSignUp                 bool            `json:"enableSignUp"`
 	DisableSelfSignup            bool            `json:"disableSelfSignup"`
@@ -131,6 +132,7 @@ type Application struct {
 	DisableSamlAttributes        bool            `json:"disableSamlAttributes"`
 	EnableSamlAssertionSignature bool            `json:"enableSamlAssertionSignature"`
 	UseEmailAsSamlNameId         bool            `json:"useEmailAsSamlNameId"`
+	SamlNameIdTemplate           string          `xorm:"mediumtext" json:"samlNameIdTemplate"`
 	EnableWebAuthn               bool            `json:"enableWebAuthn"`
 	EnableLinkWithEmail          bool            `json:"enableLinkWithEmail"`
 	OrgChoiceMode                string          `json:"orgChoiceMode"`
@@ -172,6 +174,7 @@ type Application struct {
 	AffiliationUrl          string                 `xorm:"varchar(100)" json:"affiliationUrl"`
 	IpWhitelist             string                 `xorm:"varchar(200)" json:"ipWhitelist"`
 	TermsOfUse              string                 `xorm:"varchar(200)" json:"termsOfUse"`
+	PrivacyPolicy           string                 `xorm:"mediumtext" json:"privacyPolicy"`
 	SignupHtml              string                 `xorm:"mediumtext" json:"signupHtml"`
 	SigninHtml              string                 `xorm:"mediumtext" json:"signinHtml"`
 	ThemeData               *ThemeData             `xorm:"json" json:"themeData"`
@@ -310,6 +313,49 @@ func getApplication(owner string, name string) (*Application, error) {
 	}
 }
 
+func GetApplicationByOrganizationAndName(organization string, name string) (*Application, error) {
+	if organization == "" || name == "" {
+		return nil, nil
+	}
+
+	realApplicationName, sharedOrg := util.GetSharedOrgFromApp(name)
+
+	application := Application{}
+	existed, err := ormer.Engine.Where("organization = ?", organization).And("name = ?", realApplicationName).Get(&application)
+	if err != nil {
+		return nil, err
+	}
+
+	if !existed {
+		return nil, nil
+	}
+
+	if application.IsShared && sharedOrg != "" {
+		application.Organization = sharedOrg
+	}
+
+	err = extendApplicationWithProviders(&application)
+	if err != nil {
+		return nil, err
+	}
+
+	err = extendApplicationWithOrg(&application)
+	if err != nil {
+		return nil, err
+	}
+
+	err = extendApplicationWithSigninMethods(&application)
+	if err != nil {
+		return nil, err
+	}
+	err = extendApplicationWithSigninItems(&application)
+	if err != nil {
+		return nil, err
+	}
+
+	return &application, nil
+}
+
 func GetApplicationByOrganizationName(organization string) (*Application, error) {
 	application := Application{}
 	existed, err := ormer.Engine.Where("organization=?", organization).Get(&application)
@@ -379,7 +425,11 @@ func GetApplicationByUserId(userId string) (application *Application, err error)
 func GetApplicationByClientId(clientId string) (*Application, error) {
 	application := Application{}
 
-	realClientId, sharedOrg := util.GetSharedOrgFromApp(clientId)
+	realClientId, sharedOrg := clientId, ""
+	// a URL client_id may contain "-org-" in its path
+	if !IsClientIdMetadataUrl(clientId) {
+		realClientId, sharedOrg = util.GetSharedOrgFromApp(clientId)
+	}
 
 	existed, err := ormer.Engine.Where("client_id=?", realClientId).Get(&application)
 	if err != nil {
@@ -530,6 +580,13 @@ func AddApplication(application *Application, lang string) (bool, error) {
 
 		application.TokenFields = tokenFields
 	}
+	if application.ExpireInHours == 0 {
+		expireInHours, refreshExpireInHours, _ := getDcrTokenLifetimes(nil)
+		application.ExpireInHours = expireInHours
+		if application.RefreshExpireInHours == 0 {
+			application.RefreshExpireInHours = refreshExpireInHours
+		}
+	}
 
 	app, err := GetApplicationByClientId(application.ClientId)
 	if err != nil {
@@ -537,7 +594,7 @@ func AddApplication(application *Application, lang string) (bool, error) {
 	}
 
 	if app != nil {
-		return false, nil
+		return false, fmt.Errorf(i18n.Translate(lang, "general:The client ID: %s is already used by another application"), application.ClientId)
 	}
 
 	if application.IsShared == true && application.Organization != "built-in" {

@@ -10,6 +10,7 @@ import {ThemeEditor} from "@/components/common/ThemeEditor";
 import {EditableTable} from "@/components/crud/EditableTable";
 import {ApplicationPromptPreview, ApplicationSignupSigninPreview} from "@/components/application/ApplicationPreview";
 import {FormRow} from "@/components/crud/FormRow";
+import {useAccount} from "@/hooks/use-account";
 import type {ApplicationTabProps} from "@/components/application/types";
 import {enumSelectOptions, type EnumMap} from "@/lib/enum-labels";
 import {SigninTableDefaultCssMap} from "@/lib/signin-css";
@@ -38,6 +39,7 @@ const SIGNIN_METHOD_RULES: Record<string, EnumMap> = {
   "WeChat": {
     "Tab": {i18nKey: "general:Tab"},
     "Login page": {i18nKey: "general:Login page"},
+    "Corner": {i18nKey: "application:Corner QR code"},
   },
   "Device login": {
     "Tab": {i18nKey: "general:Tab"},
@@ -111,6 +113,7 @@ const SIGNIN_ITEM_NAMES: {name: string; labelKey: string}[] = [
   {name: "Logo", labelKey: "general:Logo"},
   {name: "Back button", labelKey: "login:Back button"},
   {name: "Languages", labelKey: "general:Languages"},
+  {name: "Theme", labelKey: "theme:Theme"},
   {name: "Username", labelKey: "signup:Username"},
   {name: "Password", labelKey: "general:Password"},
   {name: "Verification code", labelKey: "login:Verification code"},
@@ -125,6 +128,7 @@ const SIGNIN_ITEM_NAMES: {name: string; labelKey: string}[] = [
 ];
 
 const SIGNUP_ITEM_NAMES: {name: string; labelKey: string}[] = [
+  {name: "Logo", labelKey: "general:Logo"},
   {name: "Username", labelKey: "signup:Username"},
   {name: "ID", labelKey: "general:ID"},
   {name: "Display name", labelKey: "general:Display name"},
@@ -158,8 +162,8 @@ const SIGNUP_ITEM_NAMES: {name: string; labelKey: string}[] = [
 /** the signin items whose text the antd table lets you relabel */
 const LABELED_SIGNIN_ITEMS = ["Username", "Password", "Verification code", "Signup link", "Forgot password?", "Login button"];
 /** signup items that are page furniture rather than fields, so they cannot be required or prompted */
-const NON_FIELD_SIGNUP_ITEMS = ["Signup button", "Providers", "Languages"];
-const NO_REGEX_SIGNUP_ITEMS = ["Password", "Confirm password", "Signup button", "Provider", "Providers", "Languages"];
+const NON_FIELD_SIGNUP_ITEMS = ["Logo", "Signup button", "Providers", "Languages"];
+const NO_REGEX_SIGNUP_ITEMS = ["Logo", "Password", "Confirm password", "Signup button", "Provider", "Providers", "Languages"];
 
 /** a picked item cannot be picked again by another row */
 function getUnusedItemOptions(names: {name: string; labelKey: string}[], rows: any[], index: number) {
@@ -198,6 +202,8 @@ function getSigninItemRuleOptions(name: string) {
 
 /** The "UI Customization" tab: the blocks the sign-in and sign-up pages are built from. */
 export function ApplicationUiCustomizationTab({application, updateField}: ApplicationTabProps) {
+  const {account} = useAccount();
+
   return (
     <>
       <FormRow block labelKey="application:Org choice mode">
@@ -395,7 +401,7 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
               render: (row: any, index, patch) => (
                 <SelectField
                   value={row.name}
-                  onChange={(v) => patch({name: v, customCss: SignupTableDefaultCssMap[v] ?? ""})}
+                  onChange={(v) => patch({name: v, customCss: SignupTableDefaultCssMap[v] ?? "", ...(v === "Logo" ? {required: false, prompted: false} : {})})}
                   options={getUnusedItemOptions(SIGNUP_ITEM_NAMES, application.signupItems ?? [], index)}
                 />
               ),
@@ -406,7 +412,7 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
               width: 90,
               render: (row: any, _i, patch) =>
                 row.name === "ID" ? null : (
-                  <Switch checked={!!row.visible} onCheckedChange={(v) => patch({visible: v, required: v})} />
+                  <Switch checked={!!row.visible} onCheckedChange={(v) => patch(row.name === "Logo" ? {visible: v} : {visible: v, required: v})} />
                 ),
             },
             {
@@ -581,6 +587,13 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
           themeData={application.themeData}
           onChange={(next) => updateField("themeData", next)}
           followLabelKey="application:Follow organization theme"
+        />
+      </FormRow>
+      <FormRow labelKey="application:Enable custom scripts">
+        <Switch
+          checked={!!application.enableCustomScript}
+          disabled={!Setting.isAdminUser(account)}
+          onCheckedChange={(v) => updateField("enableCustomScript", v)}
         />
       </FormRow>
       <FormRow labelKey="application:Header HTML" block>

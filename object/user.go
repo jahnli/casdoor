@@ -262,6 +262,28 @@ type Userinfo struct {
 	Groups        []string     `json:"groups,omitempty"`
 	Roles         []string     `json:"roles,omitempty"`
 	Permissions   []string     `json:"permissions,omitempty"`
+
+	CustomClaims map[string]interface{} `json:"-"`
+}
+
+func (u Userinfo) MarshalJSON() ([]byte, error) {
+	type userinfo Userinfo
+	data, err := json.Marshal(userinfo(u))
+	if err != nil || len(u.CustomClaims) == 0 {
+		return data, err
+	}
+
+	res := map[string]interface{}{}
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return nil, err
+	}
+	for name, value := range u.CustomClaims {
+		if _, ok := res[name]; !ok {
+			res[name] = value
+		}
+	}
+	return json.Marshal(res)
 }
 
 type ManagedAccount struct {
@@ -364,6 +386,11 @@ func GetUserCount(owner, field, value string, groupName string) (int64, error) {
 	return session.Count(&User{})
 }
 
+func GetUserCountWithFilter(owner string, cond builder.Cond) (int64, error) {
+	session := GetSession(owner, -1, -1, "", "", "", "")
+	return session.And(cond).Count(&User{})
+}
+
 func GetOnlineUserCount(owner string, isOnline int) (int64, error) {
 	return ormer.Engine.Where("is_online = ?", isOnline).Count(&User{Owner: owner})
 }
@@ -428,6 +455,16 @@ func GetPaginationUsers(owner string, offset, limit int, field, value, sortField
 
 	session := GetSessionForUser(owner, offset, limit, field, value, sortField, sortOrder)
 	err := session.Find(&users)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func GetPaginationUsersWithFilter(owner string, offset, limit int, cond builder.Cond) ([]*User, error) {
+	users := []*User{}
+	session := GetSession(owner, offset, limit, "", "", "", "")
+	err := session.And(cond).Find(&users)
 	if err != nil {
 		return nil, err
 	}
@@ -563,9 +600,27 @@ func GetUserByPhone(owner string, phone string) (*User, error) {
 
 	if existed {
 		return &user, nil
-	} else {
-		return nil, nil
 	}
+
+	if regionCode == "" {
+		return getUserByNationalPhone(owner, phone)
+	}
+	return nil, nil
+}
+
+// GetUserByPhoneWithCountryCode looks up the user of a phone number typed with the chosen country code,
+// a national number like "0796488996" is normalized the same way as the one stored at signup
+func GetUserByPhoneWithCountryCode(owner string, phone string, countryCode string) (*User, error) {
+	if countryCode != "" && !strings.HasPrefix(phone, "+") {
+		if e164, ok := util.GetE164Number(phone, countryCode); ok {
+			user, err := GetUserByPhone(owner, e164)
+			if user != nil || err != nil {
+				return user, err
+			}
+		}
+	}
+
+	return GetUserByPhone(owner, phone)
 }
 
 func GetUserByPhoneOnly(phone string) (*User, error) {
@@ -721,6 +776,22 @@ func GetMaskedUser(user *User, isAdminOrSelf bool, errs ...error) (*User, error)
 	return user, nil
 }
 
+func getOAuthDisplayProperties(properties map[string]string) map[string]string {
+	res := map[string]string{}
+	for key, value := range properties {
+		if !strings.HasPrefix(key, "oauth_") {
+			continue
+		}
+		for _, suffix := range []string{"_id", "_username", "_displayName", "_email", "_avatarUrl"} {
+			if strings.HasSuffix(key, suffix) {
+				res[key] = value
+				break
+			}
+		}
+	}
+	return res
+}
+
 func GetFilteredUser(user *User, isAdmin bool, isAdminOrSelf bool, accountItems []*AccountItem) (*User, error) {
 	if accountItems == nil || len(accountItems) == 0 {
 		return user, nil
@@ -762,6 +833,11 @@ func GetFilteredUser(user *User, isAdmin bool, isAdminOrSelf bool, accountItems 
 						user.Properties[infoKey] = ""
 					}
 				}
+				continue
+			}
+		case "Properties":
+			if isAdminOrSelf {
+				user.Properties = getOAuthDisplayProperties(user.Properties)
 				continue
 			}
 		}
@@ -832,7 +908,7 @@ func GetDefaultUserUpdateColumns(isAdmin bool) []string {
 	columns := append([]string{}, userSelfColumns...)
 	if isAdmin {
 		columns = append(columns, "name", "id", "email", "phone", "country_code", "type", "mfa_items", "register_type", "register_source",
-			"is_admin", "is_forbidden", "is_deleted", "uid_number", "email_verified")
+			"is_admin", "is_forbidden", "is_deleted", "uid_number", "email_verified", "is_verified")
 		columns = append(columns, userProviderColumns...)
 	}
 	return columns
@@ -1417,6 +1493,20 @@ func GetUserInfo(user *User, scope string, aud string, host string) (*Userinfo, 
 		if allowed("IsVerified") {
 			resp.IsVerified = user.IsVerified
 		}
+	}
+
+	if application != nil && application.TokenFormat == "JWT-Custom" && len(application.TokenAttributes) > 0 {
+		tokenUser := *user
+		err = ExtendUserWithRolesAndPermissions(&tokenUser)
+		if err != nil {
+			return nil, err
+		}
+
+		refinedUser, err := getTokenUser(application, &tokenUser)
+		if err != nil {
+			return nil, err
+		}
+		resp.CustomClaims = getTokenAttributeClaims(refinedUser, application.TokenAttributes)
 	}
 
 	return &resp, nil

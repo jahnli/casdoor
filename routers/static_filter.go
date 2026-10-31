@@ -17,6 +17,7 @@ package routers
 import (
 	"compress/gzip"
 	stdcontext "context"
+	"encoding/json"
 	"fmt"
 	"html"
 	"io"
@@ -163,7 +164,7 @@ func fastAutoSignin(ctx *context.Context) (string, error) {
 	if strings.Contains(redirectUri, "?") {
 		sep = "&"
 	}
-	issuer := object.GetOidcDiscovery(ctx.Request.Host, "").Issuer
+	issuer := object.GetOidcIssuer(ctx.Request.Host)
 	res := fmt.Sprintf("%s%scode=%s&state=%s&iss=%s", redirectUri, sep, url.QueryEscape(code.Code), url.QueryEscape(state), url.QueryEscape(issuer))
 	return res, nil
 }
@@ -227,6 +228,9 @@ func StaticFilter(ctx *context.Context) {
 		return
 	}
 	if serveProviderHintRedirectScript(ctx) {
+		return
+	}
+	if serveWebManifest(ctx) {
 		return
 	}
 	if strings.HasPrefix(urlPath, "/cas") && (strings.HasSuffix(urlPath, "/serviceValidate") || strings.HasSuffix(urlPath, "/proxy") || strings.HasSuffix(urlPath, "/proxyValidate") || strings.HasSuffix(urlPath, "/validate") || strings.HasSuffix(urlPath, "/p3/serviceValidate") || strings.HasSuffix(urlPath, "/p3/proxyValidate") || strings.HasSuffix(urlPath, "/samlValidate")) {
@@ -317,14 +321,14 @@ func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, o
 	oldContent := util.ReadStringFromPath(name)
 	newContent := oldContent
 	if organizationThemeCookie != nil {
-		newContent = strings.ReplaceAll(newContent, "https://cdn.casbin.org/img/favicon.png", html.EscapeString(organizationThemeCookie.Favicon))
-		newContent = strings.ReplaceAll(newContent, "<title>Casdoor</title>", fmt.Sprintf("<title>%s</title>", html.EscapeString(organizationThemeCookie.DisplayName)))
+		newContent = addBrandingToHtml(newContent, organizationThemeCookie)
 	}
 
 	// Set the correct <html lang="..."> on the initial HTML response so browsers
 	// do not mis-detect the page language (e.g. Chrome offering to translate a
 	// Chinese page into Chinese because the static shell declares lang="en").
 	if strings.HasSuffix(name, "index.html") {
+		w.Header().Set("Cache-Control", "no-cache")
 		lang := getIndexHtmlLanguage(r)
 		newContent = strings.ReplaceAll(newContent, `<html lang="en">`, fmt.Sprintf(`<html lang="%s">`, lang))
 		var cdnEnabled bool
@@ -334,11 +338,32 @@ func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, o
 			// the cached CDN version after the page turned the CDN off
 			modTime = time.Time{}
 		}
+		newContent = addBasePathToHtml(newContent)
+		newContent = addWebConfigToHtml(newContent)
+		newContent = addIssuerToHtml(newContent, r.Host)
 	}
 
 	newContent = strings.ReplaceAll(newContent, oldStaticBaseUrl, newStaticBaseUrl)
 
 	http.ServeContent(w, r, d.Name(), modTime, strings.NewReader(newContent))
+}
+
+// addWebConfigToHtml puts the web config into the page too: a page embedded in another site does not get the
+// jsonWebConfig cookie
+func addWebConfigToHtml(content string) string {
+	webConfig, err := json.Marshal(conf.GetWebConfig())
+	if err != nil {
+		return content
+	}
+
+	meta := fmt.Sprintf(`<meta name="casdoor-web-config" content="%s">`, html.EscapeString(string(webConfig)))
+	return strings.Replace(content, "</head>", meta+"</head>", 1)
+}
+
+// addIssuerToHtml tells the frontend the issuer it has to send back as `iss` in authorization responses (RFC 9207)
+func addIssuerToHtml(content string, host string) string {
+	meta := fmt.Sprintf(`<meta name="casdoor-issuer" content="%s">`, html.EscapeString(object.GetOidcIssuer(host)))
+	return strings.Replace(content, "</head>", meta+"</head>", 1)
 }
 
 type gzipResponseWriter struct {

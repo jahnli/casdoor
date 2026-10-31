@@ -107,8 +107,7 @@ p, *, *, *, /api/webauthn, *, *
 p, *, *, GET, /api/get-release, *, *
 p, *, *, GET, /api/get-default-application, *, *
 p, *, *, GET, /api/get-prometheus-info, *, *
-p, *, *, *, /api/metrics, *, *
-p, *, *, GET, /api/get-provider, *, *
+p, *, *, *, /api/metrics, *, *p, *, *, GET, /api/get-provider, *, *
 p, *, *, GET, /api/get-organization-names, *, *
 p, *, *, GET, /api/get-organizations, *, *
 p, *, *, GET, /api/get-all-objects, *, *

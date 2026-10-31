@@ -28,7 +28,6 @@ export const TICKET_STATES: EnumMap = {
   "Resolved": {i18nKey: "ticket:Resolved", variant: "success"},
   "Closed": {i18nKey: "ticket:Closed", variant: "secondary"},
 };
-
 export const INVITATION_STATES: EnumMap = {
   "Active": {i18nKey: "general:Active", variant: "success"},
   "Suspended": {i18nKey: "general:Suspended", variant: "secondary"},

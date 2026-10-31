@@ -37,9 +37,12 @@ import viCountries from "i18n-iso-countries/langs/vi.json";
 import zhCountries from "i18n-iso-countries/langs/zh.json";
 import * as Conf from "@/Conf";
 import {authConfig} from "@/auth/Auth";
+import {BasePath, getRoutePath, withBasePath} from "@/lib/base-path";
 import "@/i18n";
 
-export const ServerUrl = "";
+export {BasePath, getOriginUrl, getRoutePath, withBasePath} from "@/lib/base-path";
+
+export const ServerUrl = BasePath;
 
 export const StaticBaseUrl = Conf.StaticBaseUrl;
 
@@ -77,26 +80,30 @@ export function getFullServerUrl() {
   if (fullServerUrl === "http://localhost:7002" || fullServerUrl === "http://localhost:7001") {
     fullServerUrl = "http://localhost:8000";
   }
-  return fullServerUrl;
+  return `${fullServerUrl}${BasePath}`;
 }
 
-// An OAuth redirect URI on Casdoor's own origin belongs to Casdoor itself: the whole
-// origin serves the frontend, so no client application can live there. Such a request
-// is signed in directly instead of being answered with a code nobody can collect.
+// An OAuth redirect URI on Casdoor's own origin (under its base path) belongs to Casdoor
+// itself: that whole path serves the frontend, so no client application can live there.
+// Such a request is signed in directly instead of being answered with a code nobody can collect.
 export function isSelfRedirectUri(redirectUri) {
   if (!redirectUri) {
     return false;
   }
 
   try {
-    return new URL(redirectUri).origin === getFullServerUrl();
+    const url = new URL(redirectUri);
+    if (url.origin !== new URL(getFullServerUrl()).origin) {
+      return false;
+    }
+    return BasePath === "" || url.pathname === BasePath || url.pathname.startsWith(`${BasePath}/`);
   } catch {
     return false;
   }
 }
 
 export function getOAuthIssuer() {
-  return getFullServerUrl();
+  return document.querySelector("meta[name=\"casdoor-issuer\"]")?.getAttribute("content") || getFullServerUrl();
 }
 
 export function getOAuthIssuerParam() {
@@ -192,14 +199,14 @@ export function copyToClipboard(text: string) {
   showMessage("success", i18next.t("general:Copied to clipboard successfully"));
 }
 
-export function getClickable(text) {
+export function getClickable(text, label: React.ReactNode = text) {
   return (
     <button
       type="button"
       className="text-left underline-offset-4 hover:underline"
       onClick={() => copyToClipboard(text)}
     >
-      {text}
+      {label}
     </button>
   );
 }
@@ -329,6 +336,10 @@ export const OtherProviderInfo = {
     "Twilio SMS": {
       logo: `${StaticBaseUrl}/img/social_twilio.svg`,
       url: "https://www.twilio.com/messaging",
+    },
+    "Twilio Verify": {
+      logo: `${StaticBaseUrl}/img/social_twilio.svg`,
+      url: "https://www.twilio.com/docs/verify",
     },
     "SmsBao SMS": {
       logo: `${StaticBaseUrl}/img/social_smsbao.png`,
@@ -717,6 +728,9 @@ export const GetTranslatedUserItems = () => {
     {name: "Multi-factor authentication", label: i18next.t("mfa:Multi-factor authentication")},
     {name: "WebAuthn credentials", label: i18next.t("user:WebAuthn credentials")},
     {name: "Last change password time", label: i18next.t("user:Last change password time")},
+    {name: "Deleted time", label: i18next.t("user:Deleted time")},
+    {name: "Last signin time", label: i18next.t("user:Last signin time")},
+    {name: "Last signin IP", label: i18next.t("user:Last signin IP")},
     {name: "Managed accounts", label: i18next.t("user:Managed accounts")},
     {name: "Face ID", label: i18next.t("login:Face ID")},
     {name: "MFA accounts", label: i18next.t("user:MFA accounts")},
@@ -817,12 +831,13 @@ export function getCountryCode(country) {
   return "";
 }
 
-export function getCountryCodeData(countryCodes: any = phoneNumber.getCountries()): any[] {
-  if (countryCodes?.includes("All")) {
+export function getCountryCodeData(countryCodes: any = undefined): any[] {
+  // organizations created from init.json come back with null countryCodes
+  if (!countryCodes || countryCodes.includes("All")) {
     countryCodes = phoneNumber.getCountries();
   }
   const countries = initCountries() as any;
-  return countryCodes?.map((countryCode) => {
+  return countryCodes.map((countryCode) => {
     if (phoneNumber.isSupportedCountry(countryCode)) {
       // fall back to English so an unregistered locale never empties the list
       const name = countries.getName(countryCode, getLanguage()) || countries.getName(countryCode, "en");
@@ -865,6 +880,11 @@ export function isProviderVisible(providerItem) {
   }
 
   if (providerItem.provider.type === "WeChatMiniProgram") {
+    return false;
+  }
+
+  // inside WeChat only the Official Account (clientId2) can sign in, the QR code needs another device
+  if (providerItem.provider.type === "WeChat" && !providerItem.provider.clientId2 && navigator.userAgent.includes("MicroMessenger")) {
     return false;
   }
 
@@ -1085,6 +1105,15 @@ export function isRequiredEnableMfa(user, organization) {
   return getMfaItemsByRules(user, organization, [MfaRuleRequired]).length > 0;
 }
 
+/** The MFA types the user may set up: the user's own MFA items, else the organization's. An empty list allows all types. */
+export function getAllowedMfaTypes(user, organization): string[] {
+  let mfaItems = organization?.mfaItems ?? [];
+  if (user?.mfaItems && user.mfaItems.length !== 0) {
+    mfaItems = user.mfaItems;
+  }
+  return (mfaItems ?? []).map((mfaItem) => mfaItem.name);
+}
+
 export function getMfaItemsByRules(user, organization, mfaRules = []) {
   if (!user || !organization || (!organization.mfaItems && !user.mfaItems)) {
     return [];
@@ -1139,7 +1168,7 @@ export function openLink(link) {
   }
   // this.props.history.push(link);
   const w = window.open("about:blank");
-  w.location.href = link;
+  w.location.href = withBasePath(link);
 }
 
 export function openLinkSafe(link) {
@@ -1149,16 +1178,50 @@ export function openLinkSafe(link) {
   // Javascript window.open issue in safari
   // https://stackoverflow.com/questions/45569893/javascript-window-open-issue-in-safari
   const a = document.createElement("a");
-  a.href = link;
+  a.href = withBasePath(link);
   a.setAttribute("target", "_blank");
   a.click();
+}
+
+let leavingPage = false;
+
+// a custom scheme hands the link to a native app and a fragment of this page stays on it
+function unloadsPage(link) {
+  try {
+    const url = new URL(link, window.location.href);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return false;
+    }
+    return !(url.hash !== "" && url.href.split("#")[0] === window.location.href.split("#")[0]);
+  } catch {
+    return false;
+  }
+}
+
+/** Whether goToLink() or createFormAndSubmit() has sent the browser to another page that is still loading. */
+export function isLeavingPage() {
+  return leavingPage;
+}
+
+/** Calls onRestored when the browser shows this page again from its back-forward cache. */
+export function onPageRestored(onRestored) {
+  const onPageShow = (event) => {
+    if (event.persisted) {
+      leavingPage = false;
+      onRestored();
+    }
+  };
+  window.addEventListener("pageshow", onPageShow);
+  return () => window.removeEventListener("pageshow", onPageShow);
 }
 
 export function goToLink(link) {
   if (isScriptUrl(link)) {
     return;
   }
-  window.location.href = link;
+  const href = withBasePath(link);
+  leavingPage = unloadsPage(href);
+  window.location.href = href;
 }
 
 
@@ -1344,7 +1407,7 @@ export function getProviderLogoURL(provider) {
     const type = isCustomOAuthType(provider.type) ? "Custom" : provider.type;
     return `${StaticBaseUrl}/img/social_${type.toLowerCase()}.png`;
   } else {
-    const info = OtherProviderInfo[provider.category][provider.type];
+    const info = OtherProviderInfo[provider.category]?.[provider.type];
     // avoid crash when provider is not found
     if (info) {
       return info.logo;
@@ -1477,6 +1540,7 @@ export function getProviderTypeOptions(category) {
         {id: "Huawei Cloud SMS", name: "Huawei Cloud SMS"},
         {id: "UCloud SMS", name: "UCloud SMS"},
         {id: "Twilio SMS", name: "Twilio SMS"},
+        {id: "Twilio Verify", name: "Twilio Verify"},
         {id: "SmsBao SMS", name: "SmsBao SMS"},
         {id: "SUBMAIL SMS", name: "SUBMAIL SMS"},
         {id: "Msg91 SMS", name: "Msg91 SMS"},
@@ -1652,6 +1716,19 @@ export function getProvidersRule(application, item) {
   const showForm = isPasswordEnabled(application) || isCodeSigninEnabled(application) ||
     isWebAuthnEnabled(application) || isLdapEnabled(application);
   return showForm ? "small" : "big";
+}
+
+// The login page offers a credential form, the sign-in providers or a QR panel; without any of them it has nothing to sign in with.
+export function hasAnySigninMethod(application) {
+  if (isPasswordEnabled(application) || isCodeSigninEnabled(application) || isWebAuthnEnabled(application) ||
+    isLdapEnabled(application) || isFaceIdEnabled(application) || isMagicLinkEnabled(application)) {
+    return true;
+  }
+  const providersShown = (application?.signinItems ?? []).some(item => item.name === "Providers" && item.visible);
+  if (providersShown && (application?.providers ?? []).some(item => isProviderVisibleForSignIn(item))) {
+    return true;
+  }
+  return (application?.signinMethods ?? []).some(item => (item.name === "WeChat" || item.name === "Device login") && item.rule === "Login page");
 }
 
 export function getAutoSigninDefaultValue(application) {
@@ -2179,6 +2256,7 @@ export function createFormAndSubmit(url, params) {
   }
 
   document.body.appendChild(form);
+  leavingPage = unloadsPage(url);
   form.submit();
   setTimeout(() => {form.remove();}, 500);
 }
@@ -2205,8 +2283,8 @@ export function getSignupLink(application) {
   if (application.signupUrl) {
     // the application's own signup page, also when signing in through OAuth
     url = application.signupUrl;
-  } else if (window.location.pathname.includes("/login/oauth/authorize")) {
-    url = window.location.pathname.replace("/login/oauth/authorize", "/signup/oauth/authorize");
+  } else if (getRoutePath().includes("/login/oauth/authorize")) {
+    url = getRoutePath().replace("/login/oauth/authorize", "/signup/oauth/authorize");
   } else if (authConfig.appName === application.name) {
     url = "/signup";
   } else {
@@ -2219,7 +2297,7 @@ export function getSignupLink(application) {
 
 /** The sign-in URL carries the OAuth params, so remember it before leaving for the signup or forget page. */
 export function storeSigninUrl() {
-  sessionStorage.setItem("signinUrl", window.location.pathname + window.location.search);
+  sessionStorage.setItem("signinUrl", getRoutePath() + window.location.search);
 }
 
 export function getStoredSigninUrl() {
@@ -2231,8 +2309,8 @@ export function getLoginLink(application) {
   let url;
   if (application === null) {
     url = null;
-  } else if (window.location.pathname.includes("/signup/oauth/authorize")) {
-    url = window.location.pathname.replace("/signup/oauth/authorize", "/login/oauth/authorize");
+  } else if (getRoutePath().includes("/signup/oauth/authorize")) {
+    url = getRoutePath().replace("/signup/oauth/authorize", "/login/oauth/authorize");
   } else if (authConfig.appName === application.name) {
     url = "/login";
   } else if (application.signinUrl === "") {
