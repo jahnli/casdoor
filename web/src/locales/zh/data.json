@@ -336,6 +336,7 @@
   "general": {
     "Active": "活跃的",
     "Expired": "已过期",
+    "Product": "商品",
     "Suspended": "已暂停",
     "Start time": "开始时间",
     "End time": "结束时间",

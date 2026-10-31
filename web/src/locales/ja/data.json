@@ -334,6 +334,7 @@
   "general": {
     "Active": "アクティブ",
     "Expired": "期限切れ",
+    "Product": "製品",
     "Suspended": "一時停止",
     "Start time": "開始時刻",
     "End time": "終了時刻",

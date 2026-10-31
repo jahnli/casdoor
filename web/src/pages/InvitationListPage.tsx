@@ -11,7 +11,7 @@ import {newInvitation} from "@/pages/defaults";
 
 const INVITATION_DISPLAY_STATES: EnumMap = {
   ...INVITATION_STATES,
-  "Expired": {i18nKey: "subscription:Expired", variant: "destructive"},
+  "Expired": {i18nKey: "general:Expired", variant: "destructive"},
 };
 
 export default function InvitationListPage() {

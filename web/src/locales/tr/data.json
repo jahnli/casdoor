@@ -334,6 +334,7 @@
   "general": {
     "Active": "Aktif",
     "Expired": "Süresi doldu",
+    "Product": "Ürün",
     "Suspended": "Askıya alındı",
     "Start time": "Başlangıç zamanı",
     "End time": "Bitiş zamanı",

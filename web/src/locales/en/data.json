@@ -336,6 +336,7 @@
   "general": {
     "Active": "Active",
     "Expired": "Expired",
+    "Product": "Product",
     "Suspended": "Suspended",
     "Start time": "Start time",
     "End time": "End time",

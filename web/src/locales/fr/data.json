@@ -334,6 +334,7 @@
   "general": {
     "Active": "Actif",
     "Expired": "Expiré",
+    "Product": "Produit",
     "Suspended": "Suspendu",
     "Start time": "Heure de début",
     "End time": "Heure de fin",

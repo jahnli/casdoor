@@ -334,6 +334,7 @@
   "general": {
     "Active": "Активний",
     "Expired": "Термін дії минув",
+    "Product": "Продукт",
     "Suspended": "Призупинено",
     "Start time": "Час початку",
     "End time": "Час закінчення",
