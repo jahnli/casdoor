@@ -23,7 +23,6 @@ body:
         - Docker
         - Binary or built from source
         - Helm / Kubernetes
-        - Casdoor Cloud
         - Other
     validations:
       required: true
@@ -38,7 +37,6 @@ body:
         - SQL Server
         - CockroachDB
         - Other
-        - Not applicable (Casdoor Cloud)
     validations:
       required: true
   - type: textarea

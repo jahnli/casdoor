@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {CommandPaletteTrigger} from "@/components/common/CommandPalette";
-import {CloudHeaderButton, CloudMenuItem} from "@/components/common/CloudPromo";
 import {BreadcrumbBar} from "@/components/layout/BreadcrumbBar";
 import {LanguageSelect} from "@/components/common/LanguageSelect";
 import {OrganizationSelect} from "@/components/common/OrganizationSelect";
@@ -70,7 +69,6 @@ export function Header({onOpenPalette}: {onOpenPalette: () => void}) {
 
       <div className="ml-auto flex items-center gap-1.5">
         <CommandPaletteTrigger onOpen={onOpenPalette} />
-        <CloudHeaderButton />
         {showOrganizationSelect && (
           <OrganizationSelect
             withAll
@@ -113,7 +111,6 @@ export function Header({onOpenPalette}: {onOpenPalette: () => void}) {
               <Settings />
               {i18next.t("account:My Account")}
             </DropdownMenuItem>
-            <CloudMenuItem />
             {impersonating ? (
               <DropdownMenuItem onSelect={exitImpersonation}>
                 <LogOut />
