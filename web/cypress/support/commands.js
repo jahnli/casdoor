@@ -1,7 +1,4 @@
-// Custom commands shared by the console e2e specs. The antd frontend's equivalent
-// lives in `web-old/cypress/support/commands.js`; the selectors differ because this
-// frontend is shadcn/ui, so it targets the ids the app renders rather than antd
-// class names.
+// Custom commands shared by the console e2e specs, targeting the ids the app renders.
 
 const ADMIN = {
   application: "app-built-in",

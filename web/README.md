@@ -1,9 +1,8 @@
 # web — the Casdoor console
 
 The Casdoor frontend, on **shadcn/ui + Tailwind CSS** and built with Vite. It
-started as a port of the Ant Design console, which is kept for reference at
-`../web-old` and is no longer built or served; both talk to the same Go backend
-over the same REST endpoints.
+started as a port of the Ant Design console, which has been removed. This is
+the only frontend and talks to the Go backend over the same REST endpoints.
 
 ```
 Vite 5 · React 19 · TypeScript · Tailwind CSS 3 · shadcn/ui (Radix) · react-router 6 · i18next · reactflow
@@ -81,9 +80,12 @@ Two things worth knowing when writing a spec:
 serves (`AuthCallbackHandler.js`, `ProviderHintRedirect.js`); Vite copies them to
 the build root, so a Docker image gets them without needing `public/` at runtime.
 
-## How it maps to `../web-old`
+## Migration from the Ant Design console
 
-| `web-old` (antd) | `web` (shadcn) |
+The following historical mapping documents the port; the legacy source is no
+longer included in this project.
+
+| Legacy console (antd) | `web` (shadcn) |
 | --- | --- |
 | `src/backend/*.js` | `src/backend/*.ts` — same functions, same endpoints, `any`-typed params |
 | `src/Setting.js` | `src/lib/setting.tsx` — the pure logic is ported verbatim; antd renderers replaced |
@@ -95,7 +97,7 @@ the build root, so a Docker image gets them without needing `public/` at runtime
 | antd `<Result status="403">` | `components/common/UnauthorizedPage` |
 | `<Row><Col>` label rows | `components/crud/FormRow` |
 | antd `message` | `sonner` toasts (`Setting.showMessage` keeps the same signature) |
-| antd `ConfigProvider` dark algorithm | Tailwind `dark` class; the theme is stored under the same `themeAlgorithm` localStorage key, so it survives switching between the two frontends |
+| antd `ConfigProvider` dark algorithm | Tailwind `dark` class; the theme is stored under the same `themeAlgorithm` localStorage key, preserving the preference after migration |
 | `common/Editor.js` (CodeMirror) | `components/common/CodeEditor` |
 | `table/*.js` sub-tables | `components/crud/EditableTable` |
 | antd `<Descriptions bordered>` | `components/common/DescriptionList` |

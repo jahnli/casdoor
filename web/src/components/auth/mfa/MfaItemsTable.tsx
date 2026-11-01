@@ -19,7 +19,7 @@ const MFA_RULES: Record<string, string> = {
   "Required": "organization:Required",
 };
 
-/** The "MFA items" table shared by the organization and user edit pages, as web-old's MfaTable. */
+/** The "MFA items" table shared by the organization and user edit pages. */
 export function MfaItemsTable({rows, onChange}: {rows: any[] | undefined | null; onChange: (rows: any[]) => void}) {
   const items = rows ?? [];
 
