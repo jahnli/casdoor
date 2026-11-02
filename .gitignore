@@ -45,3 +45,4 @@ casdoor
 # Cypress output
 web/cypress/videos/
 web/cypress/screenshots/
+/.1panel.local.json
