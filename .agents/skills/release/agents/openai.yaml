@@ -1,0 +1,4 @@
+interface:
+  display_name: "Casdoor 全自动发布"
+  short_description: "串联 Casdoor Docker 镜像发布、单实例 1Panel 更新和健康核验"
+  default_prompt: "使用 $release 发布 Casdoor 远端默认分支，成功后更新单实例 1Panel 并核验结果。"
