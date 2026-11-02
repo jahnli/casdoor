@@ -62,11 +62,11 @@ export default function ApplicationListPage({formItems}: {formItems?: any[]} = {
     {
       dataIndex: "logo",
       title: "Logo",
-      width: 170,
+      width: 225,
       render: (value) =>
         value ? (
           <a href={value} target="_blank" rel="noreferrer">
-            <img src={value} alt="logo" className="h-8 max-w-[150px] object-contain" />
+            <img src={value} alt="logo" className="h-6 max-w-[198px] object-contain" />
           </a>
         ) : null,
     },
