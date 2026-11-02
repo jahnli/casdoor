@@ -36,6 +36,7 @@ import ukCountries from "i18n-iso-countries/langs/uk.json";
 import viCountries from "i18n-iso-countries/langs/vi.json";
 import zhCountries from "i18n-iso-countries/langs/zh.json";
 import * as Conf from "@/Conf";
+import {StaticBaseUrl} from "@/Conf";
 import {authConfig} from "@/auth/Auth";
 import {BasePath, getRoutePath, withBasePath} from "@/lib/base-path";
 import "@/i18n";
@@ -44,7 +45,8 @@ export {BasePath, getOriginUrl, getRoutePath, withBasePath} from "@/lib/base-pat
 
 export const ServerUrl = BasePath;
 
-export const StaticBaseUrl = Conf.StaticBaseUrl;
+Conf.initConfigFromCookie();
+export {StaticBaseUrl};
 
 export const MAX_PAGE_SIZE = 25;
 export const SEARCH_DEBOUNCE_MS = 300;
