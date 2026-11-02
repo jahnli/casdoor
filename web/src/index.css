@@ -9,56 +9,53 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    --foreground: 0 0% 3.94%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 3.94%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 3.94%;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 224.4 85.17% 48.51%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 205.76 91.07% 95.02%;
+    --secondary-foreground: 0 0% 8.61%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 44%;
+    --muted: 0 0% 96.06%;
+    --muted-foreground: 0 0% 37.75%;
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
+    --accent: from color-mix(in oklch, hsl(var(--primary)) 12%, hsl(var(--background))) h s l;
+    --accent-foreground: 0 0% 3.94%;
 
-    --destructive: 0 72% 46%;
+    --destructive: 0 87.23% 69.22%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 142 71% 40%;
-    --success-foreground: 0 0% 100%;
+    --success: 100.59 53.13% 49.41%;
+    --success-foreground: 0 0% 98%;
 
-    --warning: 32 95% 44%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 36 77.98% 56.86%;
+    --warning-foreground: 0 0% 3.94%;
 
-    --border: 0 0% 90%;
-    /* a shade darker than --border so a field reads as a field next to a divider */
-    --input: 0 0% 87%;
-    --ring: 0 0% 9%;
+    --border: 0 0% 90.85%;
+    --input: 0 0% 90.85%;
+    --ring: var(--primary);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 26%;
-    --sidebar-primary: 0 0% 9%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 93%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 91%;
-    --sidebar-ring: 0 0% 9%;
+    --sidebar-background: var(--background);
+    --sidebar-foreground: 0 0% 3.94%;
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--sidebar-primary);
+    --sidebar-border: 0 0% 90.85%;
+    --sidebar-ring: var(--ring);
 
-    /* The chrome is deliberately neutral, so charts are where colour lives. Eight
-       hues far enough apart to stay legible next to each other in a legend. */
-    --chart-1: 215 90% 52%;
-    --chart-2: 199 89% 44%;
-    --chart-3: 173 58% 37%;
-    --chart-4: 258 70% 58%;
-    --chart-5: 322 65% 53%;
+    --chart-1: 224.4 85.17% 48.51%;
+    --chart-2: 185.14 100% 33%;
+    --chart-3: 214.43 94.43% 69.44%;
+    --chart-4: 209.6 83.59% 78.68%;
+    --chart-5: 212.41 86.71% 91.08%;
     --chart-6: 25 85% 51%;
     --chart-7: 142 60% 36%;
     --chart-8: 240 5% 45%;
@@ -67,59 +64,55 @@
   }
 
   .dark {
-    /* the page sits *below* the cards rather than level with them, so panels read
-       as panels without needing a border to prove it */
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
+    color-scheme: dark;
+    --background: 0 0% 11.76%;
+    --foreground: 0 0% 95.4%;
 
-    --card: 0 0% 10.5%;
-    --card-foreground: 0 0% 96%;
+    --card: 0 0% 16.47%;
+    --card-foreground: 0 0% 95.4%;
 
-    /* a menu or a dialog floats above a card, so it has to out-step the card the
-       way the card out-steps the page — at 12% it was four levels off --card and
-       read as translucent */
-    --popover: 0 0% 16.5%;
-    --popover-foreground: 0 0% 96%;
+    --popover: 0 0% 18.41%;
+    --popover-foreground: 0 0% 95.4%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary: 220.06 89.9% 56.77%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 16%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 205.76 91.07% 95.02%;
+    --secondary-foreground: 0 0% 1.29%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 64%;
+    --muted: 0 0% 18.41%;
+    --muted-foreground: 0 0% 71.83%;
 
-    --accent: 0 0% 19%;
+    --accent: from color-mix(in oklch, hsl(var(--primary)) 20%, hsl(var(--background))) h s l;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62% 50%;
+    --destructive: 0 87.23% 69.22%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 142 60% 42%;
-    --success-foreground: 0 0% 100%;
+    --success: 100.59 53.13% 49.41%;
+    --success-foreground: 0 0% 3.94%;
 
-    --warning: 32 88% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 36 77.98% 56.86%;
+    --warning-foreground: 0 0% 3.94%;
 
-    --border: 0 0% 19%;
-    --input: 0 0% 24%;
-    --ring: 0 0% 70%;
+    --border: 0 0% 100% / 10%;
+    --input: 0 0% 100% / 17%;
+    --ring: var(--primary);
 
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 78%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 0 0% 17%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 17%;
-    --sidebar-ring: 0 0% 70%;
+    --sidebar-background: var(--background);
+    --sidebar-foreground: 0 0% 93.45%;
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: 210.92 98.95% 88.71%;
+    --sidebar-border: 0 0% 100% / 11%;
+    --sidebar-ring: var(--ring);
 
-    --chart-1: 213 85% 62%;
-    --chart-2: 199 85% 55%;
-    --chart-3: 172 55% 48%;
-    --chart-4: 258 75% 68%;
-    --chart-5: 322 70% 63%;
+    --chart-1: 220.06 89.9% 56.77%;
+    --chart-2: 182.54 100% 38.53%;
+    --chart-3: 214.43 94.43% 69.44%;
+    --chart-4: 209.6 83.59% 78.68%;
+    --chart-5: 212.41 86.71% 91.08%;
     --chart-6: 25 88% 60%;
     --chart-7: 142 55% 48%;
     --chart-8: 240 5% 65%;
@@ -202,28 +195,28 @@ html.compact {
   color-scheme: light;
 
   --background: 0 0% 100%;
-  --foreground: 0 0% 9%;
+  --foreground: 0 0% 3.94%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 9%;
+  --card-foreground: 0 0% 3.94%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 9%;
-  --primary: var(--primary-base, 0 0% 9%);
-  --primary-foreground: var(--primary-base-foreground, 0 0% 98%);
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96%;
-  --muted-foreground: 0 0% 44%;
-  --accent: 0 0% 96%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 72% 46%;
+  --popover-foreground: 0 0% 3.94%;
+  --primary: var(--primary-base, 224.4 85.17% 48.51%);
+  --primary-foreground: var(--primary-base-foreground, 0 0% 100%);
+  --secondary: 205.76 91.07% 95.02%;
+  --secondary-foreground: 0 0% 8.61%;
+  --muted: 0 0% 96.06%;
+  --muted-foreground: 0 0% 37.75%;
+  --accent: from color-mix(in oklch, hsl(var(--primary)) 12%, hsl(var(--background))) h s l;
+  --accent-foreground: 0 0% 3.94%;
+  --destructive: 0 87.23% 69.22%;
   --destructive-foreground: 0 0% 98%;
-  --success: 142 71% 40%;
-  --success-foreground: 0 0% 100%;
-  --warning: 32 95% 44%;
-  --warning-foreground: 0 0% 100%;
-  --border: 0 0% 90%;
-  --input: 0 0% 87%;
-  --ring: var(--primary-base, 0 0% 9%);
+  --success: 100.59 53.13% 49.41%;
+  --success-foreground: 0 0% 98%;
+  --warning: 36 77.98% 56.86%;
+  --warning-foreground: 0 0% 3.94%;
+  --border: 0 0% 90.85%;
+  --input: 0 0% 90.85%;
+  --ring: var(--primary-base, 224.4 85.17% 48.51%);
 
   color: hsl(var(--foreground));
 }

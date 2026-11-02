@@ -99,12 +99,15 @@ export function useThemeData(themeData: ThemeData | undefined | null) {
       root.style.setProperty("--primary-base", formatHsl(primary));
       root.style.setProperty("--primary-base-foreground", foregroundFor(primary.l));
 
-      const painted = dark ? adaptPrimaryForDark(primary) : primary;
-      root.style.setProperty("--primary", formatHsl(painted));
-      // keep the label readable whichever end of the scale the brand colour sits on
-      root.style.setProperty("--primary-foreground", foregroundFor(painted.l));
-      root.style.setProperty("--ring", formatHsl(painted));
-      touched.push("--primary-base", "--primary-base-foreground", "--primary", "--primary-foreground", "--ring");
+      touched.push("--primary-base", "--primary-base-foreground");
+      // The default palette already supplies matching light/dark primary and ring colors.
+      if (themeData?.colorPrimary?.toLowerCase() !== Conf.ThemeDefault.colorPrimary) {
+        const painted = dark ? adaptPrimaryForDark(primary) : primary;
+        root.style.setProperty("--primary", formatHsl(painted));
+        root.style.setProperty("--primary-foreground", foregroundFor(painted.l));
+        root.style.setProperty("--ring", formatHsl(painted));
+        touched.push("--primary", "--primary-foreground", "--ring");
+      }
     }
     if (typeof themeData?.borderRadius === "number") {
       root.style.setProperty("--radius", `${themeData.borderRadius / 16}rem`);
