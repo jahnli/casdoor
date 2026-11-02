@@ -66,7 +66,7 @@ export default function ApplicationListPage({formItems}: {formItems?: any[]} = {
       render: (value) =>
         value ? (
           <a href={value} target="_blank" rel="noreferrer">
-            <img src={value} alt="logo" className="h-6 max-w-[198px] object-contain" />
+            <img src={value} alt="logo" className="h-[22px] max-w-[181.5px] object-contain" />
           </a>
         ) : null,
     },
