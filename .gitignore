@@ -25,6 +25,7 @@ bin/
 .env
 .env.*
 !.env.example
+/.1panel.local.json
 
 tmp/
 tmpFiles/
