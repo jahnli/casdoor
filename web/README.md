@@ -206,8 +206,10 @@ user's organization, brands the sidebar with that organization's logo (its
 console and the sign-in pages close with the Casdoor wordmark rather than the
 word — the same footer image the antd frontend renders, and the one
 `Setting.getDefaultFooterContent()` writes into an application's `footerHtml`.
-`index.html` ships the `https://cdn.casbin.org/img/favicon.png` literal that
-`routers/static_filter.go` rewrites, so the first paint is branded too.
+`index.html` ships the `http://10.16.7.144:9002/casdoor/img/favicon.png` default
+that `routers/branding.go` rewrites, so the first paint is branded too. Default
+images and icons use `staticBaseUrl`; the frontend and backend both fall back to
+`http://10.16.7.144:9002/casdoor` when no configuration is provided.
 
 **Organization branding** — the sign-in pages apply the organization/application
 `themeData` to the shadcn CSS variables, set the tab title and favicon, inject

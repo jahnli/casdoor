@@ -37,7 +37,7 @@ import (
 )
 
 var (
-	oldStaticBaseUrl = "https://cdn.casbin.org"
+	oldStaticBaseUrl = conf.DefaultStaticBaseUrl
 	newStaticBaseUrl = conf.GetConfigString("staticBaseUrl")
 	enableGzip       = conf.GetConfigBool("enableGzip")
 	frontendBaseDir  = conf.GetConfigString("frontendBaseDir")
@@ -343,7 +343,10 @@ func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, o
 		newContent = addIssuerToHtml(newContent, r.Host)
 	}
 
-	newContent = strings.ReplaceAll(newContent, oldStaticBaseUrl, newStaticBaseUrl)
+	newContent = strings.NewReplacer(
+		oldStaticBaseUrl, newStaticBaseUrl,
+		"https://cdn.casbin.org", newStaticBaseUrl,
+	).Replace(newContent)
 
 	http.ServeContent(w, r, d.Name(), modTime, strings.NewReader(newContent))
 }

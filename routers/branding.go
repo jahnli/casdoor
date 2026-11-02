@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/beego/beego/v2/server/web/context"
+	"github.com/casdoor/casdoor/conf"
 	"github.com/casdoor/casdoor/object"
 )
 
@@ -44,6 +45,7 @@ func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThem
 
 	if favicon != "" {
 		content = strings.ReplaceAll(content, "https://cdn.casbin.org/img/favicon.png", favicon)
+		content = strings.ReplaceAll(content, conf.DefaultStaticBaseUrl+"/img/favicon.png", favicon)
 	}
 	if title != "" {
 		content = strings.ReplaceAll(content, "<title>Casdoor</title>", fmt.Sprintf("<title>%s</title>", title))

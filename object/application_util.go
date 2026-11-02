@@ -612,6 +612,7 @@ func getCssUrlPrefixes() []string {
 	}
 
 	addPrefix(conf.GetConfigString("origin"))
+	addPrefix(conf.GetConfigString("staticBaseUrl"))
 	for _, prefix := range strings.Split(conf.GetConfigString("formCssAllowedUrls"), ",") {
 		addPrefix(prefix)
 	}

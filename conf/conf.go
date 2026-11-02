@@ -29,6 +29,8 @@ import (
 //go:embed waf.conf
 var WafConf string
 
+const DefaultStaticBaseUrl = "http://10.16.7.144:9002/casdoor"
+
 func init() {
 	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
 		panic("cannot load .env: check file permissions and dotenv syntax (contents suppressed)")
@@ -54,7 +56,7 @@ func GetConfigString(key string) string {
 	res, _ := web.AppConfig.String(key)
 	if res == "" {
 		if key == "staticBaseUrl" {
-			res = "https://cdn.casbin.org"
+			res = DefaultStaticBaseUrl
 		} else if key == "logConfig" {
 			appname, _ := web.AppConfig.String("appname")
 			res = fmt.Sprintf("{\"filename\": \"logs/%s.log\", \"maxdays\":99999, \"perm\":\"0770\"}", appname)

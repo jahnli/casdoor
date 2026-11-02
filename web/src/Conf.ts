@@ -22,7 +22,7 @@ export let IsDemoMode = false;
 export let ForceLanguage = "";
 export let DefaultLanguage = "en";
 
-export let StaticBaseUrl = "https://cdn.casbin.org";
+export let StaticBaseUrl = "http://10.16.7.144:9002/casdoor";
 
 export const ThemeDefault = {
   themeType: "default",

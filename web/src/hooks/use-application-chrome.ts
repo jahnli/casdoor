@@ -227,18 +227,14 @@ export function useApplicationHelmet(application: any) {
   }, [application]);
 }
 
-/** what the tab shows before an organization has been loaded */
-const DEFAULT_FAVICON = "https://cdn.casdoor.com/static/favicon.png";
-
 /**
  * The console's tab title and favicon, which follow the signed-in user's
- * organization. Signed out, the favicon falls back to Casdoor's own — the same
- * two <Helmet> blocks web/src/App.js renders.
+ * organization, with a default icon from the configured static resource base.
  */
 export function useAccountHelmet(account: any) {
   const organization = account?.organization;
   const title = organization?.displayName;
-  const favicon = organization?.favicon || DEFAULT_FAVICON;
+  const favicon = organization?.favicon || `${Setting.StaticBaseUrl}/img/favicon.png`;
 
   React.useEffect(() => {
     if (title) {
