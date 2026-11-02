@@ -10,7 +10,7 @@ import * as Setting from "@/lib/setting";
 export function ApplicationAuthenticationTab({application, updateField}: ApplicationTabProps) {
   return (
     <>
-      <FormRow labelKey="application:Cookie expire">
+      <FormRow labelKey="application:Cookie expire" label={`${i18next.t("application:Cookie expire")} (h)`}>
         <Input
           type="number"
           value={application.cookieExpireInHours || 720}

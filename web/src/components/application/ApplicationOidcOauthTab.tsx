@@ -353,14 +353,14 @@ export function ApplicationOidcOauthTab({application, updateField}: ApplicationT
           />
         </FormRow>
       ) : null}
-      <FormRow labelKey="application:Token expire">
+      <FormRow labelKey="application:Token expire" label={`${i18next.t("application:Token expire")} (h)`}>
         <Input
           type="number"
           value={application.expireInHours ?? 168}
           onChange={(e) => updateField("expireInHours", Setting.myParseInt(e.target.value))}
         />
       </FormRow>
-      <FormRow labelKey="application:Refresh token expire">
+      <FormRow labelKey="application:Refresh token expire" label={`${i18next.t("application:Refresh token expire")} (h)`}>
         <Input
           type="number"
           value={application.refreshExpireInHours ?? 168}
