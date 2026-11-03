@@ -85,6 +85,8 @@ p, *, *, POST, /api/v1/traces, *, *
 p, *, *, POST, /api/v1/metrics, *, *
 p, *, *, POST, /api/v1/logs, *, *
 p, *, *, POST, /api/reset-email-or-phone, *, *
+p, *, *, GET, /api/check-user-merge, *, *
+p, *, *, POST, /api/merge-user, *, *
 p, *, *, POST, /api/upload-resource, *, *
 p, *, *, GET, /.well-known/openid-configuration, *, *
 p, *, *, GET, /.well-known/oauth-authorization-server, *, *
@@ -94,7 +96,12 @@ p, *, *, *, /.well-known/jwks, *, *
 p, *, *, GET, /.well-known/:application/openid-configuration, *, *
 p, *, *, GET, /.well-known/:application/oauth-authorization-server, *, *
 p, *, *, GET, /.well-known/:application/oauth-protected-resource, *, *
+p, *, *, GET, /.well-known/oauth-protected-resource/api/server/:owner/:name, *, *
 p, *, *, GET, /.well-known/:application/webfinger, *, *
+p, *, *, GET, /orgs/:organization/.well-known/openid-configuration, *, *
+p, *, *, GET, /orgs/:organization/.well-known/oauth-authorization-server, *, *
+p, *, *, GET, /.well-known/openid-configuration/orgs/:organization, *, *
+p, *, *, GET, /.well-known/oauth-authorization-server/orgs/:organization, *, *
 p, *, *, *, /.well-known/:application/jwks, *, *
 p, *, *, GET, /api/get-saml-login, *, *
 p, *, *, POST, /api/acs, *, *
@@ -107,7 +114,8 @@ p, *, *, *, /api/webauthn, *, *
 p, *, *, GET, /api/get-release, *, *
 p, *, *, GET, /api/get-default-application, *, *
 p, *, *, GET, /api/get-prometheus-info, *, *
-p, *, *, *, /api/metrics, *, *p, *, *, GET, /api/get-provider, *, *
+p, *, *, *, /api/metrics, *, *
+p, *, *, GET, /api/get-provider, *, *
 p, *, *, GET, /api/get-organization-names, *, *
 p, *, *, GET, /api/get-organizations, *, *
 p, *, *, GET, /api/get-all-objects, *, *
@@ -184,6 +192,13 @@ func IsAllowed(subOwner string, subName string, method string, urlPath string, o
 
 		if user.IsAdmin && subOwner == objOwner {
 			return true, nil
+		}
+
+		if strings.HasPrefix(urlPath, "/api/server/") && subOwner == objOwner {
+			allowed, err := object.IsServerAllowed(user, objOwner, objName)
+			if err != nil || allowed {
+				return allowed, err
+			}
 		}
 	}
 

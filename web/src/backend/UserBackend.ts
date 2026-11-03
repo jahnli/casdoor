@@ -16,7 +16,7 @@ import * as Setting from "@/lib/setting";
 import i18next from "i18next";
 
 export function getGlobalUsers(page, pageSize, field: any = "", value: any = "", sortField: any = "", sortOrder: any = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-global-users?p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`, {
+  return fetch(`${Setting.ServerUrl}/api/get-global-users?p=${page}&pageSize=${pageSize}&field=${field}&value=${encodeURIComponent(value)}&sortField=${sortField}&sortOrder=${sortOrder}`, {
     method: "GET",
     credentials: "include",
     headers: {
@@ -26,7 +26,7 @@ export function getGlobalUsers(page, pageSize, field: any = "", value: any = "",
 }
 
 export function getUsers(owner, page: any = "", pageSize: any = "", field: any = "", value: any = "", sortField: any = "", sortOrder: any = "", groupName: any = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-users?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}&groupName=${groupName}`, {
+  return fetch(`${Setting.ServerUrl}/api/get-users?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${encodeURIComponent(value)}&sortField=${sortField}&sortOrder=${sortOrder}&groupName=${groupName}`, {
     method: "GET",
     credentials: "include",
     headers: {
@@ -177,6 +177,32 @@ export function verifyCaptcha(owner, name, captchaType, captchaToken, clientSecr
       return false;
     }
   });
+}
+
+/** Data is "merge" when the email or phone belongs to another account that can be merged with the signed-in one. */
+export function checkUserMerge(type: string, dest: string, countryCode: string, keep: "current" | "other") {
+  const query = new URLSearchParams({type, dest, countryCode, keep});
+  return fetch(`${Setting.ServerUrl}/api/check-user-merge?${query}`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Accept-Language": Setting.getAcceptLanguage(),
+    },
+  }).then(res => res.json());
+}
+
+/** Merges the signed-in user with the account that owns the verified email, phone or third-party account. */
+export function mergeUser(params: Record<string, string>) {
+  const formData = new FormData();
+  Object.entries(params).forEach(([key, value]) => formData.append(key, value ?? ""));
+  return fetch(`${Setting.ServerUrl}/api/merge-user`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+    headers: {
+      "Accept-Language": Setting.getAcceptLanguage(),
+    },
+  }).then(res => res.json());
 }
 
 export function resetEmailOrPhone(dest, type, code, countryCode = "") {

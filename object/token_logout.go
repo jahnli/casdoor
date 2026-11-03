@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/casdoor/casdoor/util"
@@ -34,7 +35,10 @@ type LogoutTokenClaims struct {
 
 func generateLogoutToken(application *Application, user *User, sessionId string, host string) (string, error) {
 	nowTime := time.Now()
-	_, originBackend := getOriginFromHost(host)
+	issuer, err := GetOidcIssuerByApplication(host, application)
+	if err != nil {
+		return "", err
+	}
 
 	events := map[string]interface{}{
 		"http://schemas.openid.net/event/backchannel-logout": map[string]interface{}{},
@@ -43,16 +47,18 @@ func generateLogoutToken(application *Application, user *User, sessionId string,
 	claims := LogoutTokenClaims{
 		Events: events,
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:   originBackend,
-			Subject:  user.Id,
-			Audience: []string{application.ClientId},
-			IssuedAt: jwt.NewNumericDate(nowTime),
-			ID:       util.GetId(application.Owner, util.GenerateId()),
+			Issuer:    issuer,
+			Subject:   user.Id,
+			Audience:  []string{application.ClientId},
+			IssuedAt:  jwt.NewNumericDate(nowTime),
+			ExpiresAt: jwt.NewNumericDate(nowTime.Add(2 * time.Minute)),
+			ID:        util.GetId(application.Owner, util.GenerateId()),
 		},
 	}
 
+	// The raw id is the Casdoor session cookie, so only its hash leaves Casdoor, the one in the ID token's "sid"
 	if sessionId != "" {
-		claims.Sid = sessionId
+		claims.Sid = GetSessionIdHash(sessionId)
 	}
 
 	cert, err := getCertByApplication(application)
@@ -80,10 +86,18 @@ func generateLogoutToken(application *Application, user *User, sessionId string,
 
 // SendBackchannelLogout sends OIDC Back-Channel Logout tokens to all registered
 // backchannel_logout_uri endpoints for applications that have active tokens for the user.
+// With a sessionId, only the applications signed in with that Casdoor session are told and the
+// logout token carries its "sid", without one every session of the user at the applications ends.
 // See https://openid.net/specs/openid-connect-backchannel-1_0.html
 func SendBackchannelLogout(organization, username, sessionId, host string) {
 	tokens, err := GetActiveTokensByUser(organization, username)
-	if err != nil || len(tokens) == 0 {
+	if err != nil {
+		return
+	}
+	if sessionId != "" {
+		tokens = slices.DeleteFunc(tokens, func(token *Token) bool { return token.SessionId != sessionId })
+	}
+	if len(tokens) == 0 {
 		return
 	}
 

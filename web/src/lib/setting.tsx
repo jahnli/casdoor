@@ -969,6 +969,10 @@ export function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+export function isValidRealName(name) {
+  return /^[一-龥]{2,6}(?:·[一-龥]{1,10})*$/.test(name ?? "");
+}
+
 export function isValidPhone(phone, countryCode = "") {
   if (countryCode !== "" && countryCode !== "CN") {
     return phoneNumber.isValidPhoneNumber(phone, countryCode as any);
@@ -1061,6 +1065,10 @@ function isSignupItemAnswered(user, signupItem) {
   }
 
   const value = user[field];
+  if (signupItem.name === "Display name" && signupItem.rule === "Real name") {
+    // a third-party nickname fills the display name but is not a real name
+    return isValidRealName(value);
+  }
   return value !== undefined && value !== null && value !== "";
 }
 
@@ -1955,7 +1963,7 @@ export function getDefaultHtmlEmailContent() {
         <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
-    <p>Use this code to verify your account. It's valid for 5 minutes</p>
+    <p>Use this code to verify your account. It's valid for 10 minutes</p>
     <div class="code">
         %s
     </div>
@@ -2130,8 +2138,9 @@ export function getApiPaths() {
     });
     if (obj === "user") {
       res.push("remove-user-from-group", "upload-users");
-      res.push("check-user-password", "set-password", "reset-email-or-phone");
+      res.push("check-user-password", "set-password", "reset-email-or-phone", "merge-user");
       res.push("verify-identification");
+      res.push("forbid-user", "unforbid-user"); // Custom events for the user being forbidden or unforbidden by any path
     }
     if (obj === "group") {
       res.push("upload-groups");

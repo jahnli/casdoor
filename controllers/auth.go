@@ -235,7 +235,7 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 			if !valid {
 				resp = &Response{Status: "error", Msg: "error: invalid_scope", Data: ""}
 			} else {
-				token, err := object.GetTokenByUserWithAuth(application, user, expandedScope, nonce, c.Ctx.Input.CruSession.SessionID(context.Background()), c.Ctx.Request.Host, authTime, responseType.Token && responseType.IdToken)
+				token, err := object.GetTokenByUserWithAuth(application, user, expandedScope, nonce, c.Ctx.Input.CruSession.SessionID(context.Background()), c.Ctx.Request.Host, authTime, responseType.Token && responseType.IdToken, "")
 				if err != nil {
 					c.ResponseError(err.Error(), nil)
 					return
@@ -1335,15 +1335,22 @@ func (c *ApiController) Login() {
 				return
 			}
 
-			if oldUser != nil {
-				c.ResponseError(fmt.Sprintf(c.T("auth:The account for provider: %s and username: %s (%s) is already linked to another account: %s (%s)"), provider.Type, userInfo.Username, userInfo.DisplayName, oldUser.Name, oldUser.DisplayName))
-				return
-			}
-
 			var user *object.User
 			user, err = object.GetUser(userId)
 			if err != nil {
 				c.ResponseError(err.Error())
+				return
+			}
+
+			if oldUser != nil {
+				// the provider sign-in proved the other account too, so offer to merge it into this one
+				if user != nil && oldUser.Name != user.Name && object.GetUserMergeError(oldUser, user, c.GetAcceptLanguage()) == "" {
+					c.setPendingUserMerge(oldUser, provider.Name)
+					c.ResponseOk(map[string]interface{}{"merge": true, "name": oldUser.Name, "displayName": oldUser.DisplayName})
+					return
+				}
+
+				c.ResponseError(fmt.Sprintf(c.T("auth:The account for provider: %s and username: %s (%s) is already linked to another account: %s (%s)"), provider.Type, userInfo.Username, userInfo.DisplayName, oldUser.Name, oldUser.DisplayName))
 				return
 			}
 
@@ -1800,8 +1807,15 @@ func (c *ApiController) Callback() {
 func (c *ApiController) DeviceAuth() {
 	clientId := c.Ctx.Input.Query("client_id")
 	scope := c.Ctx.Input.Query("scope")
+	resource := c.Ctx.Input.Query("resource")
 	if clientId == "" {
 		c.responseDeviceAuthError(object.InvalidRequest, "missing client_id")
+		return
+	}
+
+	// Validate resource parameter (RFC 8707)
+	if err := object.ValidateResourceURI(resource); err != nil {
+		c.responseDeviceAuthError(object.InvalidTarget, err.Error())
 		return
 	}
 
@@ -1846,6 +1860,7 @@ func (c *ApiController) DeviceAuth() {
 		UserSignIn:    false,
 		UserName:      "",
 		Scope:         scope,
+		Resource:      resource,
 		ApplicationId: application.GetId(),
 		ClientId:      application.ClientId,
 		RequestAt:     time.Now(),

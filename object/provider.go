@@ -407,6 +407,7 @@ func DeleteProvider(provider *Provider) (bool, error) {
 
 	return affected != 0, nil
 }
+
 func (p *Provider) GetId() string {
 	return fmt.Sprintf("%s/%s", p.Owner, p.Name)
 }

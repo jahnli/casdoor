@@ -34,6 +34,8 @@ type OidcIdTokenClaims struct {
 	AuthTime *jwt.NumericDate `json:"auth_time,omitempty"`
 	AtHash   string           `json:"at_hash,omitempty"`
 	CHash    string           `json:"c_hash,omitempty"`
+	// the hashed Casdoor session id, the same "sid" as in the Back-Channel Logout token
+	Sid string `json:"sid,omitempty"`
 }
 
 type Claims struct {
@@ -432,6 +434,9 @@ func getClaimsCustom(claims Claims, tokenField []string, tokenAttributes []*JwtI
 	if claims.CHash != "" {
 		res["c_hash"] = claims.CHash
 	}
+	if claims.Sid != "" {
+		res["sid"] = claims.Sid
+	}
 
 	// Always include azp if present (authorized party)
 	if claims.Azp != "" {
@@ -602,6 +607,8 @@ type jwtTokenOptions struct {
 	WithAtHash bool
 	// RefreshScope is the scope of the grant when a refresh asks for a narrower access token
 	RefreshScope string
+	// SessionId is the Beego session id the tokens are minted under, its hash is the "sid" of the ID token
+	SessionId string
 }
 
 // getOidcHash returns the left-most half of the hash of value, base64url encoded, using the hash
@@ -638,7 +645,10 @@ func generateJwtTokenWithOptions(application *Application, user *User, provider 
 		return "", "", "", "", err
 	}
 
-	_, originBackend := getOriginFromHost(host)
+	issuer, err := GetOidcIssuerByApplication(host, application)
+	if err != nil {
+		return "", "", "", "", err
+	}
 
 	name := util.GenerateId()
 	jti := util.GetId(application.Owner, name)
@@ -654,7 +664,7 @@ func generateJwtTokenWithOptions(application *Application, user *User, provider 
 		Provider:     provider,
 		SigninMethod: signinMethod,
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    originBackend,
+			Issuer:    issuer,
 			Subject:   user.Id,
 			Audience:  []string{application.ClientId},
 			ExpiresAt: jwt.NewNumericDate(expireTime),
@@ -668,7 +678,8 @@ func generateJwtTokenWithOptions(application *Application, user *User, provider 
 		claims.AuthTime = jwt.NewNumericDate(time.Unix(options.AuthTime, 0))
 	}
 
-	if application.IsShared {
+	// a URL client_id is kept as it is, the client checks it
+	if application.IsShared && !IsClientIdMetadataUrl(application.ClientId) {
 		claims.Audience = []string{application.ClientId + "-org-" + user.Owner}
 	}
 
@@ -677,6 +688,9 @@ func generateJwtTokenWithOptions(application *Application, user *User, provider 
 	idClaims := claims
 	idClaims.TokenType = "id-token"
 	idClaims.ID = util.GetId(application.Owner, util.GenerateId())
+	if options.SessionId != "" {
+		idClaims.Sid = GetSessionIdHash(options.SessionId)
+	}
 
 	// RFC 8707: Use resource as audience when provided
 	if resource != "" {
