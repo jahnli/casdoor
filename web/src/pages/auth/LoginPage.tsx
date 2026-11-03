@@ -1664,6 +1664,7 @@ export default function LoginPage({type = "login", application: applicationProp,
 
   return (
     <AuthLayout
+      aurora
       preview={preview === "theme" ? "theme" : !!preview}
       application={application}
       hideLogo={!isVisible("Logo")}

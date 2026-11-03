@@ -8,6 +8,7 @@ import {ThemeToggle} from "@/components/common/ThemeToggle";
 import {ThemeShowcaseBar} from "@/components/common/ThemeShowcaseBar";
 import {CustomHtml, CustomStyle} from "@/components/common/CustomHtml";
 import {Loading} from "@/components/common/Loading";
+import {LoginAurora} from "@/components/auth/LoginAurora";
 import {getSafeHtml, isTrustedApplication} from "@/lib/custom-html";
 import {
   getOrganizationCookieChrome,
@@ -27,6 +28,7 @@ interface AuthLayoutProps {
   application?: any;
   children: React.ReactNode;
   className?: string;
+  aurora?: boolean;
   /** widen the card for the signup form */
   wide?: boolean;
   /** the sign-in page drives these two slots from its own signinItems */
@@ -182,6 +184,7 @@ export function AuthLayout({
   application: ownApplication,
   children,
   className,
+  aurora = false,
   wide,
   hideLogo,
   hideLanguages,
@@ -232,6 +235,7 @@ export function AuthLayout({
   const backgroundUrl = embedded
     ? undefined
     : (isMobile ? application?.formBackgroundUrlMobile : application?.formBackgroundUrl);
+  const showAurora = aurora && !embedded && !backgroundUrl;
   // formOffset: 1 left, 2 center, 3 right, 4 center with the side panel
   const offset = embedded || isMobile ? 2 : (application?.formOffset ?? 2);
   const sidePanel = offset === 4 && application?.formSideHtml;
@@ -259,6 +263,7 @@ export function AuthLayout({
     <div
       className={cn(
         "login-background relative flex min-h-screen flex-col",
+        showAurora && "isolate",
         // the tint is what lifts the card off the page; a panel that has
         // dissolved into the page has nothing to be lifted off
         bleed ? "bg-background" : "bg-muted/40 dark:bg-background",
@@ -268,6 +273,7 @@ export function AuthLayout({
       )}
       style={backgroundUrl ? {backgroundImage: `url(${backgroundUrl})`} : undefined}
     >
+      {showAurora ? <LoginAurora isDark={isDark} /> : null}
       {embedded ? null : <CustomStyle css={formCss} />}
       {/* embedded, the panel has no edge of its own: the corner goes to the frame's, the host page's dialog */}
       {embedded ? corner : null}
