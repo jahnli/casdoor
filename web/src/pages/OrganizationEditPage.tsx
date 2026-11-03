@@ -21,7 +21,7 @@ import {FormRow, formGridClass} from "@/components/crud/FormRow";
 import {useAccount} from "@/hooks/use-account";
 import {useEditRecord} from "@/hooks/use-edit-record";
 import {getModeTitleKey, submitEdit} from "@/lib/crud";
-import {ACCOUNT_PROPERTY_ITEMS} from "@/lib/account-items";
+import {ACCOUNT_ITEM_ORDER, ACCOUNT_PROPERTY_ITEMS} from "@/lib/account-items";
 import * as Obfuscator from "@/auth/Obfuscator";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
 import * as LdapBackend from "@/backend/LdapBackend";
@@ -38,21 +38,12 @@ const MODIFY_RULES = ["Self", "Admin", "Immutable"];
 const ADMIN_MODIFY_RULES = ["Admin", "Immutable"];
 const REGEX_ACCOUNT_ITEMS = ["Display name", "Password", "Email", "Phone", "Location", "Title", "Homepage", "Bio",
   "Gender", "Birthday", "Education", "ID card", "ID card type", ...ACCOUNT_PROPERTY_ITEMS.map((item) => item.name)];
-const BEFORE_PROPERTIES_ITEMS = ["Need update password", "IP whitelist", "Last signin time", "Deleted time",
-  "Last signin IP", ...ACCOUNT_PROPERTY_ITEMS.map((item) => item.name)];
-const TRAILING_ACCOUNT_ITEMS = ["Country code", "Country/Region", "Location", "Address", "Addresses",
-  "ID card type", "ID card", "ID card info", "Real name", "ID verification"];
-
 function orderAccountItems(items: any[] = []) {
   const filtered = items.filter((item) => item.name !== "Company");
-  const trailingItems = TRAILING_ACCOUNT_ITEMS.flatMap((name) => filtered.filter((item) => item.name === name));
-  const otherItems = filtered.filter((item) => !TRAILING_ACCOUNT_ITEMS.includes(item.name));
-  const movedItems = BEFORE_PROPERTIES_ITEMS.flatMap((name) => filtered.filter((item) => item.name === name));
-  const ordered = otherItems.some((item) => item.name === "Properties")
-    ? otherItems.filter((item) => !BEFORE_PROPERTIES_ITEMS.includes(item.name))
-      .flatMap((item) => item.name === "Properties" ? [...movedItems, item] : [item])
-    : otherItems;
-  return [...ordered, ...trailingItems];
+  return [
+    ...ACCOUNT_ITEM_ORDER.flatMap((name) => filtered.filter((item) => item.name === name)),
+    ...filtered.filter((item) => !ACCOUNT_ITEM_ORDER.includes(item.name)),
+  ];
 }
 
 function passwordOptions() {

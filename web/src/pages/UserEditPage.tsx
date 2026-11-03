@@ -32,7 +32,7 @@ import {AccountItemRow, AccountItemsProvider} from "@/components/user/AccountIte
 import {EnableMfaButton} from "@/components/user/EnableMfaButton";
 import {TotpMfaType} from "@/components/auth/mfa/constants";
 import {MfaItemsTable} from "@/components/auth/mfa/MfaItemsTable";
-import {ACCOUNT_PROPERTY_ITEMS, isAccountItemVisible} from "@/lib/account-items";
+import {ACCOUNT_ITEM_ORDER, ACCOUNT_PROPERTY_ITEMS, isAccountItemVisible} from "@/lib/account-items";
 import {PasswordModal} from "@/components/user/PasswordModal";
 import {ResetModal} from "@/components/user/ResetModal";
 import {WebauthnCredentialTable} from "@/components/user/WebauthnCredentialTable";
@@ -49,29 +49,11 @@ import * as Setting from "@/lib/setting";
 /** the value a Radix tab needs for the account item whose `tab` is the empty string */
 const DEFAULT_TAB = "__default__";
 
-const ACCOUNT_STATUS_ITEMS = ["Need update password", "IP whitelist", "Last signin time", "Deleted time", "Last signin IP"];
-const ADDRESS_IDENTITY_ITEMS = ["Address", "Addresses", "ID card type", "ID card", "ID card info", "Real name", "ID verification"];
-const SECURITY_ITEMS = ["Multi-factor authentication", "WebAuthn credentials", "Face ID", "MFA accounts", "MFA items"];
-
 function orderUserItems(names: string[]) {
-  const lowerItems = [...ACCOUNT_STATUS_ITEMS, ...ADDRESS_IDENTITY_ITEMS, ...SECURITY_ITEMS];
-  const ordered = names.filter((name) => !lowerItems.includes(name));
-  const propertyNames = ACCOUNT_PROPERTY_ITEMS.map((item) => item.name).filter((name) => ordered.includes(name));
-  const basicItems = ordered.includes("Location")
-    ? ordered.filter((name) => !propertyNames.includes(name))
-      .flatMap((name) => name === "Location" ? [name, ...propertyNames] : [name])
-    : ordered;
-  const statusItems = ACCOUNT_STATUS_ITEMS.filter((name) => names.includes(name));
-  const itemsWithStatus = basicItems.includes("Register source")
-    ? basicItems.flatMap((name) => name === "Register source" ? [name, ...statusItems] : [name])
-    : [...basicItems, ...statusItems];
-  const result = [...itemsWithStatus, ...[...ADDRESS_IDENTITY_ITEMS, ...SECURITY_ITEMS].filter((name) => names.includes(name))];
-  const beforeConsents = ["Properties", "Is admin", "Is forbidden", "Is deleted", "Last change password time"]
-    .filter((name) => result.includes(name));
-  return result.includes("Consents")
-    ? result.filter((name) => !beforeConsents.includes(name))
-      .flatMap((name) => name === "Consents" ? [...beforeConsents, name] : [name])
-    : result;
+  return [
+    ...ACCOUNT_ITEM_ORDER.filter((name) => names.includes(name)),
+    ...names.filter((name) => !ACCOUNT_ITEM_ORDER.includes(name)),
+  ];
 }
 
 const GENDERS = ["Male", "Female", "Other"];
@@ -1140,7 +1122,9 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     return orderUserItems(names).map((name) => (
       <React.Fragment key={name}>
         {extraItemNames.includes(name) ? (
-          <AccountItemRow labelKey={`user:${name}`}>{extraInputs[name]}</AccountItemRow>
+          <AccountItemRow labelKey={`user:${name}`}>
+            {extraInputs[name]}
+          </AccountItemRow>
         ) : rows[name]}
       </React.Fragment>
     ));

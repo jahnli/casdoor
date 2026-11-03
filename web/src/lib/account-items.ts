@@ -30,6 +30,17 @@ export const ACCOUNT_PROPERTY_ITEMS = [
   {name: "Job level", property: "job_level", labelKey: "user:Job level", type: "text"},
 ];
 
+export const ACCOUNT_ITEM_ORDER = [
+  "Avatar", "Organization", "Display name", "Name", "Last name", "First name", "Email", "Phone", "Country code",
+  "Groups", "Affiliation", "Department name", "Job number", "Job type", "Job level", "Work date",
+  "Gender", "Birthday", "Education", "Language", "Title", "Homepage", "Bio",
+  "Signup application", "Register type", "Register source", "ID", "Open ID",
+  "User type", "Tag", "Is admin", "Is forbidden", "Roles", "Permissions", "Password", "Need update password", "Last change password time",
+  "UID number", "IP whitelist", "Last signin time", "Last signin IP", "Is deleted", "Deleted time", "Properties", "Country/Region", "Location", "Address", "Addresses", "Consents",
+  "Multi-factor authentication", "WebAuthn credentials", "Face ID", "3rd-party logins", "MFA accounts", "MFA items", "Managed accounts",
+  "Real name", "ID card type", "ID card", "ID card info", "ID verification",
+];
+
 /** The rows whose editing is frozen once the user's identity has been verified. */
 const ID_VERIFICATION_ITEMS = new Set(["ID card info", "ID card", "ID card type", "Real name"]);
 
