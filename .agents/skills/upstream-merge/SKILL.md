@@ -149,14 +149,6 @@ git diff --cached --name-status --diff-filter=A   # 上游新增
 
 对比必须先于动手：不得先改代码再回填理由，也不得只写"保留本地更稳"这类无依据结论。每个方案都要落到具体后果——编译是否通过、哪项二开功能消失、哪些上游修复拿不到。单文件采用 ours/theirs 前必须核实整份文件，防止丢掉冲突区域以外的改动。
 
-```go
-<<<<<<< HEAD
-		if tableColumn.CasdoorName != "Id" && !isRemovedUserMetric(tableColumn.CasdoorName) {
-=======
-		if tableColumn.CasdoorName != "Id" {
->>>>>>> upstream/master
-```
-
 解决：保留本地的 `isRemovedUserMetric` 守卫，同时接入上游在同一循环内新增的其他处理；结论记为"上游去掉旧字段过滤，按 001 保留守卫"。反向情况——上游删除、本地保留——只有在本地功能被上游替代实现完整覆盖时才跟随删除。
 
 重复直到 `git diff --name-only --diff-filter=U` 为空。需确认的文件按确认边界处理并保持未解决，不阻塞无依赖的文件。
