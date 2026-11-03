@@ -613,6 +613,16 @@ func userVisible(isAdmin bool, item *AccountItem) bool {
 // leave one of them out must not hand it to its users
 var adminOnlyAccountItems = []string{"User type", "Tag", "Properties", "Groups", "Need update password", "IP whitelist"}
 
+var accountPropertyKeys = map[string]string{
+	"Company":         "company",
+	"Open ID":         "open_id",
+	"Department name": "department",
+	"Job number":      "job_number",
+	"Work date":       "job_date",
+	"Job type":        "job_type",
+	"Job level":       "job_level",
+}
+
 func GetAccountItemForUpdate(name string, organization *Organization) *AccountItem {
 	item := GetAccountItemByName(name, organization)
 	if item == nil && util.InSlice(adminOnlyAccountItems, name) {
@@ -877,15 +887,38 @@ func CheckPermissionForUpdateUser(oldUser, newUser *User, isAdmin bool, allowDis
 		}
 	}
 
-	oldUserPropertiesJson, _ := json.Marshal(oldUser.Properties)
 	if newUser.Properties == nil {
 		newUser.Properties = make(map[string]string)
 	}
-	newUserPropertiesJson, _ := json.Marshal(newUser.Properties)
-	if string(oldUserPropertiesJson) != string(newUserPropertiesJson) {
+	propertyItems := map[string]*AccountItem{}
+	for name, key := range accountPropertyKeys {
+		if item := GetAccountItemByName(name, organization); item != nil {
+			propertyItems[key] = item
+		}
+	}
+	propertyKeys := map[string]bool{}
+	for key := range oldUser.Properties {
+		propertyKeys[key] = true
+	}
+	for key := range newUser.Properties {
+		propertyKeys[key] = true
+	}
+	for key := range propertyKeys {
+		oldValue, oldExists := oldUser.Properties[key]
+		newValue, newExists := newUser.Properties[key]
+		if oldValue == newValue && oldExists == newExists {
+			continue
+		}
 		item := GetAccountItemForUpdate("Properties", organization)
+		if propertyItem := propertyItems[key]; propertyItem != nil {
+			item = propertyItem
+		}
 		if !userVisible(isAdmin, item) {
-			newUser.Properties = oldUser.Properties
+			if oldExists {
+				newUser.Properties[key] = oldValue
+			} else {
+				delete(newUser.Properties, key)
+			}
 		} else {
 			itemsChanged = append(itemsChanged, item)
 		}
@@ -1007,9 +1040,15 @@ func CheckPermissionForUpdateUser(oldUser, newUser *User, isAdmin bool, allowDis
 			return pass, err
 		}
 
-		exist, userValue, err := GetUserFieldStringValue(newUser, util.SpaceToCamel(accountItem.Name))
-		if err != nil {
-			return false, err.Error()
+		var exist bool
+		var userValue string
+		if key, ok := accountPropertyKeys[accountItem.Name]; ok {
+			exist, userValue = true, newUser.Properties[key]
+		} else {
+			exist, userValue, err = GetUserFieldStringValue(newUser, util.SpaceToCamel(accountItem.Name))
+			if err != nil {
+				return false, err.Error()
+			}
 		}
 
 		if !exist {

@@ -38,6 +38,7 @@ import zhCountries from "i18n-iso-countries/langs/zh.json";
 import * as Conf from "@/Conf";
 import {StaticBaseUrl} from "@/Conf";
 import {authConfig} from "@/auth/Auth";
+import {ACCOUNT_PROPERTY_ITEMS} from "@/lib/account-items";
 import {BasePath, getRoutePath, withBasePath} from "@/lib/base-path";
 import "@/i18n";
 
@@ -699,6 +700,7 @@ export const GetTranslatedUserItems = () => {
     {name: "Addresses", label: i18next.t("user:Addresses")},
     {name: "Affiliation", label: i18next.t("user:Affiliation")},
     {name: "Title", label: i18next.t("general:Title")},
+    ...ACCOUNT_PROPERTY_ITEMS.map((item) => ({name: item.name, label: i18next.t(item.labelKey)})),
     {name: "ID card type", label: i18next.t("user:ID card type")},
     {name: "ID card", label: i18next.t("user:ID card")},
     {name: "ID card info", label: i18next.t("user:ID card info")},

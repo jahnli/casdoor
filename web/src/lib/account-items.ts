@@ -3,9 +3,8 @@
  * them are editable. Ported from the `isAccountItemVisible` / `renderAccountItem`
  * gating in `web/src/UserEditPage.js`.
  *
- * The backend enforces none of this — it is a per-organization UI policy — but the
- * antd frontend honours it, so an organization that hides "Birthday" or marks "Name"
- * `Immutable` has to behave the same here.
+ * UI visibility and editing follow the organization's policy; the backend also
+ * filters protected fields and validates updates.
  */
 export interface AccountItem {
   name: string;
@@ -21,6 +20,15 @@ export interface AccountItemRules {
   isSelfOrAdmin: boolean;
   user: any;
 }
+
+export const ACCOUNT_PROPERTY_ITEMS = [
+  {name: "Open ID", property: "open_id", labelKey: "user:Open ID", type: "text"},
+  {name: "Department name", property: "department", labelKey: "user:Department name", type: "text"},
+  {name: "Job number", property: "job_number", labelKey: "user:Job number", type: "text"},
+  {name: "Work date", property: "job_date", labelKey: "user:Work date", type: "date"},
+  {name: "Job type", property: "job_type", labelKey: "user:Job type", type: "text"},
+  {name: "Job level", property: "job_level", labelKey: "user:Job level", type: "text"},
+];
 
 /** The rows whose editing is frozen once the user's identity has been verified. */
 const ID_VERIFICATION_ITEMS = new Set(["ID card info", "ID card", "ID card type", "Real name"]);

@@ -21,6 +21,7 @@ import {FormRow, formGridClass} from "@/components/crud/FormRow";
 import {useAccount} from "@/hooks/use-account";
 import {useEditRecord} from "@/hooks/use-edit-record";
 import {getModeTitleKey, submitEdit} from "@/lib/crud";
+import {ACCOUNT_PROPERTY_ITEMS} from "@/lib/account-items";
 import * as Obfuscator from "@/auth/Obfuscator";
 import * as ApplicationBackend from "@/backend/ApplicationBackend";
 import * as LdapBackend from "@/backend/LdapBackend";
@@ -36,7 +37,23 @@ const MODIFY_RULES = ["Self", "Admin", "Immutable"];
 /** an item only an admin may see is not one the user can be allowed to modify */
 const ADMIN_MODIFY_RULES = ["Admin", "Immutable"];
 const REGEX_ACCOUNT_ITEMS = ["Display name", "Password", "Email", "Phone", "Location", "Title", "Homepage", "Bio",
-  "Gender", "Birthday", "Education", "ID card", "ID card type"];
+  "Gender", "Birthday", "Education", "ID card", "ID card type", ...ACCOUNT_PROPERTY_ITEMS.map((item) => item.name)];
+const BEFORE_PROPERTIES_ITEMS = ["Need update password", "IP whitelist", "Last signin time", "Deleted time",
+  "Last signin IP", ...ACCOUNT_PROPERTY_ITEMS.map((item) => item.name)];
+const TRAILING_ACCOUNT_ITEMS = ["Country code", "Country/Region", "Location", "Address", "Addresses",
+  "ID card type", "ID card", "ID card info", "Real name", "ID verification"];
+
+function orderAccountItems(items: any[] = []) {
+  const filtered = items.filter((item) => item.name !== "Company");
+  const trailingItems = TRAILING_ACCOUNT_ITEMS.flatMap((name) => filtered.filter((item) => item.name === name));
+  const otherItems = filtered.filter((item) => !TRAILING_ACCOUNT_ITEMS.includes(item.name));
+  const movedItems = BEFORE_PROPERTIES_ITEMS.flatMap((name) => filtered.filter((item) => item.name === name));
+  const ordered = otherItems.some((item) => item.name === "Properties")
+    ? otherItems.filter((item) => !BEFORE_PROPERTIES_ITEMS.includes(item.name))
+      .flatMap((item) => item.name === "Properties" ? [...movedItems, item] : [item])
+    : otherItems;
+  return [...ordered, ...trailingItems];
+}
 
 function passwordOptions() {
   return [
@@ -63,7 +80,11 @@ export default function OrganizationEditPage() {
 
   const {record: organization, setRecord, updateField, loading, denied, mode, setMode} = useEditRecord<any>({
     fetch: () => OrganizationBackend.getOrganization("admin", organizationName),
-    transform: (org) => ({...org, enableDarkLogo: !!org.logoDark}),
+    transform: (org) => ({
+      ...org,
+      enableDarkLogo: !!org.logoDark,
+      accountItems: orderAccountItems(org.accountItems),
+    }),
     deps: [organizationName],
   });
 
@@ -124,7 +145,7 @@ export default function OrganizationEditPage() {
   const save = async(exitAfterSave: boolean) => {
     const payload = Setting.deepCopy(organization);
     payload.accountItems = payload.accountItems?.filter(
-      (item: any) => item.name !== "Please select an account item",
+      (item: any) => item.name !== "Please select an account item" && item.name !== "Company",
     );
 
     // a key that does not match its obfuscator would break every password sign-in

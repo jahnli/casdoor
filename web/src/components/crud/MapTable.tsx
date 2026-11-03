@@ -9,11 +9,11 @@ interface MapRow {
   value: string;
 }
 
-function toRows(map: MapValue): MapRow[] {
+function toRows(map: MapValue, hiddenKeys: string[]): MapRow[] {
   if (!map || typeof map !== "object" || Array.isArray(map)) {
     return [];
   }
-  return Object.entries(map).map(([key, value]) => ({key, value: `${value ?? ""}`}));
+  return Object.entries(map).filter(([key]) => !hiddenKeys.includes(key)).map(([key, value]) => ({key, value: `${value ?? ""}`}));
 }
 
 interface MapTableProps {
@@ -22,6 +22,7 @@ interface MapTableProps {
   keyTitle: React.ReactNode;
   valueTitle: React.ReactNode;
   keyWidth?: number | string;
+  hiddenKeys?: string[];
 }
 
 /**
@@ -33,23 +34,30 @@ interface MapTableProps {
  * collide while being typed, so rebuilding would drop them. The antd tables
  * (`PropertyTable`, `AttributesMapperTable`, `HttpHeaderTable`) did the same.
  */
-export function MapTable({value, onChange, keyTitle, valueTitle, keyWidth}: MapTableProps) {
-  const [rows, setRows] = React.useState(() => toRows(value));
+export function MapTable({value, onChange, keyTitle, valueTitle, keyWidth, hiddenKeys = []}: MapTableProps) {
+  const [rows, setRows] = React.useState(() => toRows(value, hiddenKeys));
+  const hiddenKeysSignature = JSON.stringify(hiddenKeys);
+  const [sourceHiddenKeys, setSourceHiddenKeys] = React.useState(hiddenKeysSignature);
   // the map last seen from the parent; a different object (another record
   // loaded, a reload after save) replaces the rows
   const [source, setSource] = React.useState(value);
-  if (value !== source) {
+  if (value !== source || hiddenKeysSignature !== sourceHiddenKeys) {
     setSource(value);
-    setRows(toRows(value));
+    setSourceHiddenKeys(hiddenKeysSignature);
+    setRows(toRows(value, hiddenKeys));
   }
 
   return (
     <EditableTable<MapRow>
       rows={rows}
       onChange={(next) => {
-        const map: Record<string, string> = {};
+        const map: Record<string, string> = Object.fromEntries(
+          Object.entries(value ?? {}).filter(([key]) => hiddenKeys.includes(key)),
+        );
         next.forEach((row) => {
-          map[row.key] = row.value;
+          if (!hiddenKeys.includes(row.key)) {
+            map[row.key] = row.value;
+          }
         });
         setRows(next);
         setSource(map);

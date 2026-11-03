@@ -797,6 +797,18 @@ func GetFilteredUser(user *User, isAdmin bool, isAdminOrSelf bool, accountItems 
 		return user, nil
 	}
 
+	visibleProperties := map[string]string{}
+	for _, item := range accountItems {
+		key, ok := accountPropertyKeys[item.Name]
+		if !ok {
+			continue
+		}
+		canView := item.ViewRule == "Public" || item.ViewRule == "Self" && isAdminOrSelf || item.ViewRule == "Admin" && isAdmin
+		if value, exists := user.Properties[key]; exists && canView {
+			visibleProperties[key] = value
+		}
+	}
+
 	userFieldMap := map[string]int{}
 
 	reflectedUserField := reflect.TypeOf(User{})
@@ -848,6 +860,19 @@ func GetFilteredUser(user *User, isAdmin bool, isAdminOrSelf bool, accountItems 
 		}
 
 		reflectedUser.Field(fieldIdx).SetZero()
+	}
+
+	// Dedicated items override the aggregate Properties rule, regardless of row order.
+	for _, item := range accountItems {
+		if key, ok := accountPropertyKeys[item.Name]; ok {
+			delete(user.Properties, key)
+		}
+	}
+	for key, value := range visibleProperties {
+		if user.Properties == nil {
+			user.Properties = map[string]string{}
+		}
+		user.Properties[key] = value
 	}
 
 	return user, nil

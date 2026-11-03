@@ -32,7 +32,7 @@ import {AccountItemRow, AccountItemsProvider} from "@/components/user/AccountIte
 import {EnableMfaButton} from "@/components/user/EnableMfaButton";
 import {TotpMfaType} from "@/components/auth/mfa/constants";
 import {MfaItemsTable} from "@/components/auth/mfa/MfaItemsTable";
-import {isAccountItemVisible} from "@/lib/account-items";
+import {ACCOUNT_PROPERTY_ITEMS, isAccountItemVisible} from "@/lib/account-items";
 import {PasswordModal} from "@/components/user/PasswordModal";
 import {ResetModal} from "@/components/user/ResetModal";
 import {WebauthnCredentialTable} from "@/components/user/WebauthnCredentialTable";
@@ -48,6 +48,31 @@ import * as Setting from "@/lib/setting";
 
 /** the value a Radix tab needs for the account item whose `tab` is the empty string */
 const DEFAULT_TAB = "__default__";
+
+const ACCOUNT_STATUS_ITEMS = ["Need update password", "IP whitelist", "Last signin time", "Deleted time", "Last signin IP"];
+const ADDRESS_IDENTITY_ITEMS = ["Address", "Addresses", "ID card type", "ID card", "ID card info", "Real name", "ID verification"];
+const SECURITY_ITEMS = ["Multi-factor authentication", "WebAuthn credentials", "Face ID", "MFA accounts", "MFA items"];
+
+function orderUserItems(names: string[]) {
+  const lowerItems = [...ACCOUNT_STATUS_ITEMS, ...ADDRESS_IDENTITY_ITEMS, ...SECURITY_ITEMS];
+  const ordered = names.filter((name) => !lowerItems.includes(name));
+  const propertyNames = ACCOUNT_PROPERTY_ITEMS.map((item) => item.name).filter((name) => ordered.includes(name));
+  const basicItems = ordered.includes("Location")
+    ? ordered.filter((name) => !propertyNames.includes(name))
+      .flatMap((name) => name === "Location" ? [name, ...propertyNames] : [name])
+    : ordered;
+  const statusItems = ACCOUNT_STATUS_ITEMS.filter((name) => names.includes(name));
+  const itemsWithStatus = basicItems.includes("Register source")
+    ? basicItems.flatMap((name) => name === "Register source" ? [name, ...statusItems] : [name])
+    : [...basicItems, ...statusItems];
+  const result = [...itemsWithStatus, ...[...ADDRESS_IDENTITY_ITEMS, ...SECURITY_ITEMS].filter((name) => names.includes(name))];
+  const beforeConsents = ["Properties", "Is admin", "Is forbidden", "Is deleted", "Last change password time"]
+    .filter((name) => result.includes(name));
+  return result.includes("Consents")
+    ? result.filter((name) => !beforeConsents.includes(name))
+      .flatMap((name) => name === "Consents" ? [...beforeConsents, name] : [name])
+    : result;
+}
 
 const GENDERS = ["Male", "Female", "Other"];
 /** the three ID card pictures, stored as user properties and uploaded under the same tag */
@@ -418,6 +443,16 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         <Input value={user.location ?? ""} onChange={(e) => updateField("location", e.target.value)} />
       </AccountItemRow>
     ),
+    ...Object.fromEntries(ACCOUNT_PROPERTY_ITEMS.map((item) => [
+      item.name,
+      <AccountItemRow key={item.name} name={item.name} labelKey={item.labelKey} value={user.properties?.[item.property]}>
+        <Input
+          type={item.type}
+          value={user.properties?.[item.property] ?? ""}
+          onChange={(e) => updateField("properties", {...user.properties, [item.property]: e.target.value})}
+        />
+      </AccountItemRow>,
+    ])),
     "Address": (
       <AccountItemRow name="Address" labelKey="user:Address">
         {affiliation.enabled ? (
@@ -647,6 +682,9 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
       <AccountItemRow name="Properties" labelKey="user:Properties" block>
         <MapTable
           value={user.properties}
+          hiddenKeys={ACCOUNT_PROPERTY_ITEMS
+            .filter((item) => userOrganization.accountItems?.some((configured: any) => configured.name === item.name))
+            .map((item) => item.property)}
           onChange={(value) => updateField("properties", value)}
           keyTitle={i18next.t("general:Name")}
           valueTitle={i18next.t("webhook:Value")}
@@ -1076,17 +1114,9 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
 
   // organizations whose account items predate these rows still see them, in the first tab
   const configuredItemNames = new Set(((userOrganization?.accountItems ?? []) as any[]).map((item) => item.name));
-  const extraRows = Object.entries(extraInputs)
-    .filter(([name]) => !configuredItemNames.has(name))
-    .map(([name, input]) => (
-      <AccountItemRow key={name} labelKey={`user:${name}`}>
-        {input}
-      </AccountItemRow>
-    ));
+  const extraItemNames = Object.keys(extraInputs).filter((name) => !configuredItemNames.has(name));
 
-  // `organization.accountItems` decides which rows appear, in which order and
-  // under which tab, exactly as getUniqueTabs()/getAccountItemsByTab() do in
-  // web/src/UserEditPage.js.
+  // Keep organization visibility and tabs while grouping fields within each tab.
   const visibleAccountItems = ((userOrganization?.accountItems ?? []) as any[]).filter((item) =>
     isAccountItemVisible(item, {isAdmin, isSelfOrAdmin, user}),
   );
@@ -1100,10 +1130,21 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     }
     return a.localeCompare(b);
   });
-  const rowsOfTab = (tab: string) =>
-    visibleAccountItems
+  const rowsOfTab = (tab: string) => {
+    const names = visibleAccountItems
       .filter((item: any) => (item.tab || "") === tab)
-      .map((item: any) => <React.Fragment key={item.name}>{rows[item.name]}</React.Fragment>);
+      .map((item: any) => item.name);
+    if (tab === tabNames[0]) {
+      names.push(...extraItemNames);
+    }
+    return orderUserItems(names).map((name) => (
+      <React.Fragment key={name}>
+        {extraItemNames.includes(name) ? (
+          <AccountItemRow labelKey={`user:${name}`}>{extraInputs[name]}</AccountItemRow>
+        ) : rows[name]}
+      </React.Fragment>
+    ));
+  };
   const tabValues = tabNames.map((tab) => tab || DEFAULT_TAB);
   // a stale hash would otherwise leave every tab closed
   const currentTab = tabValues.includes(activeTab) ? activeTab : tabValues[0];
@@ -1139,12 +1180,11 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
           // the organization configures no account items (or has not loaded yet);
           // showing every row beats showing an empty form
           <div className={formGridClass}>
-            {Object.entries(rows).map(([name, row]) => <React.Fragment key={name}>{row}</React.Fragment>)}
+            {orderUserItems(Object.keys(rows)).map((name) => <React.Fragment key={name}>{rows[name]}</React.Fragment>)}
           </div>
         ) : tabNames.length <= 1 ? (
           <div className={formGridClass}>
             {rowsOfTab(tabNames[0] ?? "")}
-            {extraRows}
           </div>
         ) : (
           <Tabs value={currentTab} onValueChange={selectTab}>
@@ -1158,7 +1198,6 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
             {tabNames.map((tab) => (
               <TabsContent key={tab} value={tab || DEFAULT_TAB} className={formGridClass}>
                 {rowsOfTab(tab)}
-                {tab === tabNames[0] ? extraRows : null}
               </TabsContent>
             ))}
           </Tabs>
