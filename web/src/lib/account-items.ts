@@ -22,6 +22,7 @@ export interface AccountItemRules {
 }
 
 export const ACCOUNT_PROPERTY_ITEMS = [
+  {name: "Profile Cover", property: "coverUrl", labelKey: "user:Profile Cover", type: "url"},
   {name: "Open ID", property: "open_id", labelKey: "user:Open ID", type: "text"},
   {name: "Department name", property: "department", labelKey: "user:Department name", type: "text"},
   {name: "Job number", property: "job_number", labelKey: "user:Job number", type: "text"},
@@ -33,7 +34,7 @@ export const ACCOUNT_PROPERTY_ITEMS = [
 export const ACCOUNT_ITEM_ORDER = [
   "Avatar", "Organization", "Display name", "Name", "Last name", "First name", "Email", "Phone", "Country code",
   "Groups", "Affiliation", "Department name", "Job number", "Job type", "Job level", "Work date",
-  "Gender", "Birthday", "Education", "Language", "Title", "Homepage", "Bio",
+  "Gender", "Birthday", "Education", "Language", "Title", "Homepage", "Profile Cover", "Bio",
   "Signup application", "Register type", "Register source", "ID", "Open ID",
   "User type", "Tag", "Is admin", "Is forbidden", "Roles", "Permissions", "Password", "Need update password", "Last change password time",
   "UID number", "IP whitelist", "Last signin time", "Last signin IP", "Is deleted", "Deleted time", "Properties", "Country/Region", "Location", "Address", "Addresses", "Consents",

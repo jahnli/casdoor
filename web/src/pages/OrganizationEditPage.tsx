@@ -426,10 +426,13 @@ export default function OrganizationEditPage() {
                   key: "name",
                   title: i18next.t("general:Name"),
                   width: 260,
-                  render: (row: any, _index, patch) => (
+                  render: (row: any, index) => (
                     <SelectField
                       value={row.name}
-                      onChange={(value) => patch({name: value})}
+                      onChange={(value) => update("accountItems", orderAccountItems(
+                        (organization.accountItems ?? []).map((item: any, itemIndex: number) =>
+                          itemIndex === index ? {...item, name: value} : item),
+                      ))}
                       options={Setting.GetTranslatedUserItems()
                         .filter((item) => item.name === row.name ||
                           !(organization.accountItems ?? []).some((other: any) => other.name === item.name))

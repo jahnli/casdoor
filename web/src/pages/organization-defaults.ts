@@ -62,6 +62,7 @@ export function newOrganization(createdTime: string) {
       {name: "Real name", visible: true, viewRule: "Public", modifyRule: "Self"},
       {name: "ID verification", visible: true, viewRule: "Self", modifyRule: "Self"},
       {name: "Homepage", visible: true, viewRule: "Public", modifyRule: "Self"},
+      {name: "Profile Cover", visible: true, viewRule: "Public", modifyRule: "Self"},
       {name: "Bio", visible: true, viewRule: "Public", modifyRule: "Self"},
       {name: "Tag", visible: true, viewRule: "Public", modifyRule: "Admin"},
       {name: "Language", visible: true, viewRule: "Public", modifyRule: "Admin"},

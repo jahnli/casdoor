@@ -614,6 +614,7 @@ func userVisible(isAdmin bool, item *AccountItem) bool {
 var adminOnlyAccountItems = []string{"User type", "Tag", "Properties", "Groups", "Need update password", "IP whitelist"}
 
 var accountPropertyKeys = map[string]string{
+	"Profile Cover":   "coverUrl",
 	"Company":         "company",
 	"Open ID":         "open_id",
 	"Department name": "department",

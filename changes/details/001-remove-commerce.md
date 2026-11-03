@@ -110,3 +110,17 @@
 - `web/src/pages/UserEditPage.tsx` — 展示独立属性字段，按共用顺序连续排列资料、账号状态和认证信息。
 - `web/src/pages/OrganizationEditPage.tsx` — 支持独立属性字段的配置与正则规则，个人页面设置列表与用户编辑页排序一致，过滤旧 Company 项。
 - `web/src/locales/en/data.json`、`web/src/locales/zh/data.json` — 增加独立属性字段的中英文文案。
+
+### 个人封面与账号字段文案补充
+
+用户编辑页及组织个人页面设置增加“个人封面（Profile Cover）”独立属性项，位于个人主页之后、自我介绍之前，以 URL 输入框编辑并保存到 `properties.coverUrl`，不新增数据库列。沿用独立属性字段的查看权限、修改权限与正则校验；新建组织默认包含该项，查看权限为公开、修改权限为本人，已有组织需在个人页面设置中添加并启用。本次仅提供地址配置与保存，不渲染封面图片。
+
+共享中文文案将 UID 号、IP 白名单、WebAuthn 凭据、MFA 账户、MFA 设置项、API 密钥的英文与中文之间补上空格，组织设置与用户界面同步显示。
+
+组织个人页面设置在新增配置行选定字段或更换字段名称后，立即按共享字段顺序重新排列，避免个人封面停留在列表末尾；个人封面紧跟个人主页，其余配置值保留。
+
+- `web/src/lib/account-items.ts` — 新增个人封面的属性映射、URL 输入类型和共享排序。
+- `object/user_util.go` — 将个人封面映射到 `coverUrl`，接入现有属性权限及正则校验。
+- `web/src/pages/organization-defaults.ts` — 新建组织默认在个人主页后配置个人封面。
+- `web/src/pages/OrganizationEditPage.tsx` — 选定或更换账号字段时即时排序，使个人封面自动归位到个人主页之后。
+- `web/src/locales/en/data.json`、`web/src/locales/zh/data.json` — 增加封面名称及 URL 提示，规范六项账号字段的中英文间距。

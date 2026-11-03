@@ -1543,6 +1543,8 @@
     "Gender - Tooltip": "User's gender",
     "Homepage": "Homepage",
     "Homepage - Tooltip": "Homepage URL of the user",
+    "Profile Cover": "Profile Cover",
+    "Profile Cover - Tooltip": "Cover image URL for the top of the user's profile",
     "ID card": "ID card",
     "ID card - Tooltip": "ID card number",
     "ID card back": "ID card back",
