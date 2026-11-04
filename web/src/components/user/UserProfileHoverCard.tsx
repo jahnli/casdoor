@@ -17,9 +17,13 @@ export function UserProfileHoverCard({user, children}: {user: any; children: Rea
     {label: "general:Email", chineseLabel: "邮箱", value: user.email},
     {label: "user:Job number", chineseLabel: "工号", value: properties.job_number},
     {label: "user:Job type", chineseLabel: "职务", value: properties.job_type},
+    {label: "user:Job description", chineseLabel: "职位描述", value: properties.job_description},
     {label: "general:Phone", chineseLabel: "手机号", value: user.phone},
     {label: "user:Birthday", chineseLabel: "出生日期", value: user.birthday},
-  ];
+    {label: "user:Ethnicity", chineseLabel: "民族", value: properties.ethnicity},
+    {label: "user:Location", chineseLabel: "探亲地", value: user.location},
+  ].map((field) => ({...field, value: String(field.value ?? "").trim()}))
+    .filter((field) => field.value !== "");
 
   return (
     <HoverCard.Root openDelay={100} closeDelay={150}>
@@ -77,7 +81,7 @@ export function UserProfileHoverCard({user, children}: {user: any; children: Rea
                 {fields.map((field) => (
                   <div key={field.label} className="flex items-baseline gap-3 py-1.5">
                     <span className="w-16 shrink-0 whitespace-nowrap text-[13px] leading-5 text-[#4b5672]">{Setting.getLanguage() === "zh" ? field.chineseLabel : i18next.t(field.label)}</span>
-                    <span className="min-w-0 break-words text-sm leading-5 [overflow-wrap:anywhere]">{String(field.value ?? "").trim() || "-"}</span>
+                    <span className="min-w-0 break-words text-sm leading-5 [overflow-wrap:anywhere]">{field.value}</span>
                   </div>
                 ))}
               </div>
