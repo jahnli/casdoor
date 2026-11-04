@@ -35,6 +35,7 @@ export interface ColumnDef<T = any> {
   width?: number | string;
   sortable?: boolean;
   searchable?: boolean;
+  searchPlaceholder?: string;
   /** renders a filter menu in the header cell; picking one filters on this column */
   filters?: ColumnFilterOption[];
   align?: "left" | "center" | "right";

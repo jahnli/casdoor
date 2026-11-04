@@ -337,7 +337,7 @@ func GetUserFieldStringValue(user *User, fieldName string) (bool, string, error)
 }
 
 func GetGlobalUserCount(field, value string) (int64, error) {
-	session := GetSession("", -1, -1, field, value, "", "")
+	session := GetSessionForUser("", -1, -1, field, value, "", "")
 	return session.Count(&User{})
 }
 
@@ -377,7 +377,7 @@ func GetPaginationGlobalUsers(offset, limit int, field, value, sortField, sortOr
 }
 
 func GetUserCount(owner, field, value string, groupName string) (int64, error) {
-	session := GetSession(owner, -1, -1, field, value, "", "")
+	session := GetSessionForUser(owner, -1, -1, field, value, "", "")
 
 	if groupName != "" {
 		return GetGroupUserCount(util.GetId(owner, groupName), field, value)

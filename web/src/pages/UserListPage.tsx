@@ -62,6 +62,7 @@ export default function UserListPage({
       fixed: "left",
       sortable: true,
       searchable: true,
+      searchPlaceholder: i18next.t("general:Search name or username"),
       render: (_value, record) => {
         const url = Setting.getEffectiveAvatarUrl(record);
         const avatar = (

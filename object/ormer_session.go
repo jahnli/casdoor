@@ -53,6 +53,17 @@ func GetSession(owner string, offset, limit int, field, value, sortField, sortOr
 	return session
 }
 
+func applyUserSearch(session *xorm.Session, prefix, field, value string) *xorm.Session {
+	if field == "" || value == "" || !util.FilterField(field) {
+		return session
+	}
+	pattern := "%" + value + "%"
+	if field == "displayName" {
+		return session.And(fmt.Sprintf("(%sdisplay_name like ? OR %sname like ?)", prefix, prefix), pattern, pattern)
+	}
+	return session.And(fmt.Sprintf("%s%s like ?", prefix, util.CamelToSnakeCase(field)), pattern)
+}
+
 func GetSessionForUser(owner string, offset, limit int, field, value, sortField, sortOrder string) *xorm.Session {
 	session := ormer.Engine.Prepare()
 	if offset != -1 && limit != -1 {
@@ -65,14 +76,11 @@ func GetSessionForUser(owner string, offset, limit int, field, value, sortField,
 			session = session.And("a.owner=?", owner)
 		}
 	}
-	if field != "" && value != "" {
-		if util.FilterField(field) {
-			if offset != -1 {
-				field = fmt.Sprintf("a.%s", field)
-			}
-			session = session.And(fmt.Sprintf("%s like ?", util.CamelToSnakeCase(field)), fmt.Sprintf("%%%s%%", value))
-		}
+	prefix := ""
+	if offset != -1 {
+		prefix = "a."
 	}
+	session = applyUserSearch(session, prefix, field, value)
 	if sortField == "" || sortOrder == "" || !util.FilterField(sortField) {
 		sortField = "created_time"
 	}

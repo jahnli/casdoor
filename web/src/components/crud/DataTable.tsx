@@ -113,7 +113,7 @@ function ColumnSearch({
         <Input
           autoFocus
           value={value}
-          placeholder={i18next.t("general:Please input your search")}
+          placeholder={column.searchPlaceholder ?? i18next.t("general:Please input your search")}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
