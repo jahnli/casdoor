@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/casdoor/casdoor/i18n"
+	"github.com/casdoor/casdoor/util"
 	"github.com/xorm-io/core"
 	"github.com/xorm-io/xorm/names"
 )
@@ -98,8 +99,20 @@ func GetUserMergeError(from *User, into *User, lang string) string {
 	return ""
 }
 
+// GetMergedUsers is the names of the accounts merged into the user, for the applications to move what they keep by
+// user name
+func GetMergedUsers(user *User) []string {
+	res := []string{}
+	for _, name := range strings.Split(getUserProperty(user, UserPropertiesMergedUsers), ",") {
+		if name != "" {
+			res = append(res, name)
+		}
+	}
+	return res
+}
+
 // MergeUser moves the third-party accounts, email and phone of "from" into "into", fills the
-// profile fields "into" leaves empty, then deletes "from"
+// profile fields "into" leaves empty, lists "from" in the mergedUsers property of "into", then deletes "from"
 func MergeUser(from *User, into *User) error {
 	columns := []string{}
 	for _, field := range userProviderFields {
@@ -118,9 +131,14 @@ func MergeUser(from *User, into *User) error {
 			}
 		}
 	}
-	if len(columns) > 0 {
-		columns = append(columns, "properties")
+	merged := GetMergedUsers(into)
+	for _, name := range append(GetMergedUsers(from), from.Name) {
+		if name != into.Name && !util.InSlice(merged, name) {
+			merged = append(merged, name)
+		}
 	}
+	setUserProperty(into, UserPropertiesMergedUsers, strings.Join(merged, ","))
+	columns = append(columns, "properties")
 
 	if into.Email == "" && from.Email != "" {
 		into.Email = from.Email
@@ -162,13 +180,8 @@ func MergeUser(from *User, into *User) error {
 		return err
 	}
 
-	if len(columns) > 0 {
-		_, err = UpdateUser(into.GetId(), into, columns, true)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	_, err = UpdateUser(into.GetId(), into, columns, true)
+	return err
 }
 
 func ormerColumnName(field string) string {
