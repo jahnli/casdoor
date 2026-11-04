@@ -623,6 +623,8 @@ var accountPropertyKeys = map[string]string{
 	"Work date":       "job_date",
 	"Job type":        "job_type",
 	"Job level":       "job_level",
+	"Job description": "job_description",
+	"Ethnicity":       "ethnicity",
 }
 
 func GetAccountItemForUpdate(name string, organization *Organization) *AccountItem {

@@ -1517,6 +1517,8 @@
     "Bio - Tooltip": "Self introduction of the user",
     "Birthday": "Birthday",
     "Birthday - Tooltip": "User's date of birth",
+    "Job description": "Job description",
+    "Ethnicity": "Ethnicity",
     "Captcha Verify Failed": "Captcha Verify Failed",
     "Captcha Verify Success": "Captcha Verify Success",
     "City": "City",
