@@ -1,11 +1,13 @@
 import * as React from "react";
 import i18next from "i18next";
-import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {CalendarDays} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {UserProfileHoverCard} from "@/components/user/UserProfileHoverCard";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {XlsxImport} from "@/components/crud/XlsxImport";
-import {boolColumn, dateColumn, linkColumn, organizationColumn, textColumn} from "@/components/crud/columns";
+import {boolColumn, dateColumn, organizationColumn, textColumn} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
 import {useAccount} from "@/hooks/use-account";
 import {useRequestOrganization} from "@/hooks/use-organization";
@@ -52,108 +54,131 @@ export default function UserListPage({
 
   const isGlobal = account ? Setting.isDefaultOrganizationSelected(account) && !scopedOrganizationName : false;
 
-  const tagLabels = React.useMemo(() => {
-    const map: Record<string, string> = {};
-    ((organization?.tags ?? []) as string[]).forEach((tag) => {
-      const tokens = tag.split("|");
-      map[tokens[0]] = Setting.getLanguage() !== "zh" ? tokens[0] : tokens[1] ?? tokens[0];
-    });
-    return map;
-  }, [organization]);
-
   const columns: ColumnDef<any>[] = [
-    organizationColumn(140, "owner", undefined, "left"),
     {
-      dataIndex: "signupApplication",
-      title: i18next.t("general:Application"),
-      width: 140,
+      dataIndex: "displayName",
+      title: i18next.t("general:User"),
+      width: 200,
       fixed: "left",
       sortable: true,
       searchable: true,
-      render: (value, record) =>
-        value ? (
-          <Link to={`/applications/${record.owner}/${value}`} className="underline-offset-4 hover:underline">
-            {value}
-          </Link>
-        ) : null,
-    },
-    linkColumn({dataIndex: "name", to: (r) => `/users/${r.owner}/${r.name}`, width: 150}),
-    dateColumn(),
-    textColumn({dataIndex: "displayName", title: i18next.t("general:Display name"), searchable: true, width: 150}),
-    {
-      dataIndex: "avatar",
-      title: i18next.t("general:Avatar"),
-      width: 80,
-      align: "center",
       render: (_value, record) => {
         const url = Setting.getEffectiveAvatarUrl(record);
-        // antd links the avatar to the image itself
         const avatar = (
-          <Avatar className="mx-auto h-9 w-9">
+          <Avatar className="h-7 w-7 shrink-0 text-xs">
             {url ? <AvatarImage src={url} alt={record.name} /> : null}
             <AvatarFallback style={{backgroundColor: Setting.getAvatarColor(record.name), color: "#fff"}}>
               {(record.name || "?").charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         );
-        return url ? (
-          <a href={url} target="_blank" rel="noreferrer">
-            {avatar}
-          </a>
-        ) : (
-          avatar
+        return (
+            <div className="flex w-fit max-w-full items-center gap-3">
+              <UserProfileHoverCard user={record}>
+                {url ? (
+                  <a href={url} target="_blank" rel="noreferrer" className="shrink-0">{avatar}</a>
+                ) : (
+                  <span className="shrink-0 cursor-pointer" tabIndex={0}>{avatar}</span>
+                )}
+              </UserProfileHoverCard>
+              <div className="flex min-w-0 flex-col">
+                <span>{record.displayName}</span>
+                <Link
+                  to={`/users/${record.owner}/${record.name}`}
+                  className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                >
+                  {record.name}
+                </Link>
+              </div>
+            </div>
         );
       },
     },
-    {
-      dataIndex: "email",
-      title: i18next.t("general:Email"),
-      width: 180,
-      sortable: true,
-      searchable: true,
-      render: (value) =>
-        value ? (
-          <a href={`mailto:${value}`} className="underline-offset-4 hover:underline">
-            {value}
-          </a>
-        ) : null,
-    },
-    textColumn({dataIndex: "phone", title: i18next.t("general:Phone"), width: 130, searchable: true}),
     textColumn({dataIndex: "affiliation", title: i18next.t("user:Affiliation"), width: 140, searchable: true}),
-    textColumn({dataIndex: "realName", title: i18next.t("application:Real name"), width: 130, searchable: true}),
-    boolColumn({dataIndex: "isVerified", title: i18next.t("user:Is verified")}),
     {
-      dataIndex: "region",
-      title: i18next.t("user:Country/Region"),
+      dataIndex: "department",
+      title: i18next.t("user:Employment overview"),
+      width: 260,
+      render: (_value, record) => {
+        const properties = record.properties ?? {};
+        const department = String(properties.department ?? "").trim();
+        const jobLevel = String(properties.job_level ?? "").trim();
+        const workDate = String(properties.job_date ?? "").trim();
+        return (
+          <div className="max-w-[280px] space-y-1.5 overflow-hidden font-normal">
+            {department || (!jobLevel && !workDate) ? (
+            <div className="truncate text-sm" title={department || undefined}>
+              {department || <span className="text-muted-foreground">-</span>}
+            </div>
+            ) : null}
+            {jobLevel || workDate ? (
+              <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
+                {jobLevel ? (
+                <div className="w-[88px] shrink-0 overflow-hidden">
+                  {jobLevel ? <Badge variant="secondary" className="max-w-full font-normal"><span className="truncate text-[13px]">{jobLevel}</span></Badge> : null}
+                </div>
+                ) : null}
+                {workDate ? (
+                  <Badge variant="outline" className="min-w-0 gap-1 font-normal text-muted-foreground">
+                    <CalendarDays size={13} className="shrink-0" aria-hidden="true" />
+                    <span className="truncate text-[13px] tabular-nums">{workDate}</span>
+                  </Badge>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+        );
+      },
+    },
+    dateColumn("lastSigninTime", i18next.t("user:Last signin time")),
+    textColumn({dataIndex: "lastSigninIp", title: i18next.t("user:Last signin IP"), width: 150, searchable: true}),
+    dateColumn(),
+    organizationColumn(120),
+    {
+      dataIndex: "signupApplication",
+      title: i18next.t("general:Application"),
       width: 140,
       sortable: true,
       searchable: true,
-      // the column stores the ISO code, antd shows the country's own name
-      render: (value) =>
-        value ? Setting.initCountries().getName(value, Setting.getLanguage(), {select: "official"}) ?? value : null,
-    },
-    textColumn({dataIndex: "type", title: i18next.t("general:User type"), width: 130, searchable: true}),
-    {
-      dataIndex: "tag",
-      title: i18next.t("general:Tag"),
-      width: 110,
-      sortable: true,
-      searchable: true,
-      // an organization stores its tags as "<name>|<zh name>"; show the localized one
-      render: (value) => (value ? <Badge variant="secondary">{tagLabels[value] ?? value}</Badge> : null),
+      render: (value, record) => value ? (
+        <Link to={`/applications/${record.owner}/${value}`} className="underline-offset-4 hover:underline">
+          {value}
+        </Link>
+      ) : null,
     },
     textColumn({dataIndex: "registerType", title: i18next.t("user:Register type"), width: 130, searchable: true}),
     textColumn({dataIndex: "registerSource", title: i18next.t("user:Register source"), width: 160, searchable: true}),
     boolColumn({dataIndex: "isAdmin", title: i18next.t("user:Is admin")}),
     boolColumn({dataIndex: "isForbidden", title: i18next.t("user:Is forbidden"), invertColor: true}),
     boolColumn({dataIndex: "isDeleted", title: i18next.t("user:Is deleted"), invertColor: true}),
+    {
+      ...dateColumn("deletedTime", i18next.t("user:Deleted time")),
+      render: (value, record) => record.isDeleted && value
+        ? Setting.getFormattedDate(value)
+        : <span className="text-muted-foreground">-</span>,
+    },
   ];
+
+  const displayColumns = columns.map((column): ColumnDef<any> => {
+    if (["displayName", "department", "isAdmin", "isForbidden", "isDeleted", "deletedTime"].includes(column.dataIndex)) {
+      return column;
+    }
+    return {
+      ...column,
+      render: (value, record, index) => {
+        if (value == null || (typeof value === "string" && value.trim() === "")) {
+          return <span className="text-muted-foreground">-</span>;
+        }
+        return column.render ? column.render(value, record, index) : value;
+      },
+    };
+  });
 
   return (
     <CrudListPage
       title={i18next.t("general:Users")}
       description={groupName ? `${i18next.t("general:Groups")}: ${groupName}` : undefined}
-      columns={columns}
+      columns={displayColumns}
       formType="users"
       formItems={formItems}
       toolbar={({refresh}) => (
@@ -225,7 +250,7 @@ export default function UserListPage({
           }
           : null,
       ]}
-      actionColumnWidth={groupName ? 340 : 260}
+      actionColumnWidth={groupName ? 300 : 230}
       // the tree page has one route per group, so pin the column choices to the page
       tableId={embedded ? "/trees" : undefined}
     />

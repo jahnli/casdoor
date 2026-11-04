@@ -156,7 +156,20 @@ export function CrudListPage<T extends Record<string, any>>({
   };
 
   const savedFormItems = useFormItems(formItemsProp ? undefined : formType);
-  const formItems = formItemsProp ?? savedFormItems;
+  const rawFormItems = formItemsProp ?? savedFormItems;
+  const formItems = formType === "users"
+    ? rawFormItems.filter((item) => item.name !== "avatar").map((item) =>
+      item.name === "displayName" ? {...item, label: "general:User"}
+        : item.name === "department" ? {...item, label: "user:Employment overview", width: "260"} : item,
+    ).sort((a, b) => {
+      const pinnedNames = ["displayName", "affiliation", "department", "lastSigninTime", "lastSigninIp", "createdTime", "owner", "signupApplication"];
+      const rank = (name: string) => {
+        const index = pinnedNames.indexOf(name);
+        return index === -1 ? pinnedNames.length : index;
+      };
+      return rank(a.name) - rank(b.name);
+    })
+    : rawFormItems;
 
   const deleteAction = (record: T): RowAction => {
     const blockedReason = deleteDisabled?.(record);
@@ -172,7 +185,13 @@ export function CrudListPage<T extends Record<string, any>>({
   };
 
   const allColumns = React.useMemo<ColumnDef<T>[]>(() => {
-    const visibleColumns = Setting.filterTableColumns(columns, formItems) as ColumnDef<T>[];
+    const visibleColumns = (Setting.filterTableColumns(columns, formItems) as ColumnDef<T>[]).map((column) => {
+      if (formType !== "users") {
+        return column;
+      }
+      const width = typeof column.width === "number" ? column.width : Number.parseFloat(column.width ?? "");
+      return Number.isFinite(width) ? {...column, width: Math.round(width * 0.85)} : column;
+    });
     if (!showActionColumn) {
       return visibleColumns;
     }
@@ -204,7 +223,7 @@ export function CrudListPage<T extends Record<string, any>>({
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, formItems, editUrl, remove, rowActions, showActionColumn, readOnly, deleteDisabled, rows, query.page, refresh]);
+  }, [columns, formItems, formType, editUrl, remove, rowActions, showActionColumn, readOnly, deleteDisabled, rows, query.page, refresh]);
 
   const deleteSelected = async() => {
     const records = (rows ?? []).filter((row, index) => selected.has(keyOf(row, index)) && !deleteDisabled?.(row));

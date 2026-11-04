@@ -2069,21 +2069,18 @@ export function getFormTypeOptions() {
 export function getFormTypeItems(formType) {
   if (formType === "users") {
     return [
-      {name: "owner", label: "general:Organization", visible: true, width: "150"},
-      {name: "signupApplication", label: "general:Application", visible: true, width: "120"},
-      {name: "name", label: "general:Name", visible: true, width: "110"},
-      {name: "createdTime", label: "general:Created time", visible: true, width: "160"},
-      {name: "displayName", label: "general:Display name", visible: true, width: "150"},
-      {name: "avatar", label: "general:Avatar", visible: true, width: "80"},
-      {name: "email", label: "general:Email", visible: true, width: "160"},
-      {name: "phone", label: "general:Phone", visible: true, width: "120"},
+      {name: "displayName", label: "general:User", visible: true, width: "200"},
       {name: "affiliation", label: "user:Affiliation", visible: true, width: "140"},
-      {name: "region", label: "user:Country/Region", visible: true, width: "140"},
-      {name: "type", label: "general:User type", visible: true, width: "120"},
-      {name: "tag", label: "general:Tag", visible: true, width: "110"},
+      {name: "department", label: "user:Employment overview", visible: true, width: "260"},
+      {name: "lastSigninTime", label: "user:Last signin time", visible: true, width: "165"},
+      {name: "lastSigninIp", label: "user:Last signin IP", visible: true, width: "150"},
+      {name: "createdTime", label: "general:Created time", visible: true, width: "160"},
+      {name: "owner", label: "general:Organization", visible: true, width: "120"},
+      {name: "signupApplication", label: "general:Application", visible: true, width: "120"},
       {name: "isAdmin", label: "user:Is admin", visible: true, width: "120"},
       {name: "isForbidden", label: "user:Is forbidden", visible: true, width: "110"},
       {name: "isDeleted", label: "user:Is deleted", visible: true, width: "110"},
+      {name: "deletedTime", label: "user:Deleted time", visible: true, width: "165"},
     ];
   } else if (formType === "providers") {
     return [
