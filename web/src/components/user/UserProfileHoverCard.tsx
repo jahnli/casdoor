@@ -76,7 +76,7 @@ export function UserProfileHoverCard({user, children}: {user: any; children: Rea
               <div className="px-5 py-2.5">
                 {fields.map((field) => (
                   <div key={field.label} className="flex items-baseline gap-3 py-1.5">
-                    <span className="w-12 shrink-0 text-xs leading-5 text-muted-foreground">{Setting.getLanguage() === "zh" ? field.chineseLabel : i18next.t(field.label)}</span>
+                    <span className="w-16 shrink-0 whitespace-nowrap text-[13px] leading-5 text-[#4b5672]">{Setting.getLanguage() === "zh" ? field.chineseLabel : i18next.t(field.label)}</span>
                     <span className="min-w-0 break-words text-sm leading-5 [overflow-wrap:anywhere]">{String(field.value ?? "").trim() || "-"}</span>
                   </div>
                 ))}

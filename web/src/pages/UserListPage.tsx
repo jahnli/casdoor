@@ -83,12 +83,9 @@ export default function UserListPage({
               </UserProfileHoverCard>
               <div className="flex min-w-0 flex-col">
                 <span>{record.displayName}</span>
-                <Link
-                  to={`/users/${record.owner}/${record.name}`}
-                  className="text-xs text-muted-foreground underline-offset-4 hover:underline"
-                >
+                <span className="text-[13px] text-[#4b5672]">
                   {record.name}
-                </Link>
+                </span>
               </div>
             </div>
         );
