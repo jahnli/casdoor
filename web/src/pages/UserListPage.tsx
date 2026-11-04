@@ -2,6 +2,7 @@ import * as React from "react";
 import i18next from "i18next";
 import {CalendarDays} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {UserProfileHoverCard} from "@/components/user/UserProfileHoverCard";
@@ -105,9 +106,18 @@ export default function UserListPage({
         return (
           <div className="max-w-[280px] space-y-1.5 overflow-hidden font-normal">
             {department || (!jobLevel && !workDate) ? (
-            <div className="truncate text-sm" title={department || undefined}>
-              {department || <span className="text-muted-foreground">-</span>}
-            </div>
+              department ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="truncate text-sm" tabIndex={0}>{department}</div>
+                  </TooltipTrigger>
+                  <TooltipContent className="whitespace-pre-wrap break-words" side="top" align="start">
+                    {department}
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <div className="truncate text-sm"><span className="text-muted-foreground">-</span></div>
+              )
             ) : null}
             {jobLevel || workDate ? (
               <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
