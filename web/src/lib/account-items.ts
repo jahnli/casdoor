@@ -25,6 +25,7 @@ export const ACCOUNT_PROPERTY_ITEMS = [
   {name: "Profile Cover", property: "coverUrl", labelKey: "user:Profile Cover", type: "url"},
   {name: "Open ID", property: "open_id", labelKey: "user:Open ID", type: "text"},
   {name: "Department name", property: "department", labelKey: "user:Department name", type: "text"},
+  {name: "Department", property: "department_value", labelKey: "user:Department", type: "text"},
   {name: "Job number", property: "job_number", labelKey: "user:Job number", type: "text"},
   {name: "Work date", property: "job_date", labelKey: "user:Work date", type: "date"},
   {name: "Job type", property: "job_type", labelKey: "user:Job type", type: "text"},
@@ -33,7 +34,7 @@ export const ACCOUNT_PROPERTY_ITEMS = [
 
 export const ACCOUNT_ITEM_ORDER = [
   "Avatar", "Organization", "Display name", "Name", "Last name", "First name", "Email", "Phone", "Country code",
-  "Groups", "Affiliation", "Department name", "Job number", "Job type", "Job level", "Work date",
+  "Groups", "Affiliation", "Department name", "Department", "Job number", "Job type", "Job level", "Work date",
   "Gender", "Birthday", "Education", "Language", "Title", "Homepage", "Profile Cover", "Bio",
   "Signup application", "Register type", "Register source", "ID", "Open ID",
   "User type", "Tag", "Is admin", "Is forbidden", "Roles", "Permissions", "Password", "Need update password", "Last change password time",

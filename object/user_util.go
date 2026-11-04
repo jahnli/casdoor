@@ -618,6 +618,7 @@ var accountPropertyKeys = map[string]string{
 	"Company":         "company",
 	"Open ID":         "open_id",
 	"Department name": "department",
+	"Department":      "department_value",
 	"Job number":      "job_number",
 	"Work date":       "job_date",
 	"Job type":        "job_type",
