@@ -190,7 +190,8 @@ export function CrudListPage<T extends Record<string, any>>({
         return column;
       }
       const width = typeof column.width === "number" ? column.width : Number.parseFloat(column.width ?? "");
-      return Number.isFinite(width) ? {...column, width: Math.round(width * 0.85)} : column;
+      const widthScale = ["affiliation", "department"].includes(column.dataIndex) ? 0.95 : 0.85;
+      return Number.isFinite(width) ? {...column, width: Math.round(width * widthScale)} : column;
     });
     if (!showActionColumn) {
       return visibleColumns;
