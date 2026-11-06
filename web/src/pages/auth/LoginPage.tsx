@@ -586,7 +586,7 @@ export default function LoginPage({type = "login", application: applicationProp,
   const handleCasLoginResult = (res: any, casParams: any) => {
     let message = "Logged in successfully. ";
     if (casParams.service === "") {
-      message += "Now you can visit apps protected by Casdoor.";
+      message += "Now you can visit apps protected by Semi.";
     }
     Setting.showMessage("success", message);
     if (casParams.service !== "") {

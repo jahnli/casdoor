@@ -690,7 +690,7 @@ export default function ProviderEditPage() {
       patch.host = "smtp.example.com";
       patch.port = 465;
       patch.sslMode = "Auto";
-      patch.title = "Casdoor Verification Code";
+      patch.title = "Semi Verification Code";
       patch.content = Setting.getDefaultHtmlEmailContent();
       patch.metadata = Setting.getDefaultInvitationHtmlEmailContent();
       patch.receiver = account?.email ?? "";

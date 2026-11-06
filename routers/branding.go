@@ -48,6 +48,7 @@ func addBrandingToHtml(content string, organizationThemeCookie *OrganizationThem
 		content = strings.ReplaceAll(content, conf.DefaultStaticBaseUrl+"/img/favicon.png", favicon)
 	}
 	if title != "" {
+		content = strings.ReplaceAll(content, "<title>Semi</title>", fmt.Sprintf("<title>%s</title>", title))
 		content = strings.ReplaceAll(content, "<title>Casdoor</title>", fmt.Sprintf("<title>%s</title>", title))
 	}
 	if description != "" {

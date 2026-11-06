@@ -1962,7 +1962,7 @@ export function getDefaultHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Semi Logo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
     <p>Use this code to verify your account. It's valid for 10 minutes</p>
@@ -1978,7 +1978,7 @@ export function getDefaultHtmlEmailContent() {
     <p>Casbin Team</p>
     <hr>
     <div class="footer">
-        <p>Casdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>Semi is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
     </div>
 </div>
 </body>
@@ -2005,9 +2005,9 @@ export function getDefaultInvitationHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Semi Logo" width="300">
     </div>
-    <p>You have been invited into Casdoor</p>
+    <p>You have been invited into Semi</p>
     <div class="code">
         %code
     </div>
@@ -2020,7 +2020,7 @@ export function getDefaultInvitationHtmlEmailContent() {
     <p>Casbin Team</p>
     <hr>
     <div class="footer">
-        <p>Casdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>Semi is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
     </div>
 </div>
 </body>
