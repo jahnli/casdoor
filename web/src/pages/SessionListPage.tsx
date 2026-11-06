@@ -3,6 +3,7 @@ import i18next from "i18next";
 import {Link} from "react-router-dom";
 import {X} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
+import {UserCell} from "@/components/user/UserCell";
 import {ConfirmButton} from "@/components/common/ConfirmButton";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {dateColumn} from "@/components/crud/columns";
@@ -77,15 +78,13 @@ export default function SessionListPage() {
   const columns: ColumnDef<any>[] = [
     {
       dataIndex: "name",
-      title: i18next.t("general:Name"),
-      width: 180,
+      title: i18next.t("general:User"),
+      width: 200,
       fixed: "left",
       sortable: true,
       searchable: true,
       render: (value, record) => (
-        <Link to={`/users/${record.owner}/${value}`} className="font-medium underline-offset-4 hover:underline">
-          {value}
-        </Link>
+        <UserCell organization={record.owner} name={value} linkToUser />
       ),
     },
     {

@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import {Link} from "react-router-dom";
+import {UserCell} from "@/components/user/UserCell";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {boolColumn, clientIpColumn, dateColumn, organizationColumn, textColumn} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
@@ -11,22 +11,21 @@ export default function VerificationListPage() {
   const owner = useOrganizationFilter();
 
   const columns: ColumnDef<any>[] = [
-    organizationColumn(140, "owner", undefined, "left"),
-    textColumn({dataIndex: "name", title: i18next.t("general:Name"), width: 180, searchable: true, fixed: "left"}),
-    dateColumn(),
-    textColumn({dataIndex: "type", title: i18next.t("general:Type"), width: 110, searchable: true}),
     {
       dataIndex: "user",
       title: i18next.t("general:User"),
-      width: 140,
+      width: 200,
+      fixed: "left",
       sortable: true,
       searchable: true,
       render: (value, record) => (
-        <Link to={`/users/${record.owner}/${value}`} className="underline-offset-4 hover:underline">
-          {value}
-        </Link>
+        <UserCell organization={record.owner} name={value} linkToUser />
       ),
     },
+    organizationColumn(140, "owner"),
+    textColumn({dataIndex: "name", title: i18next.t("general:Name"), width: 180, searchable: true}),
+    dateColumn(),
+    textColumn({dataIndex: "type", title: i18next.t("general:Type"), width: 110, searchable: true}),
     textColumn({dataIndex: "provider", title: i18next.t("general:Provider"), width: 160, searchable: true, link: (v, r: any) => `/providers/${r.owner}/${v}`}),
     clientIpColumn({
       dataIndex: "remoteAddr",

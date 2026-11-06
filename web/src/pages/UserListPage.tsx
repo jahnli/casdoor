@@ -4,8 +4,7 @@ import {CalendarDays} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {UserProfileHoverCard} from "@/components/user/UserProfileHoverCard";
+import {UserCell} from "@/components/user/UserCell";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {XlsxImport} from "@/components/crud/XlsxImport";
 import {boolColumn, dateColumn, organizationColumn, textColumn} from "@/components/crud/columns";
@@ -64,34 +63,7 @@ export default function UserListPage({
       sortable: true,
       searchable: true,
       searchPlaceholder: i18next.t("general:Search name or username"),
-      render: (_value, record) => {
-        const url = Setting.getEffectiveAvatarUrl(record);
-        const avatar = (
-          <Avatar className="h-7 w-7 shrink-0 text-xs">
-            {url ? <AvatarImage src={url} alt={record.name} /> : null}
-            <AvatarFallback style={{backgroundColor: Setting.getAvatarColor(record.name), color: "#fff"}}>
-              {(record.name || "?").charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        );
-        return (
-            <div className="flex w-fit max-w-full items-center gap-3">
-              <UserProfileHoverCard user={record}>
-                {url ? (
-                  <a href={url} target="_blank" rel="noreferrer" className="shrink-0">{avatar}</a>
-                ) : (
-                  <span className="shrink-0 cursor-pointer" tabIndex={0}>{avatar}</span>
-                )}
-              </UserProfileHoverCard>
-              <div className="flex min-w-0 flex-col">
-                <span>{record.displayName}</span>
-                <span className="text-[13px] text-[#4b5672]">
-                  {record.name}
-                </span>
-              </div>
-            </div>
-        );
-      },
+      render: (_value, record) => <UserCell user={record} />,
     },
     textColumn({dataIndex: "affiliation", title: i18next.t("user:Affiliation"), width: 140, searchable: true}),
     {

@@ -2,6 +2,7 @@ import * as React from "react";
 import i18next from "i18next";
 import {Link} from "react-router-dom";
 import {Badge} from "@/components/ui/badge";
+import {UserCell} from "@/components/user/UserCell";
 import {Sheet, SheetContent, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {Switch} from "@/components/ui/switch";
 import {CodeEditor} from "@/components/common/CodeEditor";
@@ -19,7 +20,10 @@ const TRIGGERABLE_ACTIONS = ["signup", "login", "logout", "update-user", "new-us
 /** an M2M row's subject is an application credential ("app/<name>"), not a user */
 function RecordUserLink({organization, user}: {organization: string; user: string}) {
   const appPrefix = ["app/", "app-dcr/"].find((prefix) => user.startsWith(prefix));
-  const to = appPrefix ? `/applications/admin/${user.slice(appPrefix.length)}` : `/users/${organization}/${user}`;
+  if (!appPrefix) {
+    return <UserCell organization={organization} name={user} linkToUser />;
+  }
+  const to = `/applications/admin/${user.slice(appPrefix.length)}`;
 
   return (
     <Link to={to} className="underline-offset-4 hover:underline">
@@ -98,6 +102,15 @@ export default function RecordListPage() {
   const [detail, setDetail] = React.useState<any>(null);
 
   const columns: ColumnDef<any>[] = [
+    {
+      dataIndex: "user",
+      title: i18next.t("general:User"),
+      width: 200,
+      fixed: "left",
+      sortable: true,
+      searchable: true,
+      render: (value, record) => <RecordUserLink organization={record.organization} user={String(value ?? "")} />,
+    },
     textColumn({dataIndex: "name", title: i18next.t("general:Name"), width: 140, searchable: true}),
     textColumn({dataIndex: "id", title: i18next.t("general:ID"), width: 90, searchable: true}),
     clientIpColumn(),
@@ -121,14 +134,6 @@ export default function RecordListPage() {
           {value}
         </Link>
       ),
-    },
-    {
-      dataIndex: "user",
-      title: i18next.t("general:User"),
-      width: 130,
-      sortable: true,
-      searchable: true,
-      render: (value, record) => <RecordUserLink organization={record.organization} user={String(value ?? "")} />,
     },
     textColumn({
       dataIndex: "method",

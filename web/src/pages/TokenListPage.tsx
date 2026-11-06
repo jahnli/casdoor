@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import {Link} from "react-router-dom";
+import {UserCell} from "@/components/user/UserCell";
 import {CrudListPage} from "@/components/crud/CrudListPage";
 import {dateColumn, linkColumn, textColumn} from "@/components/crud/columns";
 import type {ColumnDef} from "@/components/crud/types";
@@ -14,7 +15,18 @@ export default function TokenListPage() {
   const organizationName = useOrganizationFilter();
 
   const columns: ColumnDef<any>[] = [
-    linkColumn({dataIndex: "name", to: (r) => `/tokens/${r.name}`, width: 170}),
+    {
+      dataIndex: "user",
+      title: i18next.t("general:User"),
+      width: 200,
+      fixed: "left",
+      sortable: true,
+      searchable: true,
+      render: (value, record) => (
+        <UserCell organization={record.organization} name={value} linkToUser />
+      ),
+    },
+    linkColumn({dataIndex: "name", to: (r) => `/tokens/${r.name}`, width: 170, fixed: false}),
     dateColumn(),
     {
       dataIndex: "application",
@@ -36,18 +48,6 @@ export default function TokenListPage() {
       searchable: true,
       render: (value) => (
         <Link to={`/organizations/${value}`} className="underline-offset-4 hover:underline">
-          {value}
-        </Link>
-      ),
-    },
-    {
-      dataIndex: "user",
-      title: i18next.t("general:User"),
-      width: 130,
-      sortable: true,
-      searchable: true,
-      render: (value, record) => (
-        <Link to={`/users/${record.organization}/${value}`} className="underline-offset-4 hover:underline">
           {value}
         </Link>
       ),
