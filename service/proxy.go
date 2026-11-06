@@ -166,7 +166,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		responseError(w, "Casdoor site error: site not found for host: %s", r.Host)
+		responseError(w, "Semi site error: site not found for host: %s", r.Host)
 		return
 	}
 
@@ -190,7 +190,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		responseError(w, "Casdoor site error: ACME HTTP-01 challenge failed, requestUri cannot match with challengeMap, requestUri = %s, challengeMap = %v", r.RequestURI, challengeMap)
+		responseError(w, "Semi site error: ACME HTTP-01 challenge failed, requestUri cannot match with challengeMap, requestUri = %s, challengeMap = %v", r.RequestURI, challengeMap)
 		return
 	}
 
@@ -226,7 +226,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 			case siteAuthNeedLogin:
 				casdoorClient, err := getCasdoorClientFromSite(site)
 				if err != nil {
-					responseError(w, "Casdoor site error: getCasdoorClientFromSite() error: %s", err.Error())
+					responseError(w, "Semi site error: getCasdoorClientFromSite() error: %s", err.Error())
 					return
 				}
 				if _, err = r.Cookie("casdoor_access_token"); err == nil {
@@ -238,7 +238,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 				responseForbidden(w, "Forbidden: %s", msg)
 				return
 			case siteAuthError:
-				responseError(w, "Casdoor site error: %s", msg)
+				responseError(w, "Semi site error: %s", msg)
 				return
 			}
 
@@ -248,7 +248,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 
 	host := site.GetHost()
 	if host == "" {
-		responseError(w, "Casdoor site error: targetUrl should not be empty for host: %s, site = %v", r.Host, site)
+		responseError(w, "Semi site error: targetUrl should not be empty for host: %s, site = %v", r.Host, site)
 		return
 	}
 
@@ -275,11 +275,11 @@ func evaluateSiteRules(site *object.Site, r *http.Request) (bool, int, string) {
 	case "", "Allow":
 		return true, 0, ""
 	case "Block":
-		return false, result.StatusCode, fmt.Sprintf("Blocked by Casdoor: %s", reason)
+		return false, result.StatusCode, fmt.Sprintf("Blocked by Semi: %s", reason)
 	case "Drop":
-		return false, result.StatusCode, fmt.Sprintf("Dropped by Casdoor: %s", reason)
+		return false, result.StatusCode, fmt.Sprintf("Dropped by Semi: %s", reason)
 	default:
-		return false, http.StatusInternalServerError, fmt.Sprintf("Casdoor site error: %s", reason)
+		return false, http.StatusInternalServerError, fmt.Sprintf("Semi site error: %s", reason)
 	}
 }
 

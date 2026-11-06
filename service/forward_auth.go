@@ -70,20 +70,20 @@ func HandleForwardAuth(w http.ResponseWriter, r *http.Request) {
 	scheme, host, uri := getForwardedRequest(r)
 	if host == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		responseErrorWithoutCode(w, "Casdoor forward auth error: the X-Forwarded-Host or X-Original-URL header is missing")
+		responseErrorWithoutCode(w, "Semi forward auth error: the X-Forwarded-Host or X-Original-URL header is missing")
 		return
 	}
 
 	site := getSiteByDomainWithWww(host)
 	if site == nil || site.CasdoorApplication == "" {
-		responseForbidden(w, "Casdoor forward auth error: no site with a Casdoor application is found for host: %s", host)
+		responseForbidden(w, "Semi forward auth error: no site with a Semi application is found for host: %s", host)
 		return
 	}
 
 	forwardedUrl, err := url.Parse(uri)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		responseErrorWithoutCode(w, "Casdoor forward auth error: invalid URI: %s", uri)
+		responseErrorWithoutCode(w, "Semi forward auth error: invalid URI: %s", uri)
 		return
 	}
 	isAuthRequest := r.Header.Get("X-Original-URL") != ""
@@ -117,7 +117,7 @@ func HandleForwardAuth(w http.ResponseWriter, r *http.Request) {
 	case siteAuthNeedLogin:
 		casdoorClient, err := getCasdoorClientFromSite(site)
 		if err != nil {
-			responseError(w, "Casdoor forward auth error: getCasdoorClientFromSite() error: %s", err.Error())
+			responseError(w, "Semi forward auth error: getCasdoorClientFromSite() error: %s", err.Error())
 			return
 		}
 		if _, err = r.Cookie("casdoor_access_token"); err == nil {
@@ -136,7 +136,7 @@ func HandleForwardAuth(w http.ResponseWriter, r *http.Request) {
 		responseForbidden(w, "Forbidden: %s", msg)
 		return
 	case siteAuthError:
-		responseError(w, "Casdoor forward auth error: %s", msg)
+		responseError(w, "Semi forward auth error: %s", msg)
 		return
 	}
 

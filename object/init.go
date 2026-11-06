@@ -284,7 +284,7 @@ func initBuiltInApplication() {
 		Owner:          "admin",
 		Name:           "app-built-in",
 		CreatedTime:    util.GetCurrentTime(),
-		DisplayName:    "Casdoor",
+		DisplayName:    "Semi",
 		Category:       "Default",
 		Type:           "All",
 		Scopes:         []*ScopeItem{},

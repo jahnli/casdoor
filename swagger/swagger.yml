@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  title: Casdoor RESTful API
-  description: Swagger Docs of Casdoor Backend API
+  title: Semi RESTful API
+  description: Swagger Docs of Semi Backend API
   version: 1.503.0
   contact:
     email: casbin@googlegroups.com

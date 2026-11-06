@@ -577,7 +577,7 @@ func installThemeIntegration(integration *Integration, item *MarketplaceIntegrat
 		isSafe := isCssSafeFor(theme.FormCss, prefixes) && isCssSafeFor(theme.FormCssMobile, prefixes) &&
 			isHtmlSafeFor(theme.FormSideHtml, prefixes) && isHtmlSafeFor(theme.FooterHtml, prefixes)
 		if !isSafe {
-			return fmt.Errorf("the theme: %s uses HTML or loads files that this Casdoor only lets a global admin set", item.Id)
+			return fmt.Errorf("the theme: %s uses HTML or loads files that this Semi only lets a global admin set", item.Id)
 		}
 	}
 

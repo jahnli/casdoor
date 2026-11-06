@@ -330,7 +330,7 @@ export function AuthLayout({
             >
               {hideLogo ? null : (
                 <div className="login-logo-box mb-6 flex justify-center">
-                  <img src={logo} alt={application?.displayName ?? "Casdoor"} className="h-auto max-h-32 w-[220px] max-w-full object-contain" />
+                  <img src={logo} alt={application?.displayName ?? "Semi"} className="h-auto max-h-32 w-[220px] max-w-full object-contain" />
                 </div>
               )}
 

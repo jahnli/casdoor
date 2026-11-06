@@ -316,7 +316,7 @@ func StartUpgrade(version string, operator string) error {
 	if !info.CanUpgrade {
 		switch {
 		case info.DeploymentType != DeploymentRelease:
-			return fmt.Errorf("only an official release binary can upgrade itself, this Casdoor is deployed as: %s", info.DeploymentType)
+			return fmt.Errorf("only an official release binary can upgrade itself, this Semi is deployed as: %s", info.DeploymentType)
 		case info.IsUpgradeDisabled:
 			return fmt.Errorf("upgrading is disabled by disableUpgrade in app.conf")
 		case info.IsCheckDisabled:
@@ -369,7 +369,7 @@ func runUpgrade(release *Release) {
 		logs.Error("restart after the upgrade to %s failed: %s", release.TagName, err.Error())
 		setStatus(func(status *UpgradeStatus) {
 			status.State = StateFailed
-			status.Error = fmt.Sprintf("%s is installed but Casdoor failed to restart, please restart it manually: %s", release.TagName, err.Error())
+			status.Error = fmt.Sprintf("%s is installed but Semi failed to restart, please restart it manually: %s", release.TagName, err.Error())
 		})
 	}
 }
