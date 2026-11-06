@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest a new feature or an improvement for Casdoor
+description: Suggest a new feature or an improvement for Semi
 labels: ["enhancement"]
 body:
   - type: markdown
@@ -12,7 +12,7 @@ body:
     id: problem
     attributes:
       label: Problem
-      description: What you are trying to do and why Casdoor does not support it today
+      description: What you are trying to do and why Semi does not support it today
     validations:
       required: true
   - type: textarea

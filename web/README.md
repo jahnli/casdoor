@@ -1,6 +1,6 @@
-# web — the Casdoor console
+# web — the Semi console
 
-The Casdoor frontend, on **shadcn/ui + Tailwind CSS** and built with Vite. It
+The Semi frontend, on **shadcn/ui + Tailwind CSS** and built with Vite. It
 started as a port of the Ant Design console, which has been removed. This is
 the only frontend and talks to the Go backend over the same REST endpoints.
 
@@ -65,7 +65,7 @@ spec reaches one column's sort, search or filter control; an open filter menu is
 
 Two things worth knowing when writing a spec:
 
-- Match intercepts on `pathname`, not a URL glob. Casdoor's query string is
+- Match intercepts on `pathname`, not a URL glob. Semi's query string is
   `?id=<owner>/<name>`, and the `/` in it makes minimatch read the object name as
   another path segment, so `**/api/get-entry*` never matches.
 - On Windows, Vite binds `localhost` to `::1` only, while Cypress's Node-side
@@ -123,7 +123,7 @@ organization the visitor belongs to first; a visitor already signed in to that
 organization gets a one-click "continue as" panel above the form, which is how
 an OAuth or device request is approved. Sign-up runs the same client-side rules
 the antd Form does — each signup item's own `regex` included — and reports them
-in Casdoor's own wording rather than the browser's.
+in Semi's own wording rather than the browser's.
 
 **Captcha** — the full rule handling of the antd frontend (`Never` / `Always` /
 `Dynamic` / `Internet-Only`), as a dialog or inline in the sign-in form, for both
@@ -202,10 +202,15 @@ an existing installation.
 
 **Branding** — the console takes its tab title and favicon from the signed-in
 user's organization, brands the sidebar with that organization's logo (its
-`logoDark` in dark mode, its favicon when the sidebar is collapsed), and both the
-console and the sign-in pages close with the Casdoor wordmark rather than the
-word — the same footer image the antd frontend renders, and the one
-`Setting.getDefaultFooterContent()` writes into an application's `footerHtml`.
+`logoDark` in dark mode, its favicon when the sidebar is collapsed).
+The console renders the organization's default application's `footerHtml`;
+sign-in pages render the current application's `footerHtml`. Configured HTML
+passes through `getSafeHtml`. With empty footer HTML and the current
+`Conf.CustomFooter = null`, no footer element or reserved space is rendered,
+and there is no automatic "Powered by" footer. The application editor's reset
+action still uses `Setting.getDefaultFooterContent()`, which generates the
+upstream "Powered by Casdoor" HTML and logo; saving that HTML explicitly
+enables it. No Semi wordmark image is substituted automatically.
 `index.html` ships the `http://10.16.7.144:9002/casdoor/img/favicon.png` default
 that `routers/branding.go` rewrites, so the first paint is branded too. Default
 images and icons use `staticBaseUrl`; the frontend and backend both fall back to
@@ -250,7 +255,7 @@ marked `Required` gets a warning and the redirect to `/mfa/setup`.
 ## Deliberately not ported
 
 - **Web3** (MetaMask / Web3-Onboard): the whole `Web3` provider category was
-  removed from Casdoor, backend included.
+  removed from Semi, backend included.
 
 ## Still to do
 

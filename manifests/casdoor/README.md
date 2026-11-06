@@ -1,10 +1,10 @@
-# Casdoor
+# Semi
 
-[Casdoor](https://casdoor.ai) is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This is the official Helm chart, published with every Casdoor release.
+Semi is an open-source Identity and Access Management (IAM) / single sign-on platform with a web UI, supporting OAuth 2.0, OIDC, SAML, CAS, LDAP, SCIM, WebAuthn, TOTP and MFA. This document describes Semi deployment based on the upstream [Casdoor](https://casdoor.ai) Helm chart. The installation commands below reference the upstream chart and images; configure the image values for your Semi deployment.
 
-- Documentation: <https://casdoor.ai/docs/basic/try-with-helm>
-- Source: <https://github.com/casdoor/casdoor/tree/master/manifests/casdoor>
-- Demo: <https://door.casdoor.com>
+- Upstream documentation: <https://casdoor.ai/docs/basic/try-with-helm>
+- Upstream chart source: <https://github.com/casdoor/casdoor/tree/master/manifests/casdoor>
+- Upstream Casdoor demo: <https://door.casdoor.com>
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ helm install casdoor oci://ghcr.io/casdoor/helm-charts/casdoor \
   -f my-values.yaml
 ```
 
-The chart does not expose Casdoor outside the cluster by default. Use `kubectl port-forward svc/<service-name> 8000:8000` to try it, or enable Ingress or the Gateway API below.
+The chart does not expose Semi outside the cluster by default. Use `kubectl port-forward svc/<service-name> 8000:8000` to try it, or enable Ingress or the Gateway API below.
 
 ## Upgrading
 
@@ -49,18 +49,18 @@ Override any value from [values.yaml](https://github.com/casdoor/casdoor/blob/ma
 
 | Parameter | Description | Default |
 |---|---|---|
-| `replicaCount` | Number of Casdoor pods | `1` |
+| `replicaCount` | Number of Semi pods | `1` |
 | `image.repository` | Docker image repository | `casbin` |
 | `image.name` | Docker image name | `casdoor` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `image.tag` | Image tag (defaults to chart appVersion) | `""` |
-| `config` | Casdoor `app.conf` content (Go template) | See values.yaml |
+| `config` | Semi `app.conf` content (Go template) | See values.yaml |
 | `configFromSecret` | Name of an existing Secret holding `app.conf` | `""` |
 | `initAdminPassword.value` | Password of `built-in/admin` for a new database; use `existingSecret` in production | `""` |
 | `initAdminPassword.existingSecret` | Name of an existing Secret that holds the initial password | `""` |
 | `initAdminPassword.existingSecretKey` | Key of the initial password in `existingSecret` | `initAdminPassword` |
 
-The initial admin password is used only when Casdoor creates the database, and only for `built-in/admin`. Read it from a Secret instead of putting it in the values file:
+The initial admin password is used only when Semi creates the database, and only for `built-in/admin`. Read it from a Secret instead of putting it in the values file:
 
 ```yaml
 initAdminPassword:
@@ -92,7 +92,7 @@ kubectl create secret generic casdoor-admin --from-literal=initAdminPassword='<a
 
 ### Declarative configuration (init data)
 
-Organizations, applications, users, providers, roles, permissions and the other Casdoor objects can be kept in the values file, in the [init data](https://casdoor.ai/docs/deployment/data-initialization) format. The chart stores them in a Secret, Casdoor applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
+Organizations, applications, users, providers, roles, permissions and the other Semi objects can be kept in the values file, in the [init data](https://casdoor.ai/docs/deployment/data-initialization) format. The chart stores them in a Secret, Semi applies them at startup and checks them for changes every `initData.watchInterval` seconds, so a `helm upgrade` that changes them takes effect without restarting the pods.
 
 ```yaml
 initData:
@@ -118,7 +118,7 @@ initData:
         signupApplication: app-acme
 ```
 
-With `initData.merge: true` (the default), an object that already exists only gets the fields written in the data, its other fields keep the values edited in the web UI. A user's `password` is only used when the user is created, so users can change their own passwords. Objects removed from the data are not deleted from Casdoor.
+With `initData.merge: true` (the default), an object that already exists only gets the fields written in the data, its other fields keep the values edited in the web UI. A user's `password` is only used when the user is created, so users can change their own passwords. Objects removed from the data are not deleted from Semi.
 
 | Parameter | Description | Default |
 |---|---|---|
@@ -139,7 +139,7 @@ With `initData.merge: true` (the default), an object that already exists only ge
 
 ### Ingress
 
-Exposes Casdoor via a standard Kubernetes `Ingress` resource.
+Exposes Semi via a standard Kubernetes `Ingress` resource.
 
 | Parameter | Description | Default |
 |---|---|---|
@@ -170,7 +170,7 @@ ingress:
 
 ### Gateway API
 
-Exposes Casdoor via the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) (`HTTPRoute` + optional `Gateway`). This is the modern successor to Ingress, supported by Istio, Envoy Gateway, Cilium, Kong, NGINX Gateway Fabric, and others.
+Exposes Semi via the [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) (`HTTPRoute` + optional `Gateway`). This is the modern successor to Ingress, supported by Istio, Envoy Gateway, Cilium, Kong, NGINX Gateway Fabric, and others.
 
 **Requires:** Gateway API CRDs (`gateway.networking.k8s.io/v1`) installed in the cluster and a compatible controller running.
 
@@ -282,7 +282,7 @@ gatewayApi:
 | `initContainers` | Init container definitions (YAML string) | `""` |
 | `extraContainersEnabled` | Enable sidecar containers | `false` |
 | `extraContainers` | Sidecar container definitions (YAML string) | `""` |
-| `extraVolumeMounts` | Extra volume mounts for the Casdoor container | `[]` |
+| `extraVolumeMounts` | Extra volume mounts for the Semi container | `[]` |
 | `extraVolumes` | Extra volumes for the pod | `[]` |
 | `defaultConfigVolumeEnabled` | Mount the default config volume at `/conf` | `true` |
 
@@ -299,7 +299,7 @@ gatewayApi:
 | Parameter | Description | Default |
 |---|---|---|
 | `probe.path` | HTTP path requested by all probes | `/api/health` |
-| `probe.startup.enabled` | Enable startup probe, which holds off the other probes until Casdoor has started | `true` |
+| `probe.startup.enabled` | Enable startup probe, which holds off the other probes until Semi has started | `true` |
 | `probe.startup.initialDelaySeconds` | Seconds before the first startup check | `0` |
 | `probe.startup.periodSeconds` | Seconds between startup checks | `10` |
 | `probe.startup.timeoutSeconds` | Seconds before a startup check times out | `5` |

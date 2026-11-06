@@ -1,5 +1,5 @@
 name: Bug report
-description: Report something in Casdoor that does not work as expected
+description: Report something in Semi that does not work as expected
 labels: ["bug"]
 body:
   - type: markdown
@@ -11,7 +11,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Casdoor version
+      label: Semi version
       description: The release (e.g. `v4.22.0`) or commit you run, shown on the System Info page (`/sysinfo`) of the admin console
     validations:
       required: true
@@ -50,7 +50,7 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
-      description: Starting from a fresh Casdoor or [the demo site](https://door.casdoor.com) if possible, include the relevant organization, application or provider settings
+      description: Starting from a fresh Semi installation if possible, include the relevant organization, application or provider settings; note whether the issue also occurs on [the upstream Casdoor demo](https://door.casdoor.com)
       placeholder: |
         1. Go to ...
         2. Click ...

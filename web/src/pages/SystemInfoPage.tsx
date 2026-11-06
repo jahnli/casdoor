@@ -512,7 +512,7 @@ export default function SystemInfoPage() {
             {i18next.t("system:An Identity and Access Management (IAM) / Single-Sign-On (SSO) platform with web UI supporting OAuth 2.0, OIDC, SAML and CAS")}
           </p>
           <div>
-            GitHub:{" "}
+            GitHub (upstream):{" "}
             <a href="https://github.com/casdoor/casdoor" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
               Casdoor
             </a>

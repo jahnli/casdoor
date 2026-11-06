@@ -364,7 +364,7 @@ func Start() {
 	}
 
 	go func() {
-		fmt.Printf("Casdoor site proxy running on: http://127.0.0.1:%d\n", gatewayHttpPort)
+		fmt.Printf("Semi site proxy running on: http://127.0.0.1:%d\n", gatewayHttpPort)
 		err := http.ListenAndServe(fmt.Sprintf(":%d", gatewayHttpPort), serverMux)
 		if err != nil {
 			logs.Error(err)
@@ -372,7 +372,7 @@ func Start() {
 	}()
 
 	go func() {
-		fmt.Printf("Casdoor site proxy running on: https://127.0.0.1:%d\n", gatewayHttpsPort)
+		fmt.Printf("Semi site proxy running on: https://127.0.0.1:%d\n", gatewayHttpsPort)
 		server := &http.Server{
 			Handler: serverMux,
 			Addr:    fmt.Sprintf(":%d", gatewayHttpsPort),

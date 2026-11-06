@@ -180,7 +180,7 @@ func applyCleanup(engine *xorm.Engine, changes []change) error {
 }
 
 func run() error {
-	config := flag.String("config", "conf/app.conf", "Casdoor configuration file")
+	config := flag.String("config", "conf/app.conf", "Semi configuration file")
 	apply := flag.Bool("apply", false, "apply the displayed cleanup (default: read-only preview)")
 	flag.Parse()
 	if err := web.LoadAppConfig("ini", *config); err != nil {
@@ -206,7 +206,7 @@ func run() error {
 	}
 	fmt.Printf("Planned changes: %d\n", len(changes))
 	if !*apply {
-		fmt.Println("Preview only. Stop Casdoor and back up the database before running with -apply.")
+		fmt.Println("Preview only. Stop Semi and back up the database before running with -apply.")
 		return nil
 	}
 	if err := applyCleanup(adapter.Engine, changes); err != nil {

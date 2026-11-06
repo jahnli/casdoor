@@ -2,27 +2,27 @@
 
 <div align="center">
   <a href="https://casdoor.ai">
-    <img src="https://cdn.casbin.org/img/casdoor-logo_1185x256.png" alt="Casdoor" width="500">
+    <img src="https://cdn.casbin.org/img/casdoor-logo_1185x256.png" alt="Upstream Casdoor logo" width="500">
   </a>
 
   <h3>An open-source, self-hosted identity and access management platform</h3>
 
   <p>
-    Casdoor is a single sign-on (SSO) and authentication server with a web console.<br>
+    Semi is a single sign-on (SSO) and authentication server with a web console.<br>
     It speaks <strong>OAuth&nbsp;2.0</strong>, <strong>OIDC</strong>, <strong>SAML&nbsp;2.0</strong>, <strong>CAS</strong>, <strong>LDAP</strong>, <strong>SCIM&nbsp;2.0</strong>, <strong>WebAuthn</strong>, <strong>TOTP/MFA</strong> and <strong>MCP</strong>,<br>
     and connects to Google Workspace, Microsoft Entra ID (Azure AD), GitHub and many other identity providers.
   </p>
 
   <p>
-    <a href="https://casdoor.ai"><strong>Website</strong></a> &middot;
-    <a href="https://casdoor.ai/docs/overview"><strong>Documentation</strong></a> &middot;
-    <a href="https://demo.casdoor.com"><strong>Live demo</strong></a> &middot;
+    <a href="https://casdoor.ai"><strong>Upstream website</strong></a> &middot;
+    <a href="https://casdoor.ai/docs/overview"><strong>Upstream documentation</strong></a> &middot;
+    <a href="https://demo.casdoor.com"><strong>Upstream demo</strong></a> &middot;
     <a href="https://discord.gg/5rPsrAzK7S"><strong>Discord</strong></a>
   </p>
 
   <p>
     <a href="https://github.com/casdoor/casdoor/releases/latest">
-      <img src="https://img.shields.io/github/v/release/casdoor/casdoor?style=flat-square&color=blue" alt="Release">
+      <img src="https://img.shields.io/github/v/release/casdoor/casdoor?style=flat-square&color=blue" alt="Upstream Casdoor release">
     </a>
     <a href="https://hub.docker.com/r/casbin/casdoor">
       <img src="https://img.shields.io/docker/pulls/casbin/casdoor?style=flat-square&color=brightgreen" alt="Docker Pulls">
@@ -51,24 +51,24 @@
 
 <div align="center">
   <a href="https://door.casdoor.com">
-    <img src="https://cdn.casbin.org/img/casdoor-signin.png" alt="Casdoor sign-in page with password, code, WebAuthn and Face ID tabs and social login icons" width="900">
+    <img src="https://cdn.casbin.org/img/casdoor-signin.png" alt="Upstream Casdoor sign-in page with password, code, WebAuthn and Face ID tabs and social login icons" width="900">
   </a>
-  <p><sub>The sign-in page your users see: password, email/SMS code, WebAuthn and Face ID, plus every social provider you enable.</sub></p>
+  <p><sub>Upstream Casdoor screenshot: password, email/SMS code, WebAuthn and Face ID, plus enabled social providers. Semi's local UI may differ.</sub></p>
 </div>
 
 <table>
   <tr>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com"><img src="https://cdn.casbin.org/img/casdoor-console.png" alt="Casdoor admin console dashboard with user, application and provider statistics"></a>
-      <sub><b>Admin console.</b> Users, tokens, organizations and providers at a glance.</sub>
+      <a href="https://door.casdoor.com"><img src="https://cdn.casbin.org/img/casdoor-console.png" alt="Upstream Casdoor admin console dashboard with user, application and provider statistics"></a>
+      <sub><b>Upstream Casdoor admin console.</b> Users, tokens, organizations and providers at a glance.</sub>
     </td>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com/applications"><img src="https://cdn.casbin.org/img/casdoor-applications.png" alt="Casdoor applications list showing several applications with their organizations and providers"></a>
-      <sub><b>Applications.</b> Every app that delegates login to Casdoor, across all organizations.</sub>
+      <a href="https://door.casdoor.com/applications"><img src="https://cdn.casbin.org/img/casdoor-applications.png" alt="Upstream Casdoor applications list showing several applications with their organizations and providers"></a>
+      <sub><b>Upstream Casdoor applications.</b> Apps that delegate login to Casdoor, across all organizations.</sub>
     </td>
     <td width="33%" valign="top" align="center">
-      <a href="https://door.casdoor.com/applications/admin/app-built-in"><img src="https://cdn.casbin.org/img/casdoor-application-providers.png" alt="Casdoor application settings, Providers tab, with per-provider signup, signin and unlink toggles"></a>
-      <sub><b>Application settings.</b> OAuth, SAML, providers and branding — no redeploy, no config file.</sub>
+      <a href="https://door.casdoor.com/applications/admin/app-built-in"><img src="https://cdn.casbin.org/img/casdoor-application-providers.png" alt="Upstream Casdoor application settings, Providers tab, with per-provider signup, signin and unlink toggles"></a>
+      <sub><b>Upstream Casdoor application settings.</b> OAuth, SAML, providers and branding.</sub>
     </td>
   </tr>
 </table>
@@ -79,7 +79,7 @@
 
 ## 🚀 Try it in 30 seconds
 
-No database and no config file needed. This runs Casdoor on SQLite with sample data:
+No database and no config file needed. This runs upstream Casdoor on SQLite with sample data; use your Semi image to evaluate the local fork:
 
 ```bash
 docker run -p 8000:8000 casbin/casdoor-all-in-one
@@ -95,7 +95,7 @@ Open <http://localhost:8000> and sign in:
 
 > The sign-in form has separate **organization** and **username** fields. Docs sometimes write this pair as `built-in/admin` — that is the same thing, not a username containing a slash.
 
-Prefer not to install anything? Use the hosted demos:
+Prefer not to install anything? Use the hosted upstream Casdoor demos:
 
 | Demo | URL | Notes |
 |------|-----|-------|
@@ -104,16 +104,16 @@ Prefer not to install anything? Use the hosted demos:
 
 Both accept the same `built-in` / `admin` / `123` credentials.
 
-## 🤔 Why Casdoor
+## 🤔 Why Semi
 
-Casdoor is a **complete identity provider**, not an authentication proxy and not a library you embed. It stores your users, issues the tokens, and gives you an admin console to manage all of it — so your applications can delegate login entirely and never handle a password themselves.
+Semi is a **complete identity provider**, not an authentication proxy and not a library you embed. It stores your users, issues the tokens, and gives you an admin console to manage all of it — so your applications can delegate login entirely and never handle a password themselves.
 
 - **One server, many protocols.** The same user directory is reachable over OAuth 2.0, OIDC, SAML 2.0, CAS, LDAP and SCIM, so a modern SPA and a legacy CAS-only app can share one set of accounts.
 - **Everything is editable in the UI.** Organizations, applications, providers, sign-in methods, email and SMS templates, and login-page branding are configured in the web console instead of in files you have to redeploy.
 - **Policy-based authorization built in.** Access rules are expressed with [Casbin](https://casbin.apache.org/) — ACL, RBAC, ABAC and custom models — rather than a fixed permission scheme.
 - **Straightforward to self-host.** A single Go binary plus a database. No JVM, no operator, no cluster required.
 
-If all you need is a login screen in front of an existing reverse proxy, a smaller tool may suit you better. Casdoor is for when you want to own the user directory itself.
+If all you need is a login screen in front of an existing reverse proxy, a smaller tool may suit you better. Semi is for when you want to own the user directory itself.
 
 ## 📦 Installation
 
@@ -125,7 +125,7 @@ Four supported paths, fastest first. All of them end up at <http://localhost:800
 docker run -p 8000:8000 casbin/casdoor-all-in-one
 ```
 
-Bundles SQLite and demo data into a single container. Ideal for a first look, but **not intended for production**: the data lives inside the container and disappears with it.
+The upstream Casdoor image bundles SQLite and demo data into a single container. Ideal for a first look, but **not intended for production**: the data lives inside the container and disappears with it. Use your Semi image for the local fork.
 
 Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
@@ -137,18 +137,18 @@ Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
 `.env` 缺失时可完全使用部署环境变量；文件不可读或语法错误时启动失败，错误信息不输出凭据。`.env` 和 `.env.*` 已加入 Git 和 Docker 构建排除规则，只有不含真实凭据的 `.env.example` 可提交。
 
-在 1Panel 的 Casdoor 容器中设置 `driverName`、`dataSourceName`、`dbName` 环境变量并重建或重启容器。单独把文件命名为 `.env` 不会让 Docker 自动向容器注入变量：直接运行镜像时使用 `docker run --env-file .env ...`；本仓库的 Compose 已显式传递这三个变量。环境文件的语法由对应启动工具解析，使用 Docker CLI `--env-file` 时不要给值额外添加外层引号。
+在 1Panel 的 Semi 容器中设置 `driverName`、`dataSourceName`、`dbName` 环境变量并重建或重启容器。单独把文件命名为 `.env` 不会让 Docker 自动向容器注入变量：直接运行镜像时使用 `docker run --env-file .env ...`；本仓库的 Compose 已显式传递这三个变量。环境文件的语法由对应启动工具解析，使用 Docker CLI `--env-file` 时不要给值额外添加外层引号。
 
-### Docker Compose — Casdoor with MySQL
+### Docker Compose — Semi with MySQL
 
-[`docker-compose.yml`](docker-compose.yml) starts Casdoor next to a MySQL 8 container.
+[`docker-compose.yml`](docker-compose.yml) starts Semi next to a MySQL 8 container.
 
 > **Two things to know before running it:**
 >
 > 1. Compose **builds the image from source** (Go backend plus React frontend). The first `docker compose up` takes several minutes, so it is not the quick-trial path — use the all-in-one image above for that.
 > 2. Without environment overrides, Compose connects to the bundled `db:3306` MySQL service using its demo credentials. The shell or root `.env` can override `driverName`, `dataSourceName` and `dbName`; keep real credentials out of tracked files.
 
-If `.env` points to an external PostgreSQL server, Casdoor connects there; this Compose stack still starts its bundled MySQL service. For an existing database deployment, configure the Casdoor container directly in 1Panel. To run the bundled stack:
+If `.env` points to an external PostgreSQL server, Semi connects there; this Compose stack still starts its bundled MySQL service. For an existing database deployment, configure the Semi container directly in 1Panel. To run the bundled stack:
 
 ```bash
 docker compose up
@@ -160,13 +160,13 @@ Guide: [Try with Docker](https://casdoor.ai/docs/basic/try-with-docker)
 
 ### Kubernetes — Helm
 
-Requires Helm v3 and a running cluster:
+Requires Helm v3 and a running cluster. The command below installs the upstream Casdoor chart and image; configure its image values for a Semi deployment:
 
 ```bash
 helm install casdoor oci://ghcr.io/casdoor/helm-charts/casdoor
 ```
 
-The chart does not expose Casdoor outside the cluster by default. To reach it, find the service and forward a port:
+The chart does not expose the deployed application outside the cluster by default. To reach it, find the service and forward a port:
 
 ```bash
 kubectl get svc
@@ -184,17 +184,19 @@ Guide: [Try with Helm](https://casdoor.ai/docs/basic/try-with-helm) &middot; Cha
 
 Organizations, applications, users, providers, roles and permissions can be kept in Git instead of being clicked together in the UI:
 
-- **Init data file**: Casdoor applies a JSON or YAML file at startup, and with `initDataMerge = true` and `initDataWatchInterval = 30` it applies every change to the file again without a restart, only touching the fields the file sets. The Helm chart exposes it as `initData` in its values ([chart README](manifests/casdoor/README.md#declarative-configuration-init-data)). Guide: [Data initialization](https://casdoor.ai/docs/deployment/data-initialization)
+- **Init data file**: Semi applies a JSON or YAML file at startup, and with `initDataMerge = true` and `initDataWatchInterval = 30` it applies every change to the file again without a restart, only touching the fields the file sets. The Helm chart exposes it as `initData` in its values ([chart README](manifests/casdoor/README.md#declarative-configuration-init-data)). Guide: [Data initialization](https://casdoor.ai/docs/deployment/data-initialization)
 - **Terraform**: the official [Terraform provider](https://registry.terraform.io/providers/casdoor/casdoor) manages the same objects through the API, with plan, import and drift detection.
 
 ### From source — for development
 
-Use this if you intend to modify Casdoor. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
+Use this if you intend to modify Semi. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
 
 ```bash
 git clone https://github.com/casdoor/casdoor.git
 cd casdoor
 ```
+
+These commands clone upstream Casdoor. Use your Semi fork's repository when developing Semi.
 
 Set `driverName`, `dataSourceName` and `dbName` in [`conf/app.conf`](conf/app.conf). For MySQL, create the `casdoor` database first, or start the server with `--createDatabase=true`. Then build the frontend and run the server:
 
@@ -211,7 +213,7 @@ Guide: [Server installation](https://casdoor.ai/docs/basic/server-installation)
 At this point you have a running identity provider with nothing connected to it yet. Next:
 
 1. **Change the `admin` password.** `123` is a demo credential and must not survive contact with production.
-2. **[Connect your first application](https://casdoor.ai/docs/how-to-connect/overview)** — create an Application in the console, copy its Client ID and Client Secret, and point your app's OAuth/OIDC client at Casdoor. For Grafana, GitLab, Nextcloud and other popular apps, open **Marketplace** in the console instead: one click creates the application, and the setup guide shows the app's settings with your values filled in.
+2. **[Connect your first application](https://casdoor.ai/docs/how-to-connect/overview)** — create an Application in the console, copy its Client ID and Client Secret, and point your app's OAuth/OIDC client at Semi. For Grafana, GitLab, Nextcloud and other popular apps, open **Marketplace** in the console instead: one click creates the application, and the setup guide shows the app's settings with your values filled in.
 3. **[Add an identity provider](https://casdoor.ai/docs/provider/overview)** if you want Google, GitHub or Entra ID sign-in.
 4. **[Pick an SDK](https://casdoor.ai/docs/category/integrations)** for your language, or call the [Public API](https://casdoor.ai/docs/basic/public-api) directly.
 
@@ -225,7 +227,7 @@ At this point you have a running identity provider with nothing connected to it 
 - **LDAP** — sync from a directory, or serve as one
 - **WebAuthn / passkeys** — passwordless sign-in
 - **TOTP / MFA** — multi-factor authentication, including email and SMS codes
-- **[Casdoor Authenticator](https://app.casdoor.ai)** — open-source TOTP app for Android and iOS that syncs your MFA accounts with Casdoor ([source](https://github.com/casdoor/casdoor-authenticator))
+- **[Casdoor Authenticator](https://app.casdoor.ai)** — open-source TOTP app for Android and iOS that syncs your MFA accounts with Semi ([source](https://github.com/casdoor/casdoor-authenticator))
 - **Face ID** — biometric sign-in
 
 **🏢 Organizations and access control**
@@ -252,31 +254,31 @@ At this point you have a running identity provider with nothing connected to it 
 
 **🧩 Marketplace**
 
-Install ready-made integrations from the **Marketplace** page of the console. Casdoor creates the objects with your values filled in, and uninstalling removes them or restores what was there before. Browse them at **[marketplace.casdoor.com](https://marketplace.casdoor.com)**; contributions go to [casdoor-integrations](https://github.com/casdoor/casdoor-integrations).
+Install ready-made integrations from the **Marketplace** page of the console. Semi creates the objects with your values filled in, and uninstalling removes them or restores what was there before. Browse them at **[marketplace.casdoor.com](https://marketplace.casdoor.com)**; contributions go to [casdoor-integrations](https://github.com/casdoor/casdoor-integrations).
 
 - **App integrations** — single sign-on for Grafana, GitLab, Nextcloud, Vaultwarden, Argo CD, Immich, Open WebUI, Portainer, Gitea and Proxmox VE, with a step-by-step guide for the app's side
-- **Identity provider templates** — sign in to Casdoor with Keycloak, authentik, ZITADEL, Authelia or GitLab Self-Managed
+- **Identity provider templates** — sign in to Semi with Keycloak, authentik, ZITADEL, Authelia or GitLab Self-Managed
 - **Sign-in themes** — login page designs you can preview on your own application before installing
 
 ## 🧱 Technology stack
 
-Casdoor is a frontend–backend separated application:
+Semi is a frontend–backend separated application:
 
 - **Backend** — Go with the [Beego](https://github.com/beego/beego) framework, exposing REST APIs ([repository root](https://github.com/casdoor/casdoor))
 - **Frontend** — React 18 with [shadcn/ui](https://ui.shadcn.com/) on Tailwind CSS, built with Vite ([`web/`](web)). The previous Ant Design console has been removed.
 - **Database** — MySQL, PostgreSQL, SQLite, SQL Server and others through [XORM](https://xorm.io/)
-- **Cache** — Redis, optional; needed if you run more than one Casdoor replica
+- **Cache** — Redis, optional; needed if you run more than one Semi replica
 
 ## 📖 Documentation
 
 This fork omits user points, karma, ranking, and initial-score settings from the UI, API, tokens, and new database schemas. For existing databases, use the [user-metrics cleanup tool](cmd/remove-user-metrics/README.md) to preview and apply the removal of old columns and configuration.
 
-The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/overview)**. Common starting points:
+The upstream Casdoor documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/overview)**; local Semi behavior may differ. Common starting points:
 
 | I want to… | Go to |
 |------------|-------|
-| Install Casdoor | [From source](https://casdoor.ai/docs/basic/server-installation) &middot; [Docker](https://casdoor.ai/docs/basic/try-with-docker) &middot; [Helm](https://casdoor.ai/docs/basic/try-with-helm) |
-| Connect my application | [How to connect to Casdoor](https://casdoor.ai/docs/how-to-connect/overview) |
+| Install Semi | [From source](https://casdoor.ai/docs/basic/server-installation) &middot; [Docker](https://casdoor.ai/docs/basic/try-with-docker) &middot; [Helm](https://casdoor.ai/docs/basic/try-with-helm) |
+| Connect my application | [How to connect to Semi](https://casdoor.ai/docs/how-to-connect/overview) |
 | Use the API | [Public API](https://casdoor.ai/docs/basic/public-api) &middot; [Swagger UI](https://door.casdoor.com/swagger) |
 | Choose an SDK | [Integrations](https://casdoor.ai/docs/category/integrations) |
 | Deploy to production | [Deployment](https://casdoor.ai/docs/category/deployment) |
@@ -284,7 +286,7 @@ The full documentation lives at **[casdoor.ai/docs](https://casdoor.ai/docs/over
 
 ## 🔌 SDKs and integrations
 
-Official SDKs and framework integrations, by language:
+Upstream Casdoor SDKs and framework integrations, by language:
 
 - **Go** — [casdoor-go-sdk](https://github.com/casdoor/casdoor-go-sdk)
 - **Java** — [casdoor-java-sdk](https://github.com/casdoor/casdoor-java-sdk) &middot; [Spring Boot starter](https://github.com/casdoor/casdoor-spring-boot-starter)
@@ -301,10 +303,10 @@ The complete list, including reverse proxies and third-party applications, is in
 
 **Please do not report security vulnerabilities in public GitHub issues.** Email <admin@casdoor.org> instead — [SECURITY.md](SECURITY.md) has the full policy and disclosure process.
 
-Before exposing a Casdoor instance to the internet:
+Before exposing a Semi instance to the internet:
 
 - Change the built-in `admin` password. Never ship the demo credential `123`.
-- Serve Casdoor over HTTPS only, and set `origin` in [`conf/app.conf`](conf/app.conf) to your public URL.
+- Serve Semi over HTTPS only, and set `origin` in [`conf/app.conf`](conf/app.conf) to your public URL.
 - Review [`conf/app.conf`](conf/app.conf) for values inherited from the sample file, especially `dataSourceName` and any provider secrets.
 - Set `runmode = prod` and keep `showSql = false` in production.
 
@@ -332,13 +334,13 @@ Casdoor is free and open source. If it saves you time, consider supporting its d
 
 ## 📄 License
 
-Casdoor is licensed under the [Apache License 2.0](LICENSE).
+Semi is licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
 <div align="center">
 
-If Casdoor is useful to you, a star helps other people find it.
+If Semi is useful to you, a star helps other people find it.
 
 <a href="https://github.com/casdoor/casdoor/stargazers"><img src="https://img.shields.io/github/stars/casdoor/casdoor?style=social&logo=github&label=Star" alt="GitHub Stars"></a>
 
