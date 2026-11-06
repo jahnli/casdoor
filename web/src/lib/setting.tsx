@@ -1978,7 +1978,7 @@ export function getDefaultHtmlEmailContent() {
     <p>Semi Team</p>
     <hr>
     <div class="footer">
-        <p>For more info about the upstream project, please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>For more info about Semi, please refer to <a href="http://semi-tech.com/">http://semi-tech.com/</a></p>
     </div>
 </div>
 </body>
@@ -2020,7 +2020,7 @@ export function getDefaultInvitationHtmlEmailContent() {
     <p>Semi Team</p>
     <hr>
     <div class="footer">
-        <p>For more info about the upstream project, please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>For more info about Semi, please refer to <a href="http://semi-tech.com/">http://semi-tech.com/</a></p>
     </div>
 </div>
 </body>

@@ -534,14 +534,14 @@ export default function SystemInfoPage() {
           </div>
           <div>
             {i18next.t("system:Official website")}:{" "}
-            <a href="https://casdoor.org" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
-              https://casdoor.org
+            <a href="http://semi-tech.com/" target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
+              http://semi-tech.com/
             </a>
           </div>
           <div>
             {i18next.t("system:Community")}:{" "}
             <a
-              href="https://casdoor.org/#:~:text=Casdoor%20API-,Community,-GitHub"
+              href="http://semi-tech.com/"
               target="_blank"
               rel="noreferrer"
               className="underline-offset-4 hover:underline"

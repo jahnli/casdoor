@@ -18,7 +18,7 @@ export const TourObj: Record<string, TourStep[]> = {
   home: [
     {
       title: "Welcome to semi",
-      description: "You can learn more about the use of Semi at https://casdoor.org/.",
+      description: "You can learn more about the use of Semi at http://semi-tech.com/.",
       coverUrl: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
     },
     {
