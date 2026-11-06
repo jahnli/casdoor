@@ -31,25 +31,6 @@ import {useAccount} from "@/hooks/use-account";
 import {useIsDark} from "@/hooks/use-theme";
 import {cn} from "@/lib/utils";
 
-const OPEN_GROUPS_KEY = "casdoor.openNavGroups";
-
-function readOpenGroups(): string[] | null {
-  try {
-    const raw = localStorage.getItem(OPEN_GROUPS_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeOpenGroups(keys: string[]) {
-  try {
-    localStorage.setItem(OPEN_GROUPS_KEY, JSON.stringify(keys));
-  } catch {
-    // a blocked store just means the groups reopen on the active one next visit
-  }
-}
-
 /**
  * An external nav entry opens in a new tab; everything else is a router link.
  *
@@ -196,25 +177,12 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
     return location.pathname === "/" ? "/home" : groups[0]?.key;
   }, [groups, location.pathname]);
 
-  const [openGroups, setOpenGroups] = React.useState<string[]>(() => readOpenGroups() ?? []);
-
-  React.useEffect(() => {
-    if (activeGroupKey && !openGroups.includes(activeGroupKey)) {
-      setOpenGroups((previous) => {
-        const next = [...previous, activeGroupKey];
-        writeOpenGroups(next);
-        return next;
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeGroupKey]);
+  const [closedGroups, setClosedGroups] = React.useState<string[]>([]);
 
   const setGroupOpen = (key: string, open: boolean) => {
-    setOpenGroups((previous) => {
-      const next = open ? [...new Set([...previous, key])] : previous.filter((k) => k !== key);
-      writeOpenGroups(next);
-      return next;
-    });
+    setClosedGroups((previous) =>
+      open ? previous.filter((k) => k !== key) : [...new Set([...previous, key])],
+    );
   };
 
   return (
@@ -257,7 +225,7 @@ export function AppSidebar({onNavigate}: {onNavigate?: () => void}) {
                     <ExpandedGroup
                       key={group.key}
                       group={group}
-                      open={openGroups.includes(group.key)}
+                      open={!closedGroups.includes(group.key)}
                       onOpenChange={(open) => setGroupOpen(group.key, open)}
                       active={activeGroupKey === group.key}
                       isItemActive={isItemActive}
