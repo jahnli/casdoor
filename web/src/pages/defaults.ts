@@ -65,9 +65,10 @@ export function newApplication(account: Account) {
     scopes: [],
     logo: `${Setting.StaticBaseUrl}/img/casdoor-logo_1185x256.png`,
     enablePassword: true,
-    enableSignUp: true,
+    enableSignUp: false,
     disableSignin: false,
-    enableSigninSession: false,
+    enableSigninSession: true,
+    enableAutoSignin: true,
     enableCodeSignin: false,
     enableSamlCompress: false,
     disableSamlAttributes: false,
@@ -100,9 +101,9 @@ export function newApplication(account: Account) {
     // "defaultTokenFormat" and "defaultTokenFields" by the backend
     tokenFormat: "",
     tokenFields: [],
-    expireInHours: 24 * 7,
+    expireInHours: 1,
     refreshExpireInHours: 24 * 7,
-    cookieExpireInHours: 24 * 30,
+    cookieExpireInHours: 24 * 7,
     formOffset: 2,
   };
 }

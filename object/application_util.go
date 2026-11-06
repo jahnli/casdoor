@@ -130,7 +130,7 @@ func extendApplicationWithSigninItems(application *Application) (err error) {
 		application.SigninItems = append(application.SigninItems, signinItem)
 		signinItem = &SigninItem{
 			Name:        "Forgot password?",
-			Visible:     true,
+			Visible:     false,
 			CustomCss:   ".login-forget-password {\n    display: inline-flex;\n    justify-content: space-between;\n    width: 320px;\n    margin-bottom: 25px;\n}",
 			Placeholder: "",
 			Rule:        "None",
