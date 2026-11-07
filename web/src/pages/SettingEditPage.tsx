@@ -23,6 +23,7 @@ export default function SettingEditPage() {
       suffix: i18next.t("usage:seconds"),
     },
     {type: "number", name: "recordRetentionDays", labelKey: "setting:Default record retention days", min: 0},
+    {type: "code", name: "headHtml", labelKey: "setting:Head HTML", language: "html"},
   ];
 
   return (

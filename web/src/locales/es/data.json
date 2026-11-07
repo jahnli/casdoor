@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "Usar correo electrónico como NameID - Información adicional",
     "Used for": "Se usa para",
     "Vertical": "Disposición vertical",
-    "You are unexpected to see this prompt page": "Es inesperado ver esta página de inicio"
+    "You are unexpected to see this prompt page": "Es inesperado ver esta página de inicio",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Clave de acceso",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "Solo puedes seleccionar un grupo físico",
     "You must select a picture first": "Primero debes seleccionar una imagen",
     "empty": "vacío",
-    "remove": "eliminar"
+    "remove": "eliminar",
+    "RADIUS Clients": "Clientes RADIUS"
   },
   "group": {
     "Edit Group": "Editar grupo",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "Se eliminará el proveedor {name} y se quitará de la aplicación a la que se añadió.",
     "Uninstall theme description": "La aplicación {name} recuperará el aspecto que tenía antes de instalar el tema.",
     "Uninstalled": "Desinstalado",
-    "Update available": "Actualización disponible"
+    "Update available": "Actualización disponible",
+    "Allowed hosts": "Hosts permitidos",
+    "Allowed hosts help": "Los únicos destinos a los que la acción puede enviar solicitudes. No puede leer archivos, la base de datos ni nada más de Semi.",
+    "SMS action client ID help": "La clave de API o el ID de cuenta que le dio el servicio de SMS. También puede introducirlo más tarde en la página del proveedor.",
+    "SMS action client secret help": "El secreto de API que le dio el servicio de SMS. También puede introducirlo más tarde en la página del proveedor.",
+    "SMS action install summary": "Añade un proveedor de SMS {name}. Su código se ejecuta dentro de Semi en un entorno aislado y solo puede enviar solicitudes a los hosts permitidos.",
+    "SMS action installed description": "Este proveedor de SMS ejecuta la acción. Introduzca sus claves, el remitente y la plantilla en la página del proveedor y añádalo a los proveedores de una aplicación.",
+    "Uninstall SMS action description": "Esto elimina el proveedor de SMS {name}. Las aplicaciones que lo usan ya no podrán enviar códigos de verificación con él."
   },
   "invitation": {
     "1 day": "1 día",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "La persona solicitando este permiso",
     "TreeNode": "Nodo del árbol",
     "Write": "Escribir"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Avanzado",
     "Agent ID": "Identificador de agente",
     "Agent ID - Tooltip": "Identificador único para el agente, utilizado para distinguir diferentes entidades de agentes",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "URL de información del usuario",
     "UserInfo URL - Tooltip": "URL de información de usuario",
     "Web": "Cliente web",
-    "admin (Shared)": "administrador (compartido)"
+    "admin (Shared)": "administrador (compartido)",
+    "Action - Tooltip": "La acción instalada desde el Marketplace cuyo código ejecuta este proveedor"
   },
   "record": {
     "Is triggered": "Fue activado",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "Máx. conexiones inactivas",
     "Max idle connections - Tooltip": "Número máximo de conexiones inactivas en el pool, 0 significa el valor predeterminado de 2",
     "Max open connections": "Máx. conexiones abiertas",
-    "Max open connections - Tooltip": "Número máximo de conexiones abiertas a la base de datos, 0 significa ilimitado"
+    "Max open connections - Tooltip": "Número máximo de conexiones abiertas a la base de datos, 0 significa ilimitado",
+    "Head HTML": "HTML de cabecera",
+    "Head HTML - Tooltip": "HTML de confianza que se inserta en el <head> de todas las páginas de todas las organizaciones, incluidas las páginas de inicio de sesión y la consola, p. ej. etiquetas <script> para cargar una biblioteca JavaScript. Solo los administradores globales pueden cambiarlo"
   },
   "signup": {
     "Accept": "Aceptar",
@@ -1356,7 +1372,8 @@
     "Nodes": "Nodos",
     "Public IP": "IP pública",
     "Public paths": "Rutas públicas"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "Token API / Contraseña",
     "AWS Access Key ID": "ID de clave de acceso de AWS",
     "AWS Region": "Región de AWS",
@@ -1655,5 +1672,14 @@
     "Unknown": "Desconocido",
     "Value": "Valor",
     "Webhook event replay triggered": "Reproducción del evento webhook activada"
+  },
+  "radiusClient": {
+    "Bound organization": "Organización vinculada",
+    "Bound organization - Tooltip": "Si se establece, este NAS solo puede autenticar usuarios de esta organización y el atributo Class no puede elegir otra. Déjelo vacío para seguir usando el atributo Class o radiusDefaultOrganization",
+    "Edit RADIUS Client": "Editar cliente RADIUS",
+    "IP ranges": "Rangos de IP",
+    "IP ranges - Tooltip": "Direcciones IP de origen o rangos CIDR de este NAS, separados por comas, p. ej. 192.168.20.50,10.0.0.0/24. Si coinciden varios clientes, gana el rango más específico",
+    "Shared secret": "Secreto compartido",
+    "Shared secret - Tooltip": "El secreto compartido RADIUS configurado en este NAS. Las solicitudes de IP que no coinciden con ningún cliente usan radiusSecret de app.conf"
   }
 }

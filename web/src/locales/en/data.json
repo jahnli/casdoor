@@ -211,7 +211,11 @@
     "Use Email as NameID - Tooltip": "Use Email as NameID",
     "Used for": "Used for",
     "Vertical": "Vertical",
-    "You are unexpected to see this prompt page": "You are unexpected to see this prompt page"
+    "You are unexpected to see this prompt page": "You are unexpected to see this prompt page",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Access secret",
@@ -683,7 +687,8 @@
     "You can only select one physical group": "You can only select one physical group",
     "You must select a picture first": "You must select a picture first",
     "empty": "empty",
-    "remove": "remove"
+    "remove": "remove",
+    "RADIUS Clients": "RADIUS Clients"
   },
   "group": {
     "Edit Group": "Edit Group",
@@ -734,7 +739,14 @@
     "Uninstall provider description": "This deletes the provider {name} and removes it from the application it was added to.",
     "Uninstall theme description": "This restores the look the application {name} had before the theme was installed.",
     "Uninstalled": "Uninstalled",
-    "Update available": "Update available"
+    "Update available": "Update available",
+    "Allowed hosts": "Allowed hosts",
+    "Allowed hosts help": "The only places the action can send requests to. It cannot read files, the database or anything else of Semi.",
+    "SMS action client ID help": "The API key or account ID the SMS service gave you. You can also fill it in on the provider page later.",
+    "SMS action client secret help": "The API secret the SMS service gave you. You can also fill it in on the provider page later.",
+    "SMS action install summary": "Adds a {name} SMS provider. Its code runs inside Semi in a sandbox and can only send requests to the allowed hosts.",
+    "SMS action installed description": "This SMS provider runs the action. Fill in its keys, sender and template on the provider page, then add it to the providers of an application.",
+    "Uninstall SMS action description": "This deletes the SMS provider {name}. Applications that use it can no longer send verification codes with it."
   },
   "invitation": {
     "1 day": "1 day",
@@ -1011,7 +1023,8 @@
     "Submitter - Tooltip": "The person applying for this permission",
     "TreeNode": "TreeNode",
     "Write": "Write"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Advanced",
     "Agent ID": "Agent ID",
     "Agent ID - Tooltip": "Unique identifier for the agent, used to distinguish different agent entities",
@@ -1223,7 +1236,8 @@
     "UserInfo URL": "UserInfo URL",
     "UserInfo URL - Tooltip": "Custom OAuth UserInfo URL",
     "Web": "Web",
-    "admin (Shared)": "admin (Shared)"
+    "admin (Shared)": "admin (Shared)",
+    "Action - Tooltip": "The action installed from the Marketplace whose code this provider runs"
   },
   "record": {
     "Is triggered": "Is triggered",
@@ -1294,7 +1308,9 @@
     "Max idle connections": "Max idle connections",
     "Max idle connections - Tooltip": "Maximum number of idle connections kept in the pool, 0 means the default of 2",
     "Max open connections": "Max open connections",
-    "Max open connections - Tooltip": "Maximum number of open connections to the database, 0 means unlimited"
+    "Max open connections - Tooltip": "Maximum number of open connections to the database, 0 means unlimited",
+    "Head HTML": "Head HTML",
+    "Head HTML - Tooltip": "Trusted HTML put into the <head> of every page of every organization, including the sign-in pages and the console, e.g. <script> tags to load a JavaScript library. Only global admins can change it"
   },
   "signup": {
     "Accept": "Accept",
@@ -1360,7 +1376,8 @@
     "Nodes": "Nodes",
     "Public IP": "Public IP",
     "Public paths": "Public paths"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "API Token / Password",
     "AWS Access Key ID": "AWS Access Key ID",
     "AWS Region": "AWS Region",
@@ -1678,5 +1695,14 @@
     "Unknown": "Unknown",
     "Value": "Value",
     "Webhook event replay triggered": "Webhook event replay triggered"
+  },
+  "radiusClient": {
+    "Bound organization": "Bound organization",
+    "Bound organization - Tooltip": "If set, this NAS can only authenticate users of this organization, and the Class attribute cannot select another one. Leave empty to keep using the Class attribute or radiusDefaultOrganization",
+    "Edit RADIUS Client": "Edit RADIUS Client",
+    "IP ranges": "IP ranges",
+    "IP ranges - Tooltip": "Source IP addresses or CIDR ranges of this NAS, separated by commas, e.g. 192.168.20.50,10.0.0.0/24. When several clients match, the most specific range wins",
+    "Shared secret": "Shared secret",
+    "Shared secret - Tooltip": "The RADIUS shared secret configured on this NAS. Requests from IPs that match no client use radiusSecret in app.conf"
   }
 }

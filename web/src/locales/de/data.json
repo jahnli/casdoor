@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "E-Mail als NameID verwenden",
     "Used for": "Verwendet für",
     "Vertical": "Vertikal",
-    "You are unexpected to see this prompt page": "Sie sind unerwartet auf diese Aufforderungsseite gelangt"
+    "You are unexpected to see this prompt page": "Sie sind unerwartet auf diese Aufforderungsseite gelangt",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Zugriffsschlüssel",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "Sie können nur eine physische Gruppe auswählen",
     "You must select a picture first": "Sie müssen zuerst ein Bild auswählen",
     "empty": "leere",
-    "remove": "entfernen"
+    "remove": "entfernen",
+    "RADIUS Clients": "RADIUS-Clients"
   },
   "group": {
     "Edit Group": "Gruppe bearbeiten",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "Dadurch wird der Anbieter {name} gelöscht und aus der Anwendung entfernt, zu der er hinzugefügt wurde.",
     "Uninstall theme description": "Dadurch erhält die Anwendung {name} wieder das Aussehen von vor der Installation des Designs.",
     "Uninstalled": "Deinstalliert",
-    "Update available": "Update verfügbar"
+    "Update available": "Update verfügbar",
+    "Allowed hosts": "Erlaubte Hosts",
+    "Allowed hosts help": "Die einzigen Ziele, an die die Action Anfragen senden kann. Sie kann weder Dateien noch die Datenbank oder sonst etwas von Semi lesen.",
+    "SMS action client ID help": "Der API-Schlüssel oder die Konto-ID, die Sie vom SMS-Dienst erhalten haben. Sie können sie auch später auf der Anbieterseite eintragen.",
+    "SMS action client secret help": "Das API-Secret, das Sie vom SMS-Dienst erhalten haben. Sie können es auch später auf der Anbieterseite eintragen.",
+    "SMS action install summary": "Fügt einen {name}-SMS-Anbieter hinzu. Sein Code läuft in Semi in einer Sandbox und kann nur Anfragen an die erlaubten Hosts senden.",
+    "SMS action installed description": "Dieser SMS-Anbieter führt die Action aus. Tragen Sie seine Schlüssel, den Absender und die Vorlage auf der Anbieterseite ein und fügen Sie ihn dann den Anbietern einer Anwendung hinzu.",
+    "Uninstall SMS action description": "Dadurch wird der SMS-Anbieter {name} gelöscht. Anwendungen, die ihn verwenden, können damit keine Bestätigungscodes mehr senden."
   },
   "invitation": {
     "1 day": "1 Tag",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "Die Person, die um diese Erlaubnis bewirbt",
     "TreeNode": "Knotenpunkt",
     "Write": "Schreib"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Erweitert",
     "Agent ID": "Agenten-ID",
     "Agent ID - Tooltip": "Eindeutige Kennung für den Agenten, verwendet zur Unterscheidung verschiedener Agenten-Entitäten",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "UserInfo-URL",
     "UserInfo URL - Tooltip": "Benutzerdefinierte OAuth UserInfo-URL",
     "Web": "Weboberfläche",
-    "admin (Shared)": "admin (Gemeinsam)"
+    "admin (Shared)": "admin (Gemeinsam)",
+    "Action - Tooltip": "Die aus dem Marketplace installierte Action, deren Code dieser Anbieter ausführt"
   },
   "record": {
     "Is triggered": "Wurde ausgelöst",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "Max. inaktive Verbindungen",
     "Max idle connections - Tooltip": "Maximale Anzahl inaktiver Verbindungen im Pool, 0 bedeutet den Standardwert 2",
     "Max open connections": "Max. offene Verbindungen",
-    "Max open connections - Tooltip": "Maximale Anzahl offener Datenbankverbindungen, 0 bedeutet unbegrenzt"
+    "Max open connections - Tooltip": "Maximale Anzahl offener Datenbankverbindungen, 0 bedeutet unbegrenzt",
+    "Head HTML": "Head-HTML",
+    "Head HTML - Tooltip": "Vertrauenswürdiges HTML, das in den <head> jeder Seite aller Organisationen eingefügt wird, einschließlich der Anmeldeseiten und der Konsole, z. B. <script>-Tags zum Laden einer JavaScript-Bibliothek. Nur globale Administratoren können es ändern"
   },
   "signup": {
     "Accept": "Akzeptieren",
@@ -1356,7 +1372,8 @@
     "Nodes": "Knoten",
     "Public IP": "Öffentliche IP",
     "Public paths": "Öffentliche Pfade"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "API-Token / Passwort",
     "AWS Access Key ID": "AWS-Zugriffsschlüssel-ID",
     "AWS Region": "AWS-Region",
@@ -1655,5 +1672,14 @@
     "Unknown": "Unbekannt",
     "Value": "Wert",
     "Webhook event replay triggered": "Webhook-Ereigniswiederholung ausgelöst"
+  },
+  "radiusClient": {
+    "Bound organization": "Gebundene Organisation",
+    "Bound organization - Tooltip": "Wenn gesetzt, kann dieses NAS nur Benutzer dieser Organisation authentifizieren, und das Class-Attribut kann keine andere wählen. Leer lassen, um weiterhin das Class-Attribut oder radiusDefaultOrganization zu verwenden",
+    "Edit RADIUS Client": "RADIUS-Client bearbeiten",
+    "IP ranges": "IP-Bereiche",
+    "IP ranges - Tooltip": "Quell-IP-Adressen oder CIDR-Bereiche dieses NAS, durch Kommas getrennt, z. B. 192.168.20.50,10.0.0.0/24. Passen mehrere Clients, gewinnt der spezifischste Bereich",
+    "Shared secret": "Gemeinsames Geheimnis",
+    "Shared secret - Tooltip": "Das auf diesem NAS konfigurierte RADIUS-Shared-Secret. Anfragen von IPs, die zu keinem Client passen, verwenden radiusSecret aus app.conf"
   }
 }

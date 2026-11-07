@@ -94,9 +94,9 @@ export default function UserListPage({
             {jobLevel || workDate ? (
               <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
                 {jobLevel ? (
-                <div className="w-[88px] shrink-0 overflow-hidden">
-                  {jobLevel ? <Badge variant="secondary" className="max-w-full font-normal"><span className="truncate text-[13px]">{jobLevel}</span></Badge> : null}
-                </div>
+                  <div className="w-[88px] shrink-0 overflow-hidden">
+                    {jobLevel ? <Badge variant="secondary" className="max-w-full font-normal"><span className="truncate text-[13px]">{jobLevel}</span></Badge> : null}
+                  </div>
                 ) : null}
                 {workDate ? (
                   <Badge variant="outline" className="min-w-0 gap-1 font-normal text-muted-foreground">

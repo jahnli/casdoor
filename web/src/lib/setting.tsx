@@ -344,6 +344,10 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/social_twilio.svg`,
       url: "https://www.twilio.com/docs/verify",
     },
+    "Plugin": {
+      logo: `${StaticBaseUrl}/img/social_custom.png`,
+      url: "",
+    },
     "SmsBao SMS": {
       logo: `${StaticBaseUrl}/img/social_smsbao.png`,
       url: "https://www.smsbao.com/",
@@ -1412,7 +1416,7 @@ export function isCustomOAuthType(type) {
 }
 
 export function getProviderLogoURL(provider) {
-  if (isCustomOAuthType(provider.type) && provider.customLogo) {
+  if ((isCustomOAuthType(provider.type) || provider.type === "Plugin") && provider.customLogo) {
     return provider.customLogo;
   }
   if (provider.category === "OAuth") {
@@ -1556,6 +1560,7 @@ export function getProviderTypeOptions(category) {
         {id: "SmsBao SMS", name: "SmsBao SMS"},
         {id: "SUBMAIL SMS", name: "SUBMAIL SMS"},
         {id: "Msg91 SMS", name: "Msg91 SMS"},
+        {id: "Plugin", name: "Plugin"},
       ]
     );
   } else if (category === "Storage") {
@@ -2281,6 +2286,11 @@ export function getForgetLink(application) {
     return `/forget/${application.name}`;
   }
   return application.forgetUrl;
+}
+
+/** The backend never signs anyone up into the built-in organization, whose members are global admins. */
+export function isSignupAllowed(application) {
+  return !!application?.enableSignUp && application.organization !== "built-in";
 }
 
 /** The OAuth params have to survive the hop, or the signup cannot hand back a code. */

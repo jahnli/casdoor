@@ -150,13 +150,15 @@ type Application struct {
 	SamlHashAlgorithm            string          `xorm:"varchar(20)" json:"samlHashAlgorithm"`
 	SamlC14nPrefix               string          `xorm:"varchar(100)" json:"samlC14nPrefix"`
 	IsShared                     bool            `json:"isShared"`
+	ExternalUsers                []string        `xorm:"mediumtext" json:"externalUsers"`
+	ExternalGroups               []string        `xorm:"mediumtext" json:"externalGroups"`
 	IpRestriction                string          `json:"ipRestriction"`
 
 	ClientId                string                 `xorm:"varchar(100)" json:"clientId"`
 	ClientSecret            string                 `xorm:"varchar(100)" json:"clientSecret"`
 	ClientCert              string                 `xorm:"varchar(100)" json:"clientCert"`
 	FederatedCredentials    []*FederatedCredential `xorm:"mediumtext" json:"federatedCredentials"`
-	RedirectUris            []string               `xorm:"varchar(1000)" json:"redirectUris"`
+	RedirectUris            []string               `xorm:"text" json:"redirectUris"`
 	BackchannelLogoutUri    string                 `xorm:"varchar(500)" json:"backchannelLogoutUri"`
 	ForcedRedirectOrigin    string                 `xorm:"varchar(100)" json:"forcedRedirectOrigin"`
 	TokenFormat             string                 `xorm:"varchar(100)" json:"tokenFormat"`
@@ -194,7 +196,7 @@ type Application struct {
 
 	// Reverse proxy fields
 	Domain       string   `xorm:"varchar(100)" json:"domain"`
-	OtherDomains []string `xorm:"varchar(1000)" json:"otherDomains"`
+	OtherDomains []string `xorm:"text" json:"otherDomains"`
 	UpstreamHost string   `xorm:"varchar(100)" json:"upstreamHost"`
 	SslMode      string   `xorm:"varchar(100)" json:"sslMode"`
 	SslCert      string   `xorm:"varchar(100)" json:"sslCert"`

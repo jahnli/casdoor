@@ -91,6 +91,33 @@ func GetSwaggerFolder() string {
 	return path
 }
 
+// serveSwaggerForAdmin serves the swagger folder to admins when it is not registered as a static path (runmode is not dev),
+// so the Swagger item of the admin menu still works in production
+func serveSwaggerForAdmin(ctx *context.Context) bool {
+	urlPath := ctx.Request.URL.Path
+	if urlPath != "/swagger" && !strings.HasPrefix(urlPath, "/swagger/") {
+		return false
+	}
+
+	userId := getSessionUser(ctx)
+	if userId == "" || isSessionExpired(ctx) {
+		return false
+	}
+
+	user, err := object.GetUser(userId)
+	if err != nil || !user.IsAdminUser() || user.IsForbidden || user.IsDeleted {
+		return false
+	}
+
+	if urlPath == "/swagger" {
+		http.Redirect(ctx.ResponseWriter, ctx.Request, basePath+"/swagger/", http.StatusFound)
+		return true
+	}
+
+	http.StripPrefix("/swagger", http.FileServer(http.Dir(GetSwaggerFolder()))).ServeHTTP(ctx.ResponseWriter, ctx.Request)
+	return true
+}
+
 func fastAutoSignin(ctx *context.Context) (string, error) {
 	userId := getSessionUser(ctx)
 	if userId == "" || isSessionExpired(ctx) {
@@ -246,6 +273,21 @@ func StaticFilter(ctx *context.Context) {
 	if strings.HasPrefix(urlPath, "/scim") {
 		return
 	}
+	if serveSwaggerForAdmin(ctx) {
+		return
+	}
+
+	// the login page reads state, nonce, PKCE etc. from the URL, so expand a request object (RFC 9101) into it first
+	if (urlPath == "/login/oauth/authorize" || urlPath == "/signup/oauth/authorize") && ctx.Request.URL.Query().Get("request") != "" {
+		query, err := object.ResolveOAuthRequestObject(ctx.Request.URL.Query())
+		if err != nil {
+			responseError(ctx, err.Error())
+			return
+		}
+
+		http.Redirect(ctx.ResponseWriter, ctx.Request, fmt.Sprintf("%s%s?%s", basePath, urlPath, query.Encode()), http.StatusFound)
+		return
+	}
 
 	if urlPath == "/login/oauth/authorize" {
 		redirectUrl, err := fastAutoSignin(ctx)
@@ -348,6 +390,15 @@ func serveFileWithReplace(w http.ResponseWriter, r *http.Request, name string, o
 		newContent = addBasePathToHtml(newContent)
 		newContent = addWebConfigToHtml(newContent)
 		newContent = addIssuerToHtml(newContent, r)
+
+		headHtml, settingTime := object.GetHeadHtml()
+		if headHtml != "" {
+			newContent = strings.Replace(newContent, "</head>", headHtml+"</head>", 1)
+		}
+		// a 304 by the file's modification time would keep the old head HTML after the setting is changed
+		if !modTime.IsZero() && settingTime.After(modTime) {
+			modTime = settingTime
+		}
 	}
 
 	newContent = strings.NewReplacer(

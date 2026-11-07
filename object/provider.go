@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/server/web/context"
+	"github.com/casdoor/casdoor/action"
 	"github.com/casdoor/casdoor/i18n"
 	"github.com/casdoor/casdoor/idp"
 	"github.com/casdoor/casdoor/idv"
@@ -406,6 +407,22 @@ func DeleteProvider(provider *Provider) (bool, error) {
 	}
 
 	return affected != 0, nil
+}
+
+// ProviderTypePlugin is a provider whose code is an action installed from the Marketplace, named by SubType
+const ProviderTypePlugin = "Plugin"
+
+func (p *Provider) getActionConfig() *action.Config {
+	return &action.Config{
+		ClientId:      p.ClientId,
+		ClientSecret:  p.ClientSecret,
+		ClientId2:     p.ClientId2,
+		ClientSecret2: p.ClientSecret2,
+		Host:          p.Host,
+		Metadata:      p.Metadata,
+		SignName:      p.SignName,
+		TemplateCode:  p.TemplateCode,
+	}
 }
 
 func (p *Provider) GetId() string {

@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "メールアドレスをNameIDとして使用 - ツールチップ",
     "Used for": "用途",
     "Vertical": "垂直",
-    "You are unexpected to see this prompt page": "このプロンプトページを見ることは予期せぬことである"
+    "You are unexpected to see this prompt page": "このプロンプトページを見ることは予期せぬことである",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "アクセスシークレット",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "物理グループは1つしか選択できません",
     "You must select a picture first": "まず画像を選択してください",
     "empty": "空",
-    "remove": "削除"
+    "remove": "削除",
+    "RADIUS Clients": "RADIUS クライアント"
   },
   "group": {
     "Edit Group": "グループを編集",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "プロバイダー {name} を削除し、追加先のアプリケーションからも外します。",
     "Uninstall theme description": "アプリケーション {name} の見た目をテーマのインストール前に戻します。",
     "Uninstalled": "アンインストールしました",
-    "Update available": "更新があります"
+    "Update available": "更新があります",
+    "Allowed hosts": "許可されたホスト",
+    "Allowed hosts help": "アクションがリクエストを送信できるのはこれらのホストだけです。ファイルやデータベースなど Semi の他の情報は読み取れません。",
+    "SMS action client ID help": "SMS サービスから発行された API キーまたはアカウント ID です。後でプロバイダーのページで入力することもできます。",
+    "SMS action client secret help": "SMS サービスから発行された API シークレットです。後でプロバイダーのページで入力することもできます。",
+    "SMS action install summary": "{name} の SMS プロバイダーを追加します。そのコードは Semi 内のサンドボックスで実行され、許可されたホストにのみリクエストを送信できます。",
+    "SMS action installed description": "この SMS プロバイダーはアクションを実行します。プロバイダーのページでキー、送信元、テンプレートを入力し、アプリケーションのプロバイダーに追加してください。",
+    "Uninstall SMS action description": "SMS プロバイダー {name} を削除します。これを使っているアプリケーションは、これで認証コードを送信できなくなります。"
   },
   "invitation": {
     "1 day": "1 日",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "この許可を申請する人",
     "TreeNode": "ツリーノード",
     "Write": "書く"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "詳細設定",
     "Agent ID": "エージェントID",
     "Agent ID - Tooltip": "エージェントID",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "UserInfo URLを日本語に翻訳すると、「ユーザー情報のURL」となります",
     "UserInfo URL - Tooltip": "ユーザー情報URL",
     "Web": "ウェブ",
-    "admin (Shared)": "管理者（共有）"
+    "admin (Shared)": "管理者（共有）",
+    "Action - Tooltip": "このプロバイダーがコードを実行する、Marketplace からインストールしたアクション"
   },
   "record": {
     "Is triggered": "トリガーされました",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "最大アイドル接続数",
     "Max idle connections - Tooltip": "プールに保持するアイドル接続の最大数。0はデフォルトの2",
     "Max open connections": "最大オープン接続数",
-    "Max open connections - Tooltip": "データベースへの最大同時接続数。0は無制限"
+    "Max open connections - Tooltip": "データベースへの最大同時接続数。0は無制限",
+    "Head HTML": "ヘッドHTML",
+    "Head HTML - Tooltip": "すべての組織のすべてのページ（サインインページとコンソールを含む）の<head>に挿入される信頼済みHTML。例：JavaScriptライブラリを読み込む<script>タグ。グローバル管理者のみ変更できます"
   },
   "signup": {
     "Accept": "受け入れる",
@@ -1356,7 +1372,8 @@
     "Nodes": "ノード一覧",
     "Public IP": "パブリックIP",
     "Public paths": "公開パス"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "APIトークン / パスワード",
     "AWS Access Key ID": "AWS アクセスキー ID",
     "AWS Region": "AWS リージョン",
@@ -1655,5 +1672,14 @@
     "Unknown": "不明",
     "Value": "値",
     "Webhook event replay triggered": "Webhookイベント再生が開始されました"
+  },
+  "radiusClient": {
+    "Bound organization": "紐付け組織",
+    "Bound organization - Tooltip": "設定すると、この NAS はこの組織のユーザーのみ認証でき、Class 属性で別の組織を指定できなくなります。空欄の場合は従来どおり Class 属性または radiusDefaultOrganization を使います",
+    "Edit RADIUS Client": "RADIUS クライアントを編集",
+    "IP ranges": "IP 範囲",
+    "IP ranges - Tooltip": "この NAS の送信元 IP アドレスまたは CIDR 範囲（カンマ区切り）。例: 192.168.20.50,10.0.0.0/24。複数のクライアントが一致する場合は最も狭い範囲が優先されます",
+    "Shared secret": "共有シークレット",
+    "Shared secret - Tooltip": "この NAS に設定した RADIUS 共有シークレット。どのクライアントにも一致しない IP からのリクエストは app.conf の radiusSecret を使います"
   }
 }

@@ -21,9 +21,11 @@ import {useAccount} from "@/hooks/use-account";
 import {useEditRecord} from "@/hooks/use-edit-record";
 import {useOrganizationOptions} from "@/hooks/use-options";
 import * as CertBackend from "@/backend/CertBackend";
+import * as IntegrationBackend from "@/backend/IntegrationBackend";
 import * as ProviderBackend from "@/backend/ProviderBackend";
 import * as ServerBackend from "@/backend/ServerBackend";
 import {submitEdit} from "@/lib/crud";
+import {getActionKind, parseBundle} from "@/lib/integration";
 import * as ProviderTest from "@/lib/provider-test";
 import * as Setting from "@/lib/setting";
 import {authConfig} from "@/auth/Auth";
@@ -118,8 +120,10 @@ function normalizeAndJoin(values: string[]) {
   return (values || []).map(item => `${item}`.trim()).filter(item => item !== "").join(",");
 }
 
-function getProviderSubTypeOptions(type: string) {
-  if (type === "Aliyun Captcha") {
+function getProviderSubTypeOptions(category: string, type: string) {
+  if (category === "OAuth" && type === "PayPal") {
+    return [{id: "Live", name: "Live"}, {id: "Sandbox", name: "Sandbox"}];
+  } else if (type === "Aliyun Captcha") {
     return [
       {id: "Embed", name: "Embed"},
       {id: "Popup", name: "Popup"},
@@ -390,6 +394,7 @@ export default function ProviderEditPage() {
   const organizations = useOrganizationOptions();
   const [providers, setProviders] = React.useState<any[]>([]);
   const [certs, setCerts] = React.useState<any[]>([]);
+  const [actions, setActions] = React.useState<any[]>([]);
   const [saving, setSaving] = React.useState(false);
 
   const [nameNotUserEdited, setNameNotUserEdited] = React.useState(false);
@@ -444,6 +449,18 @@ export default function ProviderEditPage() {
     getProviders(owner);
     getCerts(owner);
   }, [owner, getProviders, getCerts]);
+
+  const isPlugin = provider?.type === "Plugin";
+  React.useEffect(() => {
+    if (!isPlugin) {
+      return;
+    }
+    IntegrationBackend.getIntegrations(owner).then((res: any) => {
+      if (res.status === "ok") {
+        setActions((res.data ?? []).filter((integration: any) => integration.type === "action"));
+      }
+    });
+  }, [owner, isPlugin]);
 
   // the name/display name keep following category+type until the user types their own
   const initializedRef = React.useRef(false);
@@ -678,7 +695,7 @@ export default function ProviderEditPage() {
   }
 
   const certOptions = certs.map((cert: any) => ({value: cert.name, label: cert.name}));
-  const subTypeOptions = getProviderSubTypeOptions(provider.type);
+  const subTypeOptions = getProviderSubTypeOptions(provider.category, provider.type);
 
   const onChangeCategory = (value: string) => {
     const patch: Record<string, any> = {category: value};
@@ -782,6 +799,8 @@ export default function ProviderEditPage() {
       }
     } else if (value === "Security Scan") {
       patch.subType = "Site";
+    } else if (value === "PayPal" && provider.category === "OAuth") {
+      patch.subType = "Live";
     } else if (value === "Aliyun Captcha") {
       // Popup stays opt-in: only Alibaba Cloud's traceless scenes require it
       patch.subType = "Embed";
@@ -1116,8 +1135,26 @@ export default function ProviderEditPage() {
     </React.Fragment>
   );
 
+  const renderActionRow = () => {
+    if (provider.type !== "Plugin" || provider.category !== "SMS") {
+      return null;
+    }
+    return (
+      <FormRow label={i18next.t("general:Action")} tooltip={i18next.t("provider:Action - Tooltip")}>
+        <SelectField
+          value={provider.subType ?? ""}
+          onChange={(v) => updateProviderField("subType", v)}
+          options={actions
+            .filter((integration: any) => getActionKind(parseBundle(integration.bundle)) === "sms")
+            .map((integration: any) => ({id: integration.name, name: `${integration.displayName} (${integration.name})`}))}
+        />
+      </FormRow>
+    );
+  };
+
   const renderSmsFields = () => (
     <React.Fragment>
+      {renderActionRow()}
       {!SMS_PROVIDERS_WITHOUT_SIGN_NAME.includes(provider.type) ? (
         <FormRow labelKey="provider:Sign Name">
           <Input value={provider.signName ?? ""} onChange={(e) => updateProviderField("signName", e.target.value)} />

@@ -73,6 +73,7 @@ require (
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
 	github.com/stretchr/testify v1.11.1
 	github.com/tealeg/xlsx v1.0.5
+	github.com/tetratelabs/wazero v1.12.0
 	github.com/thanhpk/randstr v1.0.4
 	github.com/xorm-io/builder v0.3.13
 	github.com/xorm-io/core v0.7.4

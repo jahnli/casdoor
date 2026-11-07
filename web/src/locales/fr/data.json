@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "Utiliser l'e-mail comme NameID - Infobulle",
     "Used for": "Utilisé pour",
     "Vertical": "Disposition verticale",
-    "You are unexpected to see this prompt page": "Il n'était pas prévu que vous voyez cette page de saisie"
+    "You are unexpected to see this prompt page": "Il n'était pas prévu que vous voyez cette page de saisie",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Clé d'accès",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "Vous ne pouvez sélectionner qu'un seul groupe physique",
     "You must select a picture first": "Vous devez d'abord sélectionner une image",
     "empty": "vide",
-    "remove": "supprimer"
+    "remove": "supprimer",
+    "RADIUS Clients": "Clients RADIUS"
   },
   "group": {
     "Edit Group": "Modifier le groupe",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "Le fournisseur {name} sera supprimé et retiré de l'application à laquelle il a été ajouté.",
     "Uninstall theme description": "L'application {name} retrouvera l'apparence qu'elle avait avant l'installation du thème.",
     "Uninstalled": "Désinstallé",
-    "Update available": "Mise à jour disponible"
+    "Update available": "Mise à jour disponible",
+    "Allowed hosts": "Hôtes autorisés",
+    "Allowed hosts help": "Les seules destinations auxquelles l'action peut envoyer des requêtes. Elle ne peut lire ni les fichiers, ni la base de données, ni rien d'autre de Semi.",
+    "SMS action client ID help": "La clé d'API ou l'identifiant de compte fourni par le service SMS. Vous pouvez aussi le saisir plus tard sur la page du fournisseur.",
+    "SMS action client secret help": "Le secret d'API fourni par le service SMS. Vous pouvez aussi le saisir plus tard sur la page du fournisseur.",
+    "SMS action install summary": "Ajoute un fournisseur SMS {name}. Son code s'exécute dans Semi dans un bac à sable et ne peut envoyer des requêtes qu'aux hôtes autorisés.",
+    "SMS action installed description": "Ce fournisseur SMS exécute l'action. Saisissez ses clés, l'expéditeur et le modèle sur la page du fournisseur, puis ajoutez-le aux fournisseurs d'une application.",
+    "Uninstall SMS action description": "Cela supprime le fournisseur SMS {name}. Les applications qui l'utilisent ne pourront plus envoyer de codes de vérification avec."
   },
   "invitation": {
     "1 day": "1 jour",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "La personne demandant cette permission",
     "TreeNode": "Nœud d'arbre",
     "Write": "Écrire"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Avancé",
     "Agent ID": "Identifiant d'agent",
     "Agent ID - Tooltip": "ID d'agent",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "URL d'informations utilisateur",
     "UserInfo URL - Tooltip": "URL d'information du compte (UserInfo)",
     "Web": "Client web",
-    "admin (Shared)": "admin (Partagé)"
+    "admin (Shared)": "admin (Partagé)",
+    "Action - Tooltip": "L'action installée depuis le Marketplace dont ce fournisseur exécute le code"
   },
   "record": {
     "Is triggered": "Est déclenché",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "Connexions inactives max.",
     "Max idle connections - Tooltip": "Nombre maximal de connexions inactives conservées dans le pool, 0 signifie la valeur par défaut de 2",
     "Max open connections": "Connexions ouvertes max.",
-    "Max open connections - Tooltip": "Nombre maximal de connexions ouvertes à la base de données, 0 signifie illimité"
+    "Max open connections - Tooltip": "Nombre maximal de connexions ouvertes à la base de données, 0 signifie illimité",
+    "Head HTML": "HTML d'en-tête",
+    "Head HTML - Tooltip": "HTML de confiance inséré dans le <head> de chaque page de toutes les organisations, y compris les pages de connexion et la console, par ex. des balises <script> pour charger une bibliothèque JavaScript. Seuls les administrateurs globaux peuvent le modifier"
   },
   "signup": {
     "Accept": "Accepter",
@@ -1356,7 +1372,8 @@
     "Nodes": "Nœuds",
     "Public IP": "IP publique",
     "Public paths": "Chemins publics"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "Jeton API / Mot de passe",
     "AWS Access Key ID": "ID de clé d'accès AWS",
     "AWS Region": "Région AWS",
@@ -1655,5 +1672,14 @@
     "Unknown": "Inconnu",
     "Value": "Valeur",
     "Webhook event replay triggered": "Relecture de l'événement webhook déclenchée"
+  },
+  "radiusClient": {
+    "Bound organization": "Organisation liée",
+    "Bound organization - Tooltip": "Si défini, ce NAS ne peut authentifier que les utilisateurs de cette organisation, et l'attribut Class ne peut pas en choisir une autre. Laissez vide pour continuer à utiliser l'attribut Class ou radiusDefaultOrganization",
+    "Edit RADIUS Client": "Modifier le client RADIUS",
+    "IP ranges": "Plages d'adresses IP",
+    "IP ranges - Tooltip": "Adresses IP source ou plages CIDR de ce NAS, séparées par des virgules, par ex. 192.168.20.50,10.0.0.0/24. Si plusieurs clients correspondent, la plage la plus précise l'emporte",
+    "Shared secret": "Secret partagé",
+    "Shared secret - Tooltip": "Le secret partagé RADIUS configuré sur ce NAS. Les requêtes provenant d'IP ne correspondant à aucun client utilisent radiusSecret de app.conf"
   }
 }

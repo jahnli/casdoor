@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "Використовувати Email як NameID - підказка",
     "Used for": "Використовується для",
     "Vertical": "Вертикальний",
-    "You are unexpected to see this prompt page": "Ви неочікувано побачите цю сторінку запиту"
+    "You are unexpected to see this prompt page": "Ви неочікувано побачите цю сторінку запиту",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Секрет доступу",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "Ви можете вибрати лише одну фізичну групу",
     "You must select a picture first": "Спочатку ви повинні вибрати зображення",
     "empty": "порожній",
-    "remove": "видалити"
+    "remove": "видалити",
+    "RADIUS Clients": "Клієнти RADIUS"
   },
   "group": {
     "Edit Group": "Редагувати групу",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "Провайдера {name} буде видалено й прибрано із застосунку, до якого його додали.",
     "Uninstall theme description": "Застосунок {name} повернеться до вигляду, який мав до встановлення теми.",
     "Uninstalled": "Видалено",
-    "Update available": "Доступне оновлення"
+    "Update available": "Доступне оновлення",
+    "Allowed hosts": "Дозволені хости",
+    "Allowed hosts help": "Єдині адреси, на які дія може надсилати запити. Вона не може читати файли, базу даних чи будь-що інше в Semi.",
+    "SMS action client ID help": "Ключ API або ідентифікатор облікового запису, який надав SMS-сервіс. Його також можна ввести пізніше на сторінці постачальника.",
+    "SMS action client secret help": "Секрет API, який надав SMS-сервіс. Його також можна ввести пізніше на сторінці постачальника.",
+    "SMS action install summary": "Додає SMS-постачальника {name}. Його код виконується в Semi у пісочниці й може надсилати запити лише на дозволені хости.",
+    "SMS action installed description": "Цей SMS-постачальник виконує дію. Введіть його ключі, відправника й шаблон на сторінці постачальника, а потім додайте його до постачальників застосунку.",
+    "Uninstall SMS action description": "Це видаляє SMS-постачальника {name}. Застосунки, які його використовують, більше не зможуть надсилати ним коди підтвердження."
   },
   "invitation": {
     "1 day": "1 день",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "Особа, яка звертається за цим дозволом",
     "TreeNode": "Вузол дерева",
     "Write": "Запис"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Розширені",
     "Agent ID": "ID агента",
     "Agent ID - Tooltip": "Унікальний ідентифікатор агента, що використовується для розрізнення різних агентних сутностей",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "URL-адреса інформації про користувача",
     "UserInfo URL - Tooltip": "URL-адреса інформації про користувача",
     "Web": "Веб",
-    "admin (Shared)": "admin (спільний)"
+    "admin (Shared)": "admin (спільний)",
+    "Action - Tooltip": "Дія, встановлена з Marketplace, код якої виконує цей постачальник"
   },
   "record": {
     "Is triggered": "Спрацьовує",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "Макс. неактивних з'єднань",
     "Max idle connections - Tooltip": "Максимальна кількість неактивних з'єднань у пулі, 0 означає типове значення 2",
     "Max open connections": "Макс. відкритих з'єднань",
-    "Max open connections - Tooltip": "Максимальна кількість відкритих з'єднань з базою даних, 0 означає без обмежень"
+    "Max open connections - Tooltip": "Максимальна кількість відкритих з'єднань з базою даних, 0 означає без обмежень",
+    "Head HTML": "HTML заголовка",
+    "Head HTML - Tooltip": "Довірений HTML, що вставляється в <head> кожної сторінки всіх організацій, включно зі сторінками входу та консоллю, наприклад теги <script> для завантаження бібліотеки JavaScript. Змінювати можуть лише глобальні адміністратори"
   },
   "signup": {
     "Accept": "Прийняти",
@@ -1356,7 +1372,8 @@
     "Nodes": "Вузли",
     "Public IP": "Публічна IP",
     "Public paths": "Публічні шляхи"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "Токен API / Пароль",
     "AWS Access Key ID": "Ідентифікатор ключа доступу AWS",
     "AWS Region": "Регіон AWS",
@@ -1655,5 +1672,14 @@
     "Unknown": "Невідомо",
     "Value": "Значення",
     "Webhook event replay triggered": "Запущено повтор події webhook"
+  },
+  "radiusClient": {
+    "Bound organization": "Прив'язана організація",
+    "Bound organization - Tooltip": "Якщо задано, цей NAS може автентифікувати лише користувачів цієї організації, а атрибут Class не може вибрати іншу. Залиште порожнім, щоб і далі використовувати атрибут Class або radiusDefaultOrganization",
+    "Edit RADIUS Client": "Редагувати клієнт RADIUS",
+    "IP ranges": "Діапазони IP",
+    "IP ranges - Tooltip": "Вихідні IP-адреси або діапазони CIDR цього NAS через кому, напр. 192.168.20.50,10.0.0.0/24. Якщо збігаються кілька клієнтів, перемагає найвужчий діапазон",
+    "Shared secret": "Спільний секрет",
+    "Shared secret - Tooltip": "Спільний секрет RADIUS, налаштований на цьому NAS. Запити з IP, що не збігаються з жодним клієнтом, використовують radiusSecret з app.conf"
   }
 }

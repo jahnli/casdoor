@@ -211,7 +211,11 @@
     "Use Email as NameID - Tooltip": "使用邮箱作为NameID",
     "Used for": "用途",
     "Vertical": "垂直",
-    "You are unexpected to see this prompt page": "错误：该提醒页面不应出现"
+    "You are unexpected to see this prompt page": "错误：该提醒页面不应出现",
+    "External groups": "外部群组",
+    "External groups - Tooltip": "其他组织中可以登录此应用的群组，格式为“组织/群组名”，群组的直接成员可以用自己组织的账号登录",
+    "External users": "外部用户",
+    "External users - Tooltip": "其他组织中可以登录此应用的用户，格式为“组织/用户名”，这些用户用自己组织的账号和密码登录，登录时也可以输入“组织/用户名”"
   },
   "cert": {
     "Access secret": "访问密钥",
@@ -684,7 +688,8 @@
     "You can only select one physical group": "只能选择一个实体组",
     "You must select a picture first": "您必须先选择一张图片",
     "empty": "无",
-    "remove": "移除"
+    "remove": "移除",
+    "RADIUS Clients": "RADIUS 客户端"
   },
   "group": {
     "Edit Group": "编辑群组",
@@ -735,7 +740,14 @@
     "Uninstall provider description": "将删除身份源 {name}，并把它从所加入的应用中移除。",
     "Uninstall theme description": "将把应用 {name} 的登录页恢复成安装主题前的样式。",
     "Uninstalled": "已卸载",
-    "Update available": "有新版本"
+    "Update available": "有新版本",
+    "Allowed hosts": "允许访问的地址",
+    "Allowed hosts help": "action 只能向这些地址发请求，读不到文件、数据库和 Semi 的其他任何东西。",
+    "SMS action client ID help": "短信服务给你的 API key 或账号 ID，也可以以后在身份源页面里填写。",
+    "SMS action client secret help": "短信服务给你的 API 密钥，也可以以后在身份源页面里填写。",
+    "SMS action install summary": "添加一个 {name} 短信身份源。它的代码在 Semi 内的沙箱里运行，只能访问下面列出的地址。",
+    "SMS action installed description": "这个短信身份源运行该 action。在身份源页面填好密钥、发送方和模板，再把它加到应用的身份源里。",
+    "Uninstall SMS action description": "这会删除短信身份源 {name}，用它的应用不能再用它发送验证码。"
   },
   "invitation": {
     "1 day": "1 天",
@@ -1012,7 +1024,8 @@
     "Submitter - Tooltip": "申请该授权的人",
     "TreeNode": "树节点",
     "Write": "写权限"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "高级",
     "Agent ID": "代理ID",
     "Agent ID - Tooltip": "标识代理身份的唯一编号，用于区分不同代理实体",
@@ -1224,7 +1237,8 @@
     "UserInfo URL": "UserInfo链接",
     "UserInfo URL - Tooltip": "自定义OAuth的UserInfo链接",
     "Web": "网页",
-    "admin (Shared)": "admin（共享）"
+    "admin (Shared)": "admin（共享）",
+    "Action - Tooltip": "从 Marketplace 安装的 action，这个身份源运行它的代码"
   },
   "record": {
     "Is triggered": "是否触发",
@@ -1295,7 +1309,9 @@
     "Max idle connections": "最大空闲连接数",
     "Max idle connections - Tooltip": "连接池里最多保留的空闲连接数，0表示用默认值2",
     "Max open connections": "最大打开连接数",
-    "Max open connections - Tooltip": "数据库最多同时打开的连接数，0表示不限"
+    "Max open connections - Tooltip": "数据库最多同时打开的连接数，0表示不限",
+    "Head HTML": "头部HTML",
+    "Head HTML - Tooltip": "插入所有组织每个页面（包括登录页和控制台）<head>中的可信HTML，例如用<script>标签加载JavaScript库，只有全局管理员能修改"
   },
   "signup": {
     "Accept": "阅读并接受",
@@ -1361,7 +1377,8 @@
     "Nodes": "节点列表",
     "Public IP": "公网IP",
     "Public paths": "免登录路径"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "API令牌 / 密码",
     "AWS Access Key ID": "AWS访问密钥ID",
     "AWS Region": "AWS区域",
@@ -1679,5 +1696,14 @@
     "Unknown": "未知",
     "Value": "值",
     "Webhook event replay triggered": "Webhook事件重放已触发"
+  },
+  "radiusClient": {
+    "Bound organization": "绑定组织",
+    "Bound organization - Tooltip": "设置后这台 NAS 只能认证该组织的用户，Class 属性不能再指定别的组织。留空则照旧用 Class 属性或 radiusDefaultOrganization",
+    "Edit RADIUS Client": "编辑 RADIUS 客户端",
+    "IP ranges": "IP 范围",
+    "IP ranges - Tooltip": "这台 NAS 的来源 IP 或 CIDR 网段，用英文逗号分隔，例如 192.168.20.50,10.0.0.0/24。多个客户端都匹配时用范围最小的那个",
+    "Shared secret": "共享密钥",
+    "Shared secret - Tooltip": "这台 NAS 上配置的 RADIUS 共享密钥。不匹配任何客户端的来源 IP 照旧用 app.conf 里的 radiusSecret"
   }
 }

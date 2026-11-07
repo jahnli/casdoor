@@ -209,7 +209,11 @@
     "Use Email as NameID - Tooltip": "Gợi ý sử dụng Email làm NameID",
     "Used for": "Dùng cho",
     "Vertical": "Dọc",
-    "You are unexpected to see this prompt page": "Bạn không mong đợi thấy trang này hiện lên"
+    "You are unexpected to see this prompt page": "Bạn không mong đợi thấy trang này hiện lên",
+    "External groups": "External groups",
+    "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
+    "External users": "External users",
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
   },
   "cert": {
     "Access secret": "Bí mật truy cập",
@@ -681,7 +685,8 @@
     "You can only select one physical group": "Bạn chỉ có thể chọn một nhóm vật lý",
     "You must select a picture first": "Bạn phải chọn một hình ảnh trước",
     "empty": "trống",
-    "remove": "xóa"
+    "remove": "xóa",
+    "RADIUS Clients": "Máy khách RADIUS"
   },
   "group": {
     "Edit Group": "Chỉnh sửa nhóm",
@@ -732,7 +737,14 @@
     "Uninstall provider description": "Nhà cung cấp {name} sẽ bị xóa và gỡ khỏi ứng dụng mà nó đã được thêm vào.",
     "Uninstall theme description": "Ứng dụng {name} sẽ trở lại giao diện trước khi cài giao diện này.",
     "Uninstalled": "Đã gỡ cài đặt",
-    "Update available": "Có bản cập nhật"
+    "Update available": "Có bản cập nhật",
+    "Allowed hosts": "Máy chủ được phép",
+    "Allowed hosts help": "Những nơi duy nhất mà action có thể gửi yêu cầu đến. Nó không thể đọc tệp, cơ sở dữ liệu hay bất cứ thứ gì khác của Semi.",
+    "SMS action client ID help": "API key hoặc ID tài khoản do dịch vụ SMS cấp. Bạn cũng có thể điền sau trên trang nhà cung cấp.",
+    "SMS action client secret help": "API secret do dịch vụ SMS cấp. Bạn cũng có thể điền sau trên trang nhà cung cấp.",
+    "SMS action install summary": "Thêm một nhà cung cấp SMS {name}. Mã của nó chạy trong Semi trong môi trường cách ly và chỉ có thể gửi yêu cầu đến các máy chủ được phép.",
+    "SMS action installed description": "Nhà cung cấp SMS này chạy action. Điền khóa, người gửi và mẫu tin trên trang nhà cung cấp, rồi thêm nó vào danh sách nhà cung cấp của một ứng dụng.",
+    "Uninstall SMS action description": "Thao tác này xóa nhà cung cấp SMS {name}. Các ứng dụng dùng nó sẽ không thể gửi mã xác minh bằng nó nữa."
   },
   "invitation": {
     "1 day": "1 ngày",
@@ -1009,7 +1021,8 @@
     "Submitter - Tooltip": "Người nộp đơn xin cấp phép này",
     "TreeNode": "Nút cây",
     "Write": "Viết"
-  },  "provider": {
+  },
+  "provider": {
     "Advanced": "Nâng cao",
     "Agent ID": "Mã đại lý",
     "Agent ID - Tooltip": "ID đại lý",
@@ -1219,7 +1232,8 @@
     "UserInfo URL": "Đường dẫn UserInfo",
     "UserInfo URL - Tooltip": "Địa chỉ URL của Thông tin người dùng",
     "Web": "Giao diện web",
-    "admin (Shared)": "quản trị viên (Chung)"
+    "admin (Shared)": "quản trị viên (Chung)",
+    "Action - Tooltip": "Action được cài từ Marketplace mà nhà cung cấp này chạy mã của nó"
   },
   "record": {
     "Is triggered": "Đã kích hoạt",
@@ -1290,7 +1304,9 @@
     "Max idle connections": "Số kết nối nhàn rỗi tối đa",
     "Max idle connections - Tooltip": "Số kết nối nhàn rỗi tối đa giữ trong pool, 0 nghĩa là mặc định 2",
     "Max open connections": "Số kết nối mở tối đa",
-    "Max open connections - Tooltip": "Số kết nối tối đa được mở tới cơ sở dữ liệu, 0 nghĩa là không giới hạn"
+    "Max open connections - Tooltip": "Số kết nối tối đa được mở tới cơ sở dữ liệu, 0 nghĩa là không giới hạn",
+    "Head HTML": "HTML phần đầu",
+    "Head HTML - Tooltip": "HTML tin cậy được chèn vào <head> của mọi trang thuộc mọi tổ chức, kể cả trang đăng nhập và bảng điều khiển, ví dụ thẻ <script> để tải một thư viện JavaScript. Chỉ quản trị viên toàn cục mới có thể thay đổi"
   },
   "signup": {
     "Accept": "Chấp nhận",
@@ -1356,7 +1372,8 @@
     "Nodes": "Nút",
     "Public IP": "IP công cộng",
     "Public paths": "Đường dẫn công khai"
-  },  "syncer": {
+  },
+  "syncer": {
     "API Token / Password": "Mã thông báo API / Mật khẩu",
     "AWS Access Key ID": "ID khóa truy cập AWS",
     "AWS Region": "Vùng AWS",
@@ -1655,5 +1672,14 @@
     "Unknown": "Không xác định",
     "Value": "Giá trị",
     "Webhook event replay triggered": "Đã kích hoạt phát lại sự kiện webhook"
+  },
+  "radiusClient": {
+    "Bound organization": "Tổ chức ràng buộc",
+    "Bound organization - Tooltip": "Nếu đặt, NAS này chỉ có thể xác thực người dùng của tổ chức này và thuộc tính Class không thể chọn tổ chức khác. Để trống để tiếp tục dùng thuộc tính Class hoặc radiusDefaultOrganization",
+    "Edit RADIUS Client": "Chỉnh sửa máy khách RADIUS",
+    "IP ranges": "Dải IP",
+    "IP ranges - Tooltip": "Địa chỉ IP nguồn hoặc dải CIDR của NAS này, phân tách bằng dấu phẩy, ví dụ 192.168.20.50,10.0.0.0/24. Khi nhiều máy khách khớp, dải cụ thể nhất được dùng",
+    "Shared secret": "Khóa bí mật dùng chung",
+    "Shared secret - Tooltip": "Khóa bí mật dùng chung RADIUS được cấu hình trên NAS này. Yêu cầu từ IP không khớp với máy khách nào dùng radiusSecret trong app.conf"
   }
 }

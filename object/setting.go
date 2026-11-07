@@ -16,6 +16,7 @@ package object
 
 import (
 	"fmt"
+	"sync/atomic"
 	"time"
 
 	"github.com/casdoor/casdoor/util"
@@ -41,6 +42,25 @@ type Setting struct {
 
 	// applies to the organizations that do not set their own record retention days, 0 keeps the records forever
 	RecordRetentionDays int `json:"recordRetentionDays"`
+
+	// trusted HTML (scripts, styles, meta tags) put into the <head> of every page of every organization
+	HeadHtml string `xorm:"mediumtext" json:"headHtml"`
+}
+
+type headHtmlState struct {
+	html        string
+	updatedTime time.Time
+}
+
+var currentHeadHtml atomic.Pointer[headHtmlState]
+
+// GetHeadHtml returns the head HTML of the global setting and when the setting was last saved
+func GetHeadHtml() (string, time.Time) {
+	state := currentHeadHtml.Load()
+	if state == nil {
+		return "", time.Time{}
+	}
+	return state.html, state.updatedTime
 }
 
 func GetSetting() (*Setting, error) {
@@ -108,6 +128,9 @@ func (setting *Setting) apply() {
 	ormer.Engine.SetMaxIdleConns(maxIdleConns)
 
 	ormer.Engine.SetConnMaxLifetime(time.Duration(setting.DbConnMaxLifetime) * time.Second)
+
+	updatedTime, _ := time.Parse(time.RFC3339, setting.UpdatedTime)
+	currentHeadHtml.Store(&headHtmlState{html: setting.HeadHtml, updatedTime: updatedTime})
 }
 
 func initBuiltInSetting() *Setting {

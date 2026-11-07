@@ -6,7 +6,7 @@ export function getMarketplaceSiteUrl(): string {
   return i18next.language?.startsWith("zh") ? "https://marketplace.casdoor.cn/zh" : "https://marketplace.casdoor.com";
 }
 
-export const IntegrationTypes = ["app", "provider", "theme"] as const;
+export const IntegrationTypes = ["app", "provider", "theme", "action"] as const;
 
 export function getIntegrationTypeLabel(type: string): string {
   switch (type) {
@@ -90,6 +90,10 @@ export function parseBundle(bundle: string | undefined | null): any {
   } catch {
     return null;
   }
+}
+
+export function getActionKind(bundle: any): string {
+  return bundle?.files?.["action.json"]?.kind ?? "";
 }
 
 export function IntegrationLogo({logo, name, className = "size-10"}: {logo?: string; name: string; className?: string}) {
