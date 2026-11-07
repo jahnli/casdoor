@@ -11,6 +11,7 @@ import type {ColumnDef} from "@/components/crud/types";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as SessionBackend from "@/backend/SessionBackend";
 import * as Setting from "@/lib/setting";
+import {withAuditUsers} from "@/lib/audit-users";
 import {DeviceIcon, parseUserAgent} from "@/lib/user-agent";
 
 export default function SessionListPage() {
@@ -84,7 +85,7 @@ export default function SessionListPage() {
       sortable: true,
       searchable: true,
       render: (value, record) => (
-        <UserCell organization={record.owner} name={value} linkToUser />
+        <UserCell user={record.auditUser} organization={record.owner} name={value} linkToUser />
       ),
     },
     {
@@ -131,7 +132,8 @@ export default function SessionListPage() {
           q.searchText,
           q.sortField,
           q.sortOrder,
-        )
+          true,
+        ).then((res) => withAuditUsers(res, "owner", "name"))
       }
       remove={(r) => SessionBackend.deleteSession(r)}
       actionColumnWidth={120}

@@ -13,15 +13,16 @@ import type {ColumnDef} from "@/components/crud/types";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as RecordBackend from "@/backend/RecordBackend";
 import * as Setting from "@/lib/setting";
+import {withAuditUsers} from "@/lib/audit-users";
 
 /** the actions for which the backend keeps an `isTriggered` flag worth showing */
 const TRIGGERABLE_ACTIONS = ["signup", "login", "logout", "update-user", "new-user"];
 
 /** an M2M row's subject is an application credential ("app/<name>"), not a user */
-function RecordUserLink({organization, user}: {organization: string; user: string}) {
+function RecordUserLink({organization, user, profile}: {organization: string; user: string; profile?: any}) {
   const appPrefix = ["app/", "app-dcr/"].find((prefix) => user.startsWith(prefix));
   if (!appPrefix) {
-    return <UserCell organization={organization} name={user} linkToUser />;
+    return <UserCell user={profile} organization={organization} name={user} linkToUser />;
   }
   const to = `/applications/admin/${user.slice(appPrefix.length)}`;
 
@@ -66,7 +67,7 @@ function RecordDetailSheet({record, onClose}: {record: any; onClose: () => void}
     },
     {
       label: i18next.t("general:User"),
-      children: field("user") ? <RecordUserLink organization={field("organization")} user={field("user")} /> : null,
+      children: field("user") ? <RecordUserLink organization={field("organization")} user={field("user")} profile={record.auditUser} /> : null,
     },
     {label: i18next.t("general:Method"), children: field("method")},
     {label: i18next.t("general:Request URI"), children: field("requestUri")},
@@ -109,7 +110,7 @@ export default function RecordListPage() {
       fixed: "left",
       sortable: true,
       searchable: true,
-      render: (value, record) => <RecordUserLink organization={record.organization} user={String(value ?? "")} />,
+      render: (value, record) => <RecordUserLink organization={record.organization} user={String(value ?? "")} profile={record.auditUser} />,
     },
     textColumn({dataIndex: "name", title: i18next.t("general:Name"), width: 140, searchable: true}),
     textColumn({dataIndex: "id", title: i18next.t("general:ID"), width: 90, searchable: true}),
@@ -203,7 +204,8 @@ export default function RecordListPage() {
             q.searchText,
             q.sortField,
             q.sortOrder,
-          )
+            true,
+          ).then((res) => withAuditUsers(res))
         }
         rowKey={(row, index) => `${row.id ?? index}`}
       />

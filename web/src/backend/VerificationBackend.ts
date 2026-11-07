@@ -14,8 +14,8 @@
 
 import * as Setting from "@/lib/setting";
 
-export function getVerifications(owner, page: any = "", pageSize: any = "", field: any = "", value: any = "", sortField: any = "", sortOrder: any = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-verifications?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${encodeURIComponent(value)}&sortField=${sortField}&sortOrder=${sortOrder}`, {
+export function getVerifications(owner, page: any = "", pageSize: any = "", field: any = "", value: any = "", sortField: any = "", sortOrder: any = "", includeUsers = false) {
+  return fetch(`${Setting.ServerUrl}/api/get-verifications?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${encodeURIComponent(value)}&sortField=${sortField}&sortOrder=${sortOrder}&includeUsers=${includeUsers}`, {
     method: "GET",
     credentials: "include",
     headers: {

@@ -66,7 +66,7 @@ func (c *ApiController) GetTokens() {
 			return
 		}
 
-		c.ResponseOk(tokens, paginator.Nums())
+		c.responseAuditList(tokens, paginator.Nums())
 	}
 }
 

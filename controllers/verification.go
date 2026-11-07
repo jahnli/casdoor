@@ -97,7 +97,7 @@ func (c *ApiController) GetVerifications() {
 			return
 		}
 
-		c.ResponseOk(verifications, paginator.Nums())
+		c.responseAuditList(verifications, paginator.Nums())
 	}
 }
 

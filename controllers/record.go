@@ -71,7 +71,7 @@ func (c *ApiController) GetRecords() {
 			return
 		}
 
-		c.ResponseOk(records, paginator.Nums())
+		c.responseAuditList(records, paginator.Nums())
 	}
 }
 

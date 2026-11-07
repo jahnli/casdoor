@@ -5,6 +5,7 @@ import {boolColumn, clientIpColumn, dateColumn, organizationColumn, textColumn} 
 import type {ColumnDef} from "@/components/crud/types";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as VerificationBackend from "@/backend/VerificationBackend";
+import {withAuditUsers} from "@/lib/audit-users";
 
 export default function VerificationListPage() {
   // GetVerifications() filters by "owner", an empty one means every organization
@@ -19,7 +20,7 @@ export default function VerificationListPage() {
       sortable: true,
       searchable: true,
       render: (value, record) => (
-        <UserCell organization={record.owner} name={value} linkToUser />
+        <UserCell user={record.auditUser} organization={record.owner} name={value} linkToUser />
       ),
     },
     organizationColumn(140, "owner"),
@@ -52,7 +53,8 @@ export default function VerificationListPage() {
           q.searchText,
           q.sortField,
           q.sortOrder,
-        )
+          true,
+        ).then((res) => withAuditUsers(res, "owner"))
       }
     />
   );

@@ -41,10 +41,14 @@ export function UserCell({user, organization, name, linkToUser = false}: {
     return () => { active = false; };
   }, [user, organization, name]);
 
-  const profile = user ?? (loaded?.organization === organization && loaded?.name === name ? loaded.user : null);
+  const resolved = loaded !== null && loaded.organization === organization && loaded.name === name;
+  const profile = user ?? (resolved ? loaded.user : null);
   const record = profile ?? {owner: organization, name};
   if (!record.name) {
     return null;
+  }
+  if (!user && organization && name && !resolved) {
+    return <div className="h-7" />;
   }
 
   const url = Setting.getEffectiveAvatarUrl(record);

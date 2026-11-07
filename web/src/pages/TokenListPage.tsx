@@ -8,6 +8,7 @@ import {useAccount} from "@/hooks/use-account";
 import {useOrganizationFilter} from "@/hooks/use-organization";
 import * as TokenBackend from "@/backend/TokenBackend";
 import * as Setting from "@/lib/setting";
+import {withAuditUsers} from "@/lib/audit-users";
 import {newToken} from "@/pages/defaults";
 
 export default function TokenListPage() {
@@ -23,7 +24,7 @@ export default function TokenListPage() {
       sortable: true,
       searchable: true,
       render: (value, record) => (
-        <UserCell organization={record.organization} name={value} linkToUser />
+        <UserCell user={record.auditUser} organization={record.organization} name={value} linkToUser />
       ),
     },
     linkColumn({dataIndex: "name", to: (r) => `/tokens/${r.name}`, width: 170, fixed: false}),
@@ -87,7 +88,8 @@ export default function TokenListPage() {
           q.searchText,
           q.sortField,
           q.sortOrder,
-        )
+          true,
+        ).then((res) => withAuditUsers(res))
       }
       newRecord={account ? () => newToken(account) : undefined}
       editUrl={(r) => `/tokens/${r.name}`}

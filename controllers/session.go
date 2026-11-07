@@ -64,7 +64,7 @@ func (c *ApiController) GetSessions() {
 		}
 		object.MaskSessionIds(sessions...)
 
-		c.ResponseOk(sessions, paginator.Nums())
+		c.responseAuditList(sessions, paginator.Nums())
 	}
 }
 
