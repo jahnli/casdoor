@@ -1706,7 +1706,7 @@ export default function LoginPage({type = "login", application: applicationProp,
               className="h-14 w-full justify-start gap-3 px-3 text-left"
               onClick={loginAsCurrentAccount}
             >
-              <Avatar className="h-8 w-8">
+              <Avatar className="h-9 w-9 shrink-0">
                 {Setting.getEffectiveAvatarUrl(account) ? (
                   <AvatarImage src={Setting.getEffectiveAvatarUrl(account)} alt={account.name} />
                 ) : null}
@@ -1714,8 +1714,9 @@ export default function LoginPage({type = "login", application: applicationProp,
                   {(account.name || "?").charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <span className="min-w-0 flex-1 truncate">
-                {account.displayName ? `${account.name} (${account.displayName})` : account.name}
+              <span className="flex min-w-0 flex-1 flex-col font-normal">
+                {account.displayName && <span className="truncate">{account.displayName}</span>}
+                <span className="truncate text-[13px] text-[#4b5672]">{account.name}</span>
               </span>
             </Button>
             <AuthDivider label={i18next.t("login:Or sign in with another account")} />
