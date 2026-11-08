@@ -67,22 +67,23 @@ void main() {
   float reach = uPointer.y * exp(-pow((X - uPointer.x) / 0.38, 2.0));
   vec3 glow = vec3(0.0);
   float cover = 0.0;
-  for (int k = 0; k < 1; k++) {
+  for (int k = 0; k < 3; k++) {
     float layer = float(k);
     float seed = layer * 13.7;
-    float pace = uTime * (1.0 - layer * 0.18);
-    float warp = snoise(vec2(X * 0.45 * uScale + pace * 0.02 + seed, pace * 0.05 + seed));
-    float wave = snoise(vec2(X * 0.75 * uScale + warp * 0.35 - pace * 0.03 + seed, pace * 0.07 - seed)) * 0.72
-      + snoise(vec2(X * 1.6 * uScale + warp * 0.5 + pace * 0.04 - seed, pace * 0.1 + seed * 0.5)) * 0.28;
-    float hem = 0.45 + layer * 0.07 + wave * 0.15 * uAmplitude;
-    hem += reach * 0.08;
-    float soft = 0.12 * (1.0 + layer * 0.9);
+    float pace = uTime * (1.0 - layer * 0.22);
+    float warp = snoise(vec2(X * 0.45 * uScale + pace * 0.11 + seed, pace * 0.16 + seed));
+    float wave = snoise(vec2(X * 0.75 * uScale + warp * 0.45 - pace * 0.13 + seed, pace * 0.2 - seed)) * 0.72
+      + snoise(vec2(X * 1.6 * uScale + warp * 0.55 + pace * 0.17 - seed, pace * 0.26 + seed * 0.5)) * 0.28;
+    float hem = 0.18 + layer * 0.08 + wave * 0.18 * uAmplitude;
+    hem += reach * 0.18;
+    float soft = 0.16 * (1.0 + layer * 0.85);
     float rise = hem - y;
     float body = pow(smootherstep(-soft - uGlow * 0.14, 0.26 + soft * 0.6, rise), 1.5 + uGlow * 0.6);
-    float lobes = 0.86 + 0.14 * snoise(vec2(X * 0.9 * uScale - pace * 0.025 + seed, y * 0.3 + pace * 0.04));
-    float alpha = body * lobes * (k == 0 ? 1.0 : 0.32);
-    alpha = clamp(alpha * (1.0 + reach * 0.25 * smootherstep(0.9, 0.0, abs(y - hem))), 0.0, 1.0);
-    vec3 tint = ramp(u + 0.05 * sin(pace * 0.08 + layer * 2.3) + layer * 0.1 + max(rise, 0.0) * 0.05);
+    float lobes = 0.86 + 0.14 * snoise(vec2(X * 0.9 * uScale - pace * 0.1 + seed, y * 0.35 + pace * 0.14));
+    float alpha = body * lobes * (k == 0 ? 1.0 : 0.62);
+    alpha = clamp(alpha * (1.0 + reach * 0.45 * smootherstep(0.9, 0.0, abs(y - hem))), 0.0, 1.0);
+    vec3 tint = ramp(u + 0.08 * sin(pace * 0.28 + layer * 2.3) + layer * 0.16 + max(rise, 0.0) * 0.12);
+    tint = mix(tint, vec3(0.78, 0.88, 1.0), clamp(max(rise, 0.0) * 0.55, 0.0, 0.42));
     glow = 1.0 - (1.0 - glow) * (1.0 - tint * alpha);
     cover = 1.0 - (1.0 - cover) * (1.0 - alpha);
   }
@@ -154,10 +155,10 @@ export function LoginAurora({isDark}: {isDark: boolean}) {
     const resolution = gl.getUniformLocation(program, "uResolution");
     const time = gl.getUniformLocation(program, "uTime");
     const pointerUniform = gl.getUniformLocation(program, "uPointer");
-    gl.uniform1f(gl.getUniformLocation(program, "uOpacity"), isDark ? 0.52 : 0.28);
-    gl.uniform1f(gl.getUniformLocation(program, "uAmplitude"), 0.75);
-    gl.uniform1f(gl.getUniformLocation(program, "uScale"), 1.05);
-    gl.uniform1f(gl.getUniformLocation(program, "uGlow"), 0.25);
+    gl.uniform1f(gl.getUniformLocation(program, "uOpacity"), isDark ? 0.78 : 0.62);
+    gl.uniform1f(gl.getUniformLocation(program, "uAmplitude"), 0.95);
+    gl.uniform1f(gl.getUniformLocation(program, "uScale"), 1.2);
+    gl.uniform1f(gl.getUniformLocation(program, "uGlow"), 0.62);
 
     let raf = 0;
     let elapsed = 20;
@@ -243,9 +244,9 @@ export function LoginAurora({isDark}: {isDark: boolean}) {
       aria-hidden="true"
       className="login-aurora pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       style={{background: [
-        `radial-gradient(ellipse at 0% 0%, ${isDark ? "#17366b24" : "#17366b18"}, transparent 55%)`,
-        `radial-gradient(ellipse at 50% 0%, ${isDark ? "#1249e524" : "#1249e520"}, transparent 65%)`,
-        `radial-gradient(ellipse at 100% 0%, ${isDark ? "#6f9bc924" : "#6f9bc918"}, transparent 55%)`,
+        `radial-gradient(ellipse at 18% 0%, ${isDark ? "#17366b66" : "#17366b3d"}, transparent 58%)`,
+        `radial-gradient(ellipse at 50% -8%, ${isDark ? "#1249e580" : "#1249e552"}, transparent 68%)`,
+        `radial-gradient(ellipse at 86% 0%, ${isDark ? "#6f9bc966" : "#6f9bc940"}, transparent 58%)`,
       ].join(", ")}}
     >
       {staticBackground ? null : <canvas ref={canvasRef} className="absolute inset-0 h-full max-h-[1000px] w-full" />}
