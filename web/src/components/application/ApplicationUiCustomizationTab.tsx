@@ -3,6 +3,7 @@ import i18next from "i18next";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
+import {TableCell} from "@/components/ui/table";
 import {CodeEditor} from "@/components/common/CodeEditor";
 import {SelectField} from "@/components/common/SelectField";
 import {TagsInput} from "@/components/common/TagsInput";
@@ -299,6 +300,36 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
           }
           rows={application.signinItems ?? []}
           onChange={(rows) => updateField("signinItems", rows)}
+          renderRowDetail={(row: any, _i, patch) => row.name === "Username" ? (
+            <>
+              <TableCell className="align-top">
+                <SelectField
+                  value="Username example"
+                  onChange={() => {}}
+                  options={[{id: "Username example", name: i18next.t("application:Show username example")}]} 
+                />
+              </TableCell>
+              <TableCell className="align-top">
+                <div className="flex h-9 items-center">
+                  <Switch
+                    aria-label={i18next.t("application:Show username example")}
+                    checked={!!row.showExample}
+                    onCheckedChange={(v) => patch({showExample: v, example: row.example?.trim() ? row.example : "lijiaheng"})}
+                  />
+                </div>
+              </TableCell>
+              <TableCell className="align-top">
+                {row.showExample && (
+                  <Input
+                    aria-label={i18next.t("application:Example username")}
+                    value={row.example ?? "lijiaheng"}
+                    onChange={(e) => patch({example: e.target.value})}
+                  />
+                )}
+              </TableCell>
+              <TableCell colSpan={4} />
+            </>
+          ) : null}
           newRow={() => ({
             name: Setting.getNewRowNameForTable(application.signinItems ?? [], "Please select a signin item"),
             visible: true,
@@ -326,7 +357,9 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
               title: i18next.t("organization:Visible"),
               width: 90,
               render: (row: any, _i, patch) => (
-                <Switch checked={!!row.visible} onCheckedChange={(v) => patch({visible: v, required: v})} />
+                <div className="flex h-9 items-center">
+                  <Switch checked={!!row.visible} onCheckedChange={(v) => patch({visible: v, required: v})} />
+                </div>
               ),
             },
             {

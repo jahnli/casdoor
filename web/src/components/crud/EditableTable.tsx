@@ -17,6 +17,7 @@ interface EditableTableProps<T> {
   rows: T[] | undefined | null;
   onChange: (rows: T[]) => void;
   columns: EditableColumn<T>[];
+  renderRowDetail?: (row: T, index: number, update: (patch: Partial<T> | Record<string, any>) => void) => React.ReactNode;
   newRow?: () => T;
   addLabel?: React.ReactNode;
   /** hide the up/down buttons for tables where order does not matter */
@@ -37,6 +38,7 @@ export function EditableTable<T>({
   rows,
   onChange,
   columns,
+  renderRowDetail,
   newRow,
   addLabel,
   reorderable = true,
@@ -99,53 +101,63 @@ export function EditableTable<T>({
                 </TableCell>
               </TableRow>
             ) : (
-              items.map((row, index) => (
-                <TableRow key={rowKey ? rowKey(row, index) : index}>
-                  {columns.map((column) => (
-                    <TableCell key={column.key} className="align-top">
-                      {column.render(row, index, (patch) => update(index, patch))}
-                    </TableCell>
-                  ))}
-                  {!disabled ? (
-                    <TableCell className="align-top">
-                      <div className="flex items-center gap-1">
-                        {reorderable ? (
-                          <>
+              items.map((row, index) => {
+                const detail = renderRowDetail?.(row, index, (patch) => update(index, patch));
+                return (
+                  <React.Fragment key={rowKey ? rowKey(row, index) : index}>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableCell key={column.key} className="align-top">
+                          {column.render(row, index, (patch) => update(index, patch))}
+                        </TableCell>
+                      ))}
+                      {!disabled ? (
+                        <TableCell className="align-top">
+                          <div className="flex items-center gap-1">
+                            {reorderable ? (
+                              <>
+                                <Button
+                                  variant="ghost"
+                                  size="iconSm"
+                                  disabled={index === 0}
+                                  aria-label={i18next.t("general:Up")}
+                                  onClick={() => swap(index, index - 1)}
+                                >
+                                  <ArrowUp />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="iconSm"
+                                  disabled={index === items.length - 1}
+                                  aria-label={i18next.t("general:Down")}
+                                  onClick={() => swap(index, index + 1)}
+                                >
+                                  <ArrowDown />
+                                </Button>
+                              </>
+                            ) : null}
                             <Button
                               variant="ghost"
                               size="iconSm"
-                              disabled={index === 0}
-                              aria-label={i18next.t("general:Up")}
-                              onClick={() => swap(index, index - 1)}
+                              className="text-destructive"
+                              disabled={canDelete ? !canDelete(row, index) : false}
+                              aria-label={i18next.t("general:Delete")}
+                              onClick={() => remove(index)}
                             >
-                              <ArrowUp />
+                              <Trash2 />
                             </Button>
-                            <Button
-                              variant="ghost"
-                              size="iconSm"
-                              disabled={index === items.length - 1}
-                              aria-label={i18next.t("general:Down")}
-                              onClick={() => swap(index, index + 1)}
-                            >
-                              <ArrowDown />
-                            </Button>
-                          </>
-                        ) : null}
-                        <Button
-                          variant="ghost"
-                          size="iconSm"
-                          className="text-destructive"
-                          disabled={canDelete ? !canDelete(row, index) : false}
-                          aria-label={i18next.t("general:Delete")}
-                          onClick={() => remove(index)}
-                        >
-                          <Trash2 />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  ) : null}
-                </TableRow>
-              ))
+                          </div>
+                        </TableCell>
+                      ) : null}
+                    </TableRow>
+                    {detail != null && (
+                      <TableRow className="hover:bg-transparent">
+                        {detail}
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                );
+              })
             )}
           </TableBody>
         </Table>

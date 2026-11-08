@@ -181,6 +181,8 @@
     "Signin": "Signin",
     "Signin (Default True)": "Signin (Default True)",
     "Signin items": "Signin items",
+    "Show username example": "Show username example",
+    "Example username": "Example username",
     "Signin items - Tooltip": "Items for users to fill in when signing up",
     "Signin methods": "Signin methods",
     "Signin methods - Tooltip": "Add allowed login methods for users. By default, all methods are available",
@@ -810,6 +812,7 @@
     "unsynced": "unsynced"
   },
   "login": {
+    "Username example": "Example: {{example}}",
     "A sign-in link has been sent to your email, it can only be opened in this browser": "A sign-in link has been sent to your email, it can only be opened in this browser",
     "Approve and sign in": "Approve and sign in",
     "Auto sign in": "Auto sign in",

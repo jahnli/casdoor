@@ -1506,9 +1506,16 @@ export default function LoginPage({type = "login", application: applicationProp,
       }
       return (
         <div key={key} className="login-username space-y-2">
-          <Label htmlFor="username">
-            {item.label || (isCodeMethod || loginMethod === "magicLink" ? getUsernameLabel(loginMethod) : i18next.t("signup:Username"))}
-          </Label>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <Label htmlFor="username">
+              {item.label || (isCodeMethod || loginMethod === "magicLink" ? getUsernameLabel(loginMethod) : i18next.t("signup:Username"))}
+            </Label>
+            {item.showExample && item.example?.trim() && !isCodeMethod && loginMethod !== "magicLink" && (
+              <span className="login-username-example break-all text-xs text-muted-foreground">
+                {i18next.t("login:Username example", {example: item.example.trim()})}
+              </span>
+            )}
+          </div>
           <Input
             id="username"
             className="login-username-input"

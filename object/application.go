@@ -69,6 +69,8 @@ type SigninItem struct {
 	Label       string `json:"label"`
 	CustomCss   string `json:"customCss"`
 	Placeholder string `json:"placeholder"`
+	ShowExample bool   `json:"showExample"`
+	Example     string `json:"example"`
 	Rule        string `json:"rule"`
 	IsCustom    bool   `json:"isCustom"`
 }
