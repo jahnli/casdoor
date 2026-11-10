@@ -1293,7 +1293,8 @@
     "Please select a provider": "Vui lòng chọn nhà cung cấp",
     "Production endpoint is empty": "Điểm cuối production trống",
     "Scan server": "Máy chủ quét",
-    "Scanned hosts": "Máy chủ đã quét"
+    "Scanned hosts": "Máy chủ đã quét",
+    "Token header": "Header token"
   },
   "setting": {
     "Cannot be more than the max open connections": "Không được lớn hơn số kết nối mở tối đa",

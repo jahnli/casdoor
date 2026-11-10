@@ -1300,7 +1300,8 @@
     "Please select a provider": "Please select a provider",
     "Production endpoint is empty": "Production endpoint is empty",
     "Scan server": "Scan server",
-    "Scanned hosts": "Scanned hosts"
+    "Scanned hosts": "Scanned hosts",
+    "Token header": "Token header"
   },
   "setting": {
     "Cannot be more than the max open connections": "Cannot be more than the max open connections",

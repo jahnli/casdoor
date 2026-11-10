@@ -706,6 +706,23 @@ func linkUserByProvider(user *object.User, provider *object.Provider, providerId
 	return object.LinkUserAccount(user, provider.Type, providerId)
 }
 
+// getSigninApplication returns the application signed in to, see object.GetSigninApplicationOfOrganization
+func getSigninApplication(id string, organization string) (*object.Application, error) {
+	application, err := object.GetApplication(id)
+	if err != nil {
+		return nil, err
+	}
+	return object.GetSigninApplicationOfOrganization(application, organization)
+}
+
+func getSigninApplicationByClientId(clientId string, organization string) (*object.Application, error) {
+	application, err := object.GetApplicationByClientId(clientId)
+	if err != nil {
+		return nil, err
+	}
+	return object.GetSigninApplicationOfOrganization(application, organization)
+}
+
 // Login ...
 // @Title Login
 // @Tag Login API
@@ -748,7 +765,7 @@ func (c *ApiController) Login() {
 			}
 		} else if authForm.SigninMethod == "Face ID" {
 			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error(), nil)
 				return
@@ -785,7 +802,7 @@ func (c *ApiController) Login() {
 			}
 		} else if authForm.Password == "" {
 			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error(), nil)
 				return
@@ -861,7 +878,7 @@ func (c *ApiController) Login() {
 			}
 		} else {
 			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error(), nil)
 				return
@@ -954,7 +971,7 @@ func (c *ApiController) Login() {
 			return
 		} else {
 			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error())
 				return
@@ -983,13 +1000,13 @@ func (c *ApiController) Login() {
 	} else if authForm.Provider != "" {
 		var application *object.Application
 		if authForm.ClientId != "" {
-			application, err = object.GetApplicationByClientId(authForm.ClientId)
+			application, err = getSigninApplicationByClientId(authForm.ClientId, authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error())
 				return
 			}
 		} else {
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error())
 				return
@@ -1392,9 +1409,9 @@ func (c *ApiController) Login() {
 
 		var application *object.Application
 		if authForm.ClientId == "" {
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 		} else {
-			application, err = object.GetApplicationByClientId(authForm.ClientId)
+			application, err = getSigninApplicationByClientId(authForm.ClientId, authForm.Organization)
 		}
 		if err != nil {
 			c.ResponseError(err.Error())
@@ -1476,7 +1493,7 @@ func (c *ApiController) Login() {
 		if c.GetSessionUsername() != "" {
 			// user already signed in to Casdoor, so let the user click the avatar button to do the quick sign-in
 			var application *object.Application
-			application, err = object.GetApplication(fmt.Sprintf("admin/%s", authForm.Application))
+			application, err = getSigninApplication(fmt.Sprintf("admin/%s", authForm.Application), authForm.Organization)
 			if err != nil {
 				c.ResponseError(err.Error())
 				return

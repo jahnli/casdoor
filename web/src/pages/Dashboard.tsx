@@ -237,7 +237,7 @@ export default function Dashboard() {
       </div>
 
       {/* 30-day trend + provider distribution */}
-      <div className="grid gap-4 xl:grid-cols-[7fr_5fr]">
+      <div className="grid gap-4 xl:grid-cols-[7fr_5fr] [&>*]:min-w-0">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{i18next.t("home:Past 30 days")}</CardTitle>
@@ -324,7 +324,7 @@ export default function Dashboard() {
       </div>
 
       {/* MFA coverage + sign-in heatmap */}
-      <div className="grid gap-4 xl:grid-cols-[4fr_8fr]">
+      <div className="grid gap-4 xl:grid-cols-[4fr_8fr] [&>*]:min-w-0">
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{i18next.t("user:MFA accounts")}</CardTitle>
@@ -364,11 +364,13 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {heatmapData?.data ? (
-              <ActivityHeatmap
-                data={heatmapData.data}
-                maxCount={heatmapData.maxCount}
-                dateRange={heatmapData.dateRange}
-              />
+              <div className="overflow-x-auto scrollbar-thin">
+                <ActivityHeatmap
+                  data={heatmapData.data}
+                  maxCount={heatmapData.maxCount}
+                  dateRange={heatmapData.dateRange}
+                />
+              </div>
             ) : (
               <div className="flex h-[180px] items-center justify-center text-muted-foreground">
                 {i18next.t("general:None")}

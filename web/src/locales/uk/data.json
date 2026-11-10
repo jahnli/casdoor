@@ -1293,7 +1293,8 @@
     "Please select a provider": "Будь ласка, оберіть постачальника",
     "Production endpoint is empty": "Продакшн-кінцева точка порожня",
     "Scan server": "Сервер сканування",
-    "Scanned hosts": "Відскановані хости"
+    "Scanned hosts": "Відскановані хости",
+    "Token header": "Заголовок токена"
   },
   "setting": {
     "Cannot be more than the max open connections": "Не може перевищувати макс. кількість відкритих з'єднань",

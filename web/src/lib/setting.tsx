@@ -402,6 +402,10 @@ export const OtherProviderInfo = {
       logo: `${StaticBaseUrl}/img/email_resend.png`,
       url: "https://resend.com/",
     },
+    "Microsoft 365": {
+      logo: `${StaticBaseUrl}/img/social_microsoftonline.png`,
+      url: "https://learn.microsoft.com/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth",
+    },
   },
   Storage: {
     "Local File System": {
@@ -499,6 +503,10 @@ export const OtherProviderInfo = {
     "Cloudflare Turnstile": {
       logo: `${StaticBaseUrl}/img/social_cloudflare.png`,
       url: "https://www.cloudflare.com/products/turnstile/",
+    },
+    "ALTCHA": {
+      logo: `${StaticBaseUrl}/img/social_altcha.svg`,
+      url: "https://altcha.org",
     },
   },
   AI: {
@@ -1537,6 +1545,7 @@ export function getProviderTypeOptions(category) {
         {id: "SendGrid", name: "SendGrid"},
         {id: "Custom HTTP Email", name: "Custom HTTP Email"},
         {id: "Resend", name: "Resend"},
+        {id: "Microsoft 365", name: "Microsoft 365"},
       ]
     );
   } else if (category === "SMS") {
@@ -1595,6 +1604,7 @@ export function getProviderTypeOptions(category) {
       {id: "Aliyun Captcha", name: "Aliyun Captcha"},
       {id: "GEETEST", name: "GEETEST"},
       {id: "Cloudflare Turnstile", name: "Cloudflare Turnstile"},
+      {id: "ALTCHA", name: "ALTCHA"},
     ]);
   } else if (category === "Notification") {
     return ([

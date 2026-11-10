@@ -154,13 +154,7 @@ func (c *RootController) CasP3ProxyValidate() {
 		}
 	}
 	// everything is ok, send the response
-	if strings.EqualFold(format, "json") {
-		c.Data["json"] = serviceResponse
-		c.ServeJSON()
-	} else {
-		c.Data["xml"] = serviceResponse
-		c.ServeXML()
-	}
+	c.serveCasResponse(&serviceResponse, format)
 }
 
 func getCasPgtCallbackClient(applicationId string) *http.Client {
@@ -222,13 +216,7 @@ func (c *RootController) CasProxy() {
 		},
 	}
 
-	if strings.EqualFold(format, "json") {
-		c.Data["json"] = serviceResponse
-		c.ServeJSON()
-	} else {
-		c.Data["xml"] = serviceResponse
-		c.ServeXML()
-	}
+	c.serveCasResponse(&serviceResponse, format)
 }
 
 func (c *RootController) isCasProxyTargetAllowed(applicationId string, targetService string) bool {
@@ -295,13 +283,7 @@ func (c *RootController) sendCasProxyResponseErr(code, msg, format string) {
 			Message: msg,
 		},
 	}
-	if strings.EqualFold(format, "json") {
-		c.Data["json"] = serviceResponse
-		c.ServeJSON()
-	} else {
-		c.Data["xml"] = serviceResponse
-		c.ServeXML()
-	}
+	c.serveCasResponse(&serviceResponse, format)
 }
 
 func (c *RootController) sendCasAuthenticationResponseErr(code, msg, format string) {
@@ -312,11 +294,29 @@ func (c *RootController) sendCasAuthenticationResponseErr(code, msg, format stri
 			Message: msg,
 		},
 	}
+	c.serveCasResponse(&serviceResponse, format)
+}
+
+func (c *RootController) serveCasResponse(serviceResponse *object.CasServiceResponse, format string) {
 	if strings.EqualFold(format, "json") {
 		c.Data["json"] = serviceResponse
 		c.ServeJSON()
 	} else {
+		if serviceResponse.Failure != nil {
+			serviceResponse.Failure.Message = escapeCasXmlText(serviceResponse.Failure.Message)
+		}
+		if serviceResponse.ProxyFailure != nil {
+			serviceResponse.ProxyFailure.Message = escapeCasXmlText(serviceResponse.ProxyFailure.Message)
+		}
 		c.Data["xml"] = serviceResponse
 		c.ServeXML()
 	}
+}
+
+func escapeCasXmlText(text string) string {
+	var sb strings.Builder
+	if err := xml.EscapeText(&sb, []byte(text)); err != nil {
+		return ""
+	}
+	return sb.String()
 }

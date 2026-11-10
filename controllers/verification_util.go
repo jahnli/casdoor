@@ -16,12 +16,21 @@ package controllers
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/casdoor/casdoor/captcha"
 	"github.com/casdoor/casdoor/form"
 	"github.com/casdoor/casdoor/object"
 	"github.com/casdoor/casdoor/util"
 )
+
+func getCaptchaService(provider *object.Provider, captchaType string) captcha.CaptchaProvider {
+	service := captcha.GetCaptchaProvider(captchaType, provider.Endpoint)
+	if altcha, ok := service.(*captcha.AltchaProvider); ok && provider.Owner != "admin" && provider.Owner != "built-in" {
+		altcha.SetHttpClient(util.NewInternetOnlyHttpClient(10 * time.Second))
+	}
+	return service
+}
 
 // verifyAuthFormCaptcha verifies the captcha with the type of the application's provider, a
 // client-chosen type with a client-supplied secret would let any test secret key pass
@@ -34,7 +43,11 @@ func verifyAuthFormCaptcha(captchaProvider *object.Provider, authForm *form.Auth
 	if captchaProvider.Type != "Default" {
 		clientSecret = captchaProvider.ClientSecret
 	}
-	return captcha.VerifyCaptchaByCaptchaType(captchaProvider.Type, authForm.CaptchaToken, captchaProvider.ClientId, clientSecret, captchaProvider.ClientId2)
+	service := getCaptchaService(captchaProvider, captchaProvider.Type)
+	if service == nil {
+		return false, fmt.Errorf("invalid captcha provider: %s", captchaProvider.Type)
+	}
+	return service.VerifyCaptcha(authForm.CaptchaToken, captchaProvider.ClientId, clientSecret, captchaProvider.ClientId2)
 }
 
 func (c *ApiController) checkOrgMasterVerificationCode(user *object.User, code string) (bool, error) {

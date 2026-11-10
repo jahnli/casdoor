@@ -1293,7 +1293,8 @@
     "Please select a provider": "Por favor, selecione um provedor",
     "Production endpoint is empty": "O ponto de extremidade de produção está vazio",
     "Scan server": "Servidor de varredura",
-    "Scanned hosts": "Hosts verificados"
+    "Scanned hosts": "Hosts verificados",
+    "Token header": "Cabeçalho do token"
   },
   "setting": {
     "Cannot be more than the max open connections": "Não pode ser maior que o máx. de conexões abertas",

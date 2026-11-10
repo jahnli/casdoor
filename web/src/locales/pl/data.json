@@ -1293,7 +1293,8 @@
     "Please select a provider": "Proszę wybrać dostawcę",
     "Production endpoint is empty": "Punkt końcowy produkcji jest pusty",
     "Scan server": "Serwer skanowania",
-    "Scanned hosts": "Zeskanowane hosty"
+    "Scanned hosts": "Zeskanowane hosty",
+    "Token header": "Nagłówek tokenu"
   },
   "setting": {
     "Cannot be more than the max open connections": "Nie może przekraczać maks. liczby otwartych połączeń",

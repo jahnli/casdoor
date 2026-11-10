@@ -21,7 +21,6 @@ import (
 	"strings"
 
 	"github.com/beego/beego/v2/core/utils/pagination"
-	"github.com/casdoor/casdoor/captcha"
 	"github.com/casdoor/casdoor/form"
 	"github.com/casdoor/casdoor/object"
 	"github.com/casdoor/casdoor/util"
@@ -327,7 +326,7 @@ func (c *ApiController) SendVerificationCode() {
 			}
 
 			if vform.CaptchaType != "none" {
-				if captchaService := captcha.GetCaptchaProvider(vform.CaptchaType); captchaService == nil {
+				if captchaService := getCaptchaService(captchaProvider, vform.CaptchaType); captchaService == nil {
 					c.ResponseError(c.T("general:don't support captchaProvider: ") + vform.CaptchaType)
 					return
 				} else if isHuman, err := captchaService.VerifyCaptcha(vform.CaptchaToken, captchaProvider.ClientId, vform.ClientSecret, captchaProvider.ClientId2); err != nil {
@@ -566,7 +565,7 @@ func (c *ApiController) VerifyCaptcha() {
 		vform.ClientSecret = captchaProvider.ClientSecret
 	}
 
-	provider := captcha.GetCaptchaProvider(vform.CaptchaType)
+	provider := getCaptchaService(captchaProvider, vform.CaptchaType)
 	if provider == nil {
 		c.ResponseError(c.T("verification:Invalid captcha provider."))
 		return

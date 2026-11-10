@@ -199,6 +199,13 @@ export default function ServerEditPage() {
           </Button>
         </div>
       </FormRow>
+      <FormRow labelKey="server:Token header">
+        <Input
+          placeholder="Authorization: Bearer"
+          value={server.tokenHeader ?? ""}
+          onChange={(e) => updateServerField("tokenHeader", e.target.value)}
+        />
+      </FormRow>
       <FormRow block labelKey="general:Application">
         <SearchableSelect
           value={server.application ?? ""}

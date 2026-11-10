@@ -124,10 +124,15 @@ func (c *ApiController) ProxyServer() {
 
 		// don't forward the caller's own credentials to the upstream MCP server
 		request.Header.Del("Cookie")
+		request.Header.Del("X-Casdoor-Access-Key")
+		request.Header.Del("X-Casdoor-Access-Secret")
+		request.Header.Del("Authorization")
 		if server.Token != "" {
-			request.Header.Set("Authorization", "Bearer "+server.Token)
-		} else {
-			request.Header.Del("Authorization")
+			if server.TokenHeader != "" && !strings.EqualFold(server.TokenHeader, "Authorization") {
+				request.Header.Set(server.TokenHeader, server.Token)
+			} else {
+				request.Header.Set("Authorization", "Bearer "+server.Token)
+			}
 		}
 	}
 

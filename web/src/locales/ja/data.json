@@ -1293,7 +1293,8 @@
     "Please select a provider": "プロバイダーを選択してください",
     "Production endpoint is empty": "本番エンドポイントが空です",
     "Scan server": "サーバーをスキャン",
-    "Scanned hosts": "スキャン済みホスト"
+    "Scanned hosts": "スキャン済みホスト",
+    "Token header": "トークンヘッダー"
   },
   "setting": {
     "Cannot be more than the max open connections": "最大オープン接続数を超えることはできません",

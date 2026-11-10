@@ -1301,7 +1301,8 @@
     "Please select a provider": "请选择一个提供商",
     "Production endpoint is empty": "生产端点为空",
     "Scan server": "扫描服务器",
-    "Scanned hosts": "已扫描主机"
+    "Scanned hosts": "已扫描主机",
+    "Token header": "令牌请求头"
   },
   "setting": {
     "Cannot be more than the max open connections": "不能超过最大打开连接数",

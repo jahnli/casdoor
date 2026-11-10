@@ -1293,7 +1293,8 @@
     "Please select a provider": "Lütfen bir sağlayıcı seçin",
     "Production endpoint is empty": "Üretim uç noktası boş",
     "Scan server": "Tarama sunucusu",
-    "Scanned hosts": "Taranan hostlar"
+    "Scanned hosts": "Taranan hostlar",
+    "Token header": "Belirteç başlığı"
   },
   "setting": {
     "Cannot be more than the max open connections": "Maks. açık bağlantı sayısından fazla olamaz",
