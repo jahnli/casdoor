@@ -36,7 +36,9 @@ export default function AppListPage() {
       return;
     }
     ApplicationBackend.getApplicationsByOrganization("admin", account.owner).then((res: any) => {
-      const items = [...(res.data ?? [])].sort((a: any, b: any) => a.order - b.order);
+      const items = (res.data ?? [])
+        .filter((application: any) => !application.hideFromAppList)
+        .sort((a: any, b: any) => a.order - b.order);
       setApplications(items);
     });
   }, [account]);

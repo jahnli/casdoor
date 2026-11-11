@@ -178,6 +178,8 @@
     "Side panel HTML - Tooltip": "Customize the HTML code for the side panel of the login page",
     "Sign in only": "Sign in only",
     "Sign in or sign up": "Sign in or sign up",
+    "Show in application list": "Show in application list",
+    "Show in application list - Tooltip": "When disabled, the application is hidden from the Apps page. Sign-in and existing access permissions are not affected.",
     "Signin": "Signin",
     "Signin (Default True)": "Signin (Default True)",
     "Signin items": "Signin items",

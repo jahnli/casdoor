@@ -109,6 +109,7 @@ type Application struct {
 	Title                        string          `xorm:"varchar(100)" json:"title"`
 	Favicon                      string          `xorm:"varchar(200)" json:"favicon"`
 	Order                        int             `json:"order"`
+	HideFromAppList              bool            `xorm:"notnull default false" json:"hideFromAppList"`
 	HomepageUrl                  string          `xorm:"varchar(100)" json:"homepageUrl"`
 	Description                  string          `xorm:"mediumtext" json:"description"`
 	Organization                 string          `xorm:"varchar(100)" json:"organization"`
