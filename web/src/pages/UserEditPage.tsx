@@ -32,7 +32,7 @@ import {AccountItemRow, AccountItemsProvider} from "@/components/user/AccountIte
 import {EnableMfaButton} from "@/components/user/EnableMfaButton";
 import {TotpMfaType} from "@/components/auth/mfa/constants";
 import {MfaItemsTable} from "@/components/auth/mfa/MfaItemsTable";
-import {ACCOUNT_ITEM_ORDER, ACCOUNT_PROPERTY_ITEMS, isAccountItemVisible} from "@/lib/account-items";
+import {ACCOUNT_ITEM_ORDER, ACCOUNT_PROPERTY_ITEMS, USER_SECURITY_FIELDS, USER_SECURITY_ITEMS, isAccountItemVisible} from "@/lib/account-items";
 import {PasswordModal} from "@/components/user/PasswordModal";
 import {ResetModal} from "@/components/user/ResetModal";
 import {WebauthnCredentialTable} from "@/components/user/WebauthnCredentialTable";
@@ -97,8 +97,13 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   const groups = useGroupOptions(organizationName);
   const groupList = useGroupList(organizationName);
 
+  const persistedUser = React.useRef<any>(null);
   const {record: user, updateField, updateFields, loading, denied, mode, setMode, reload} = useEditRecord<any>({
     fetch: () => UserBackend.getUser(organizationName, userName),
+    transform: (record) => {
+      persistedUser.current = Setting.deepCopy(record);
+      return record;
+    },
     deps: [organizationName, userName],
   });
   const affiliation = useAffiliation(application, user);
@@ -149,7 +154,13 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   }
 
   const isAdmin = Setting.isLocalAdminUser(account);
+  const isGlobalAdmin = Setting.isAdminUser(account);
   const isSelf = !!account && (user.id && account.id ? user.id === account.id : account.owner === user.owner && account.name === user.name);
+  const changedSecurityFields = USER_SECURITY_FIELDS.filter((field) =>
+    user[field] !== undefined && JSON.stringify(user[field]) !== JSON.stringify(persistedUser.current?.[field]),
+  );
+  const canSave = isGlobalAdmin || (isSelf && mode !== "add" && changedSecurityFields.length > 0);
+  const editableItems = isGlobalAdmin ? undefined : isSelf && mode !== "add" ? USER_SECURITY_ITEMS : [];
   // The form layout and MFA items are a per-organization policy, and `get-user-application`
   // is the only way a non-admin can read their own organization, so prefer it over the
   // admin-only `get-organization` this page also fetches.
@@ -161,14 +172,21 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   );
 
   const save = async(exitAfterSave: boolean) => {
+    if (!canSave || mode === "view") {
+      return;
+    }
     const isAdd = mode === "add";
+    const record = isGlobalAdmin ? Setting.deepCopy(user) : Object.fromEntries(
+      changedSecurityFields.map((field) => [field, user[field]]),
+    );
     setSaving(true);
     await submitEdit({
       mode,
-      record: Setting.deepCopy(user),
+      record,
       add: (record) => UserBackend.addUser(record),
-      update: (record) => UserBackend.updateUser(organizationName, userName, record),
+      update: (record) => UserBackend.updateUser(organizationName, userName, record, isGlobalAdmin ? undefined : Object.keys(record)),
       onSaved: () => {
+        persistedUser.current = Setting.deepCopy(user);
         setMode("edit");
         if (isSelf) {
           reloadAccount();
@@ -1139,12 +1157,12 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
       title={`${i18next.t(
         mode === "add" ? "user:New User" : isSelf ? "account:My Account" : getModeTitleKey("user:Edit User", mode),
       )} - ${user.displayName || user.name}`}
-      mode={mode}
+      mode={canSave ? mode : "view"}
       backTo={self ? "/" : "/users"}
       onSave={save}
       saving={saving}
     >
-      {isSelf && user.needUpdatePassword ? (
+      {isSelf && isGlobalAdmin && user.needUpdatePassword ? (
         <Alert variant="warning" className="mb-4">
           <AlertTitle>{i18next.t("user:You need to update your password")}</AlertTitle>
           <AlertDescription>
@@ -1159,6 +1177,8 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         isAdmin={isAdmin}
         isSelfOrAdmin={isSelfOrAdmin}
         user={user}
+        editableItems={mode === "view" ? [] : editableItems}
+        canModifyAsAdmin={isGlobalAdmin}
       >
         {visibleAccountItems.length === 0 ? (
           // the organization configures no account items (or has not loaded yet);

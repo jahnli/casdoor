@@ -265,6 +265,12 @@ func (c *ApiController) GetUser() {
 // @Success 200 {object} controllers.Response The Response object
 // @router /update-user [post]
 func (c *ApiController) UpdateUser() {
+	isGlobalAdmin, actor := c.isGlobalAdmin()
+	if !isGlobalAdmin && actor == nil {
+		c.ResponseError(c.T("auth:Unauthorized operation"))
+		return
+	}
+
 	id := c.Ctx.Input.Query("id")
 	userId := c.Ctx.Input.Query("userId")
 	owner := c.Ctx.Input.Query("owner")
@@ -321,6 +327,20 @@ func (c *ApiController) UpdateUser() {
 		return
 	}
 
+	var securityColumns []string
+	if !isGlobalAdmin {
+		if actor.Owner != oldUser.Owner || actor.Name != oldUser.Name {
+			c.ResponseError(c.T("auth:Unauthorized operation"))
+			return
+		}
+		securityColumns, err = getUserSecurityUpdateColumns(c.Ctx.Input.RequestBody, columnsStr)
+		if err != nil {
+			c.ResponseError(c.T(err.Error()))
+			return
+		}
+		columnsStr = strings.Join(securityColumns, ",")
+	}
+
 	if columnsStr != "" {
 		mergedUser := *oldUser
 		if err = json.Unmarshal(c.Ctx.Input.RequestBody, &mergedUser); err != nil {
@@ -328,6 +348,26 @@ func (c *ApiController) UpdateUser() {
 			return
 		}
 		user = mergedUser
+	}
+
+	if !isGlobalAdmin && util.InSlice(securityColumns, "mfaAccounts") {
+		for index, account := range user.MfaAccounts {
+			if account.SecretKey != "***" {
+				continue
+			}
+			found := false
+			for _, oldAccount := range oldUser.MfaAccounts {
+				if account.AccountName == oldAccount.AccountName && account.Issuer == oldAccount.Issuer && account.Origin == oldAccount.Origin {
+					user.MfaAccounts[index].SecretKey = oldAccount.SecretKey
+					found = true
+					break
+				}
+			}
+			if !found {
+				c.ResponseError(c.T("general:Invalid parameter") + ": MFA secret key")
+				return
+			}
+		}
 	}
 
 	if oldUser.Owner == "built-in" && oldUser.Name == "admin" && (user.Owner != "built-in" || user.Name != "admin") {
@@ -356,28 +396,37 @@ func (c *ApiController) UpdateUser() {
 	}
 
 	isUsernameLowered := conf.GetConfigBool("isUsernameLowered")
-	if isUsernameLowered {
+	if isGlobalAdmin && isUsernameLowered {
 		user.Name = strings.ToLower(user.Name)
 	}
 
-	isAdmin := c.IsAdmin()
+	isAdmin := isGlobalAdmin
 	allowDisplayNameEmpty := c.Ctx.Input.Query("allowEmpty") != ""
 	if pass, err := object.CheckPermissionForUpdateUser(oldUser, &user, isAdmin, allowDisplayNameEmpty, c.GetAcceptLanguage()); !pass {
 		c.ResponseError(err)
 		return
 	}
 
-	columns := []string{}
-	if columnsStr != "" {
-		for _, col := range strings.Split(columnsStr, ",") {
-			columns = append(columns, util.CamelToSnakeCase(col))
+	if !isGlobalAdmin {
+		organization, err := object.GetOrganizationByUser(oldUser)
+		if err != nil {
+			c.ResponseError(err.Error())
+			return
 		}
-		if !isAdmin {
-			columns = object.FilterUserSelfColumns(columns)
-			if len(columns) == 0 {
-				c.ResponseError(c.T("auth:Unauthorized operation"))
+		itemNames := map[string]string{"face_ids": "Face ID", "mfaAccounts": "MFA accounts", "webauthnCredentials": "WebAuthn credentials"}
+		for _, column := range securityColumns {
+			item := object.GetAccountItemByName(itemNames[column], organization)
+			if pass, msg := object.CheckAccountItemModifyRule(item, false, c.GetAcceptLanguage()); !pass {
+				c.ResponseError(msg)
 				return
 			}
+		}
+	}
+
+	columns := securityColumns
+	if isGlobalAdmin && columnsStr != "" {
+		for _, col := range strings.Split(columnsStr, ",") {
+			columns = append(columns, util.CamelToSnakeCase(col))
 		}
 	}
 
@@ -604,6 +653,10 @@ func (c *ApiController) GetEmailAndPhone() {
 // @Success 200 {object} controllers.Response The Response object
 // @router /set-password [post]
 func (c *ApiController) SetPassword() {
+	if !c.requireGlobalAdmin() {
+		return
+	}
+
 	userOwner := c.Ctx.Request.Form.Get("userOwner")
 	userName := c.Ctx.Request.Form.Get("userName")
 	oldPassword := c.Ctx.Request.Form.Get("oldPassword")
@@ -1052,6 +1105,10 @@ func (c *ApiController) ExitImpersonateUser() {
 // @Success 200 {object} controllers.Response The Response object
 // @router /verify-identification [post]
 func (c *ApiController) VerifyIdentification() {
+	if !c.requireGlobalAdmin() {
+		return
+	}
+
 	owner := c.Ctx.Input.Query("owner")
 	name := c.Ctx.Input.Query("name")
 	providerName := c.Ctx.Input.Query("provider")

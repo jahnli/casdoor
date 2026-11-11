@@ -19,7 +19,12 @@ export interface AccountItemRules {
   isAdmin: boolean;
   isSelfOrAdmin: boolean;
   user: any;
+  editableItems?: readonly string[];
+  canModifyAsAdmin?: boolean;
 }
+
+export const USER_SECURITY_ITEMS = ["Face ID", "MFA accounts", "Multi-factor authentication", "WebAuthn credentials"];
+export const USER_SECURITY_FIELDS = ["faceIds", "mfaAccounts", "webauthnCredentials"];
 
 export const ACCOUNT_PROPERTY_ITEMS = [
   {name: "Profile Cover", property: "coverUrl", labelKey: "user:Profile Cover", type: "url"},
@@ -73,6 +78,9 @@ export function isAccountItemVisible(item: AccountItem | undefined, rules: Accou
 }
 
 export function isAccountItemDisabled(item: AccountItem | undefined, rules: AccountItemRules): boolean {
+  if (rules.editableItems !== undefined && (!item || !rules.editableItems.includes(item.name))) {
+    return true;
+  }
   if (!item) {
     return false;
   }
@@ -81,7 +89,7 @@ export function isAccountItemDisabled(item: AccountItem | undefined, rules: Acco
   if (item.modifyRule === "Self") {
     disabled = !rules.isSelfOrAdmin;
   } else if (item.modifyRule === "Admin") {
-    disabled = !rules.isAdmin;
+    disabled = !(rules.canModifyAsAdmin ?? rules.isAdmin);
   } else if (item.modifyRule === "Immutable") {
     disabled = true;
   }

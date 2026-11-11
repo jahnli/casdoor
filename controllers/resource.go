@@ -414,6 +414,12 @@ func (c *ApiController) UploadResource() {
 	createdTime := c.Ctx.Input.Query("createdTime")
 	description := c.Ctx.Input.Query("description")
 
+	if tag == "avatar" || strings.HasPrefix(tag, "idCard") {
+		if !c.requireGlobalAdmin() {
+			return
+		}
+	}
+
 	if !c.checkResourcePermission(owner, username) {
 		return
 	}

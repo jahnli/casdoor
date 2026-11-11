@@ -253,6 +253,9 @@ func (c *ApiController) MfaSetupEnable() {
 		config.Secret = secret
 	} else if mfaType == object.EmailType {
 		if user.Email == "" {
+			if !c.requireGlobalAdmin() {
+				return
+			}
 			if dest == "" {
 				c.ResponseError("destination is missing")
 				return
@@ -261,6 +264,9 @@ func (c *ApiController) MfaSetupEnable() {
 		}
 	} else if mfaType == object.SmsType {
 		if user.Phone == "" {
+			if !c.requireGlobalAdmin() {
+				return
+			}
 			if dest == "" {
 				c.ResponseError("destination is missing")
 				return

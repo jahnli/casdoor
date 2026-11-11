@@ -590,6 +590,10 @@ func (c *ApiController) VerifyCaptcha() {
 // @router /reset-email-or-phone [post]
 // @Success 200 {object} object.Userinfo The Response object
 func (c *ApiController) ResetEmailOrPhone() {
+	if !c.requireGlobalAdmin() {
+		return
+	}
+
 	user, ok := c.RequireSignedInUser()
 	if !ok {
 		return

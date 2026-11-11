@@ -33,12 +33,16 @@ export function AccountItemsProvider({
   isAdmin,
   isSelfOrAdmin,
   user,
+  editableItems,
+  canModifyAsAdmin,
   children,
 }: {
   organization: any;
   isAdmin: boolean;
   isSelfOrAdmin: boolean;
   user: any;
+  editableItems?: readonly string[];
+  canModifyAsAdmin?: boolean;
   children: React.ReactNode;
 }) {
   const value = React.useMemo<AccountItemsContextValue>(() => {
@@ -49,8 +53,10 @@ export function AccountItemsProvider({
       isAdmin,
       isSelfOrAdmin,
       user,
+      editableItems,
+      canModifyAsAdmin,
     };
-  }, [organization, isAdmin, isSelfOrAdmin, user]);
+  }, [organization, isAdmin, isSelfOrAdmin, user, editableItems, canModifyAsAdmin]);
 
   return <AccountItemsContext.Provider value={value}>{children}</AccountItemsContext.Provider>;
 }
@@ -58,7 +64,8 @@ export function AccountItemsProvider({
 export function useAccountItem(name?: string) {
   const ctx = React.useContext(AccountItemsContext);
   if (!name || ctx.unconfigured) {
-    return {visible: true, disabled: false, item: undefined as AccountItem | undefined};
+    const disabled = ctx.editableItems !== undefined && (!name || !ctx.editableItems.includes(name));
+    return {visible: true, disabled, item: undefined as AccountItem | undefined};
   }
   const item = ctx.items[name];
   return {

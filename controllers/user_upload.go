@@ -56,8 +56,7 @@ func (c *ApiController) getUploadOrganization() (string, bool) {
 }
 
 func (c *ApiController) UploadUsers() {
-	if !c.IsAdmin() {
-		c.ResponseError(c.T("auth:Unauthorized operation"))
+	if !c.requireGlobalAdmin() {
 		return
 	}
 

@@ -161,7 +161,7 @@ export default function UserListPage({
       columns={displayColumns}
       formType="users"
       formItems={formItems}
-      toolbar={({refresh}) => (
+      toolbar={Setting.isAdminUser(account) ? ({refresh}) => (
         <XlsxImport
           columns={Setting.getUserColumns()}
           templateName="import-user.xlsx"
@@ -169,7 +169,7 @@ export default function UserListPage({
           successMessage="Users uploaded successfully, refreshing the page"
           onUploaded={refresh}
         />
-      )}
+      ) : undefined}
       deps={[organizationName, groupName, isGlobal]}
       fetch={(q) =>
         isGlobal
