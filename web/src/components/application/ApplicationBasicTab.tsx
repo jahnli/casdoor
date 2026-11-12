@@ -183,6 +183,13 @@ export function ApplicationBasicTab({
       <FormRow labelKey="general:Home">
         <Input value={application.homepageUrl ?? ""} onChange={(e) => updateField("homepageUrl", e.target.value)} />
       </FormRow>
+      <FormRow labelKey="application:Show in application list" htmlFor="show-in-application-list">
+        <Switch
+          id="show-in-application-list"
+          checked={!application.hideFromAppList}
+          onCheckedChange={(checked) => updateField("hideFromAppList", !checked)}
+        />
+      </FormRow>
       <FormRow labelKey="organization:Tags">
         <TagsInput value={application.tags ?? []} onChange={(v) => updateField("tags", v)} />
       </FormRow>

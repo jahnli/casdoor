@@ -178,6 +178,8 @@
     "Side panel HTML - Tooltip": "自定义登录页面侧面板的 HTML 代码",
     "Sign in only": "仅登录",
     "Sign in or sign up": "登录或注册",
+    "Show in application list": "在应用列表中显示",
+    "Show in application list - Tooltip": "关闭后，应用将不在用户的应用列表中显示，不影响登录和原有访问权限。",
     "Signin": "登录",
     "Signin (Default True)": "登录 (默认同意)",
     "Signin items": "登录项",
