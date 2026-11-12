@@ -294,3 +294,23 @@
 - 相关 Go 测试、前端 TypeScript 检查、修改文件的 ESLint 检查及 `git diff --check` 通过。
 - 公开登录配置、组织管理配置及 OAuth/OIDC 按授权范围输出的协议声明保留原规则，本次限制针对账户和用户资料响应，不表示所有认证协议均不再使用身份标识。
 - 未运行真实数据库与浏览器端到端验证；未部署或重启服务，不涉及数据库迁移。
+
+## 2026-11-12：新增 User ID 独立属性字段
+
+用户编辑页及组织个人页面设置新增“User ID”字段，共享字段顺序中紧接在 Open ID 前，保存到 `properties.user_id`，与用户顶层 `id` 区分，不新增数据库列。该字段接入现有独立属性的查看、修改权限及正则校验；组织配置独立入口后，通用属性表隐藏对应的 `user_id` 键，保留原值。
+
+User ID 沿用 Open ID 的内部资料限制：仅超级管理员可查看原值，非超级管理员有值时显示六位 `******`，无值时显示 `-`；账户和用户资料响应清除原值，仅保留非空标记。已有组织需在个人页面设置中添加并启用 User ID，本次不自动修改组织配置。
+
+### 涉及文件
+
+- `web/src/lib/account-items.ts` — 增加 User ID 属性映射和文本输入类型，共享顺序中排在 Open ID 前。
+- `web/src/pages/UserEditPage.tsx` — 将 User ID 接入内部资料掩码及编辑限制。
+- `web/src/locales/en/data.json`、`web/src/locales/zh/data.json` — 增加 User ID 显示文案。
+- `object/user_util.go` — 将 User ID 映射到 `user_id`，接入独立属性权限和正则校验。
+- `object/user_profile.go` — 非超级管理员的资料响应移除 `user_id` 原值并附带非空标记，保留源对象和超级管理员原值。
+- `object/user_profile_test.go` — 扩展脱敏测试，覆盖 User ID 原值清理、空值标记和源对象保留。
+
+### 验证与限制
+
+- 本轮功能修改后，`npm run typecheck`、修改前端代码文件的 ESLint 检查及 `go test ./object -run '^TestGetMaskedUserProfile' -count=1` 通过。
+- 本次日志更新未重复运行上述检查；未进行实际数据库写入或浏览器端到端验证，未部署。

@@ -659,6 +659,7 @@ var adminOnlyAccountItems = []string{"User type", "Tag", "Properties", "Groups",
 var accountPropertyKeys = map[string]string{
 	"Profile Cover":   "coverUrl",
 	"Company":         "company",
+	"User ID":         "user_id",
 	"Open ID":         "open_id",
 	"Department name": "department",
 	"Department":      "department_value",

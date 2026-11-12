@@ -461,10 +461,10 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
       <AccountItemRow key={item.name} name={item.name} labelKey={item.labelKey} value={user.properties?.[item.property]}>
         <Input
           type={item.type}
-          value={!isGlobalAdmin && ["Open ID", "Department"].includes(item.name)
+          value={!isGlobalAdmin && ["User ID", "Open ID", "Department"].includes(item.name)
             ? getMaskedProfileValue(`properties.${item.property}`, user.properties?.[item.property])
             : user.properties?.[item.property] ?? ""}
-          disabled={!isGlobalAdmin && ["Open ID", "Department"].includes(item.name)}
+          disabled={!isGlobalAdmin && ["User ID", "Open ID", "Department"].includes(item.name)}
           onChange={(e) => updateField("properties", {...user.properties, [item.property]: e.target.value})}
         />
       </AccountItemRow>,

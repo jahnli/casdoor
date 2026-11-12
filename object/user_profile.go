@@ -28,7 +28,7 @@ func GetMaskedUserProfile(user *User, isGlobalAdmin bool) *User {
 	if len(user.Groups) > 0 {
 		profile.MaskedFields = append(profile.MaskedFields, "groups")
 	}
-	for _, key := range []string{"open_id", "department_value"} {
+	for _, key := range []string{"user_id", "open_id", "department_value"} {
 		if user.Properties[key] != "" {
 			profile.MaskedFields = append(profile.MaskedFields, "properties."+key)
 		}
@@ -43,6 +43,7 @@ func GetMaskedUserProfile(user *User, isGlobalAdmin bool) *User {
 	profile.OriginalRefreshToken = ""
 	profile.Groups = nil
 	profile.Properties = maps.Clone(user.Properties)
+	delete(profile.Properties, "user_id")
 	delete(profile.Properties, "open_id")
 	delete(profile.Properties, "department_value")
 	for key := range profile.Properties {

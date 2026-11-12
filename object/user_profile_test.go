@@ -13,7 +13,7 @@ func TestGetMaskedUserProfile(t *testing.T) {
 		SignupApplication: "private-signup-app", AccessToken: "private-jwt", OriginalToken: "private-upstream-token", OriginalRefreshToken: "private-refresh-token",
 		Groups: []string{"semi/private-group"},
 		Properties: map[string]string{
-			"open_id": "private-open-id", "department_value": "private-department-json",
+			"user_id": "private-user-id", "open_id": "private-open-id", "department_value": "private-department-json",
 			"department": "研发部", "job_number": "0410",
 		},
 		Roles:       []*Role{{Name: "role", Groups: []string{"semi/private-group"}, SourceGroups: []string{"semi/private-group"}}, nil},
@@ -25,14 +25,14 @@ func TestGetMaskedUserProfile(t *testing.T) {
 	}
 
 	profile := GetMaskedUserProfile(user, false)
-	if !reflect.DeepEqual(profile.MaskedFields, []string{"owner", "id", "signupApplication", "type", "groups", "properties.open_id", "properties.department_value"}) {
-		t.Errorf("masked fields = %v, want presence of the seven restricted fields", profile.MaskedFields)
+	if !reflect.DeepEqual(profile.MaskedFields, []string{"owner", "id", "signupApplication", "type", "groups", "properties.user_id", "properties.open_id", "properties.department_value"}) {
+		t.Errorf("masked fields = %v, want presence of the eight restricted fields", profile.MaskedFields)
 	}
 	data, err := json.Marshal(profile)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, value := range []string{"private-open-id", "private-department-json", "semi/private-group", "internal-user-type", "sso-subject", "private-signup-app", "private-jwt", "private-upstream-token", "private-refresh-token", "semi/"} {
+	for _, value := range []string{"private-user-id", "private-open-id", "private-department-json", "semi/private-group", "internal-user-type", "sso-subject", "private-signup-app", "private-jwt", "private-upstream-token", "private-refresh-token", "semi/"} {
 		if strings.Contains(string(data), value) {
 			t.Errorf("restricted value %q leaked in profile", value)
 		}
@@ -74,7 +74,7 @@ func TestGetMaskedUserProfileFieldPresence(t *testing.T) {
 	user := &User{
 		Type:       "normal-user",
 		Groups:     []string{},
-		Properties: map[string]string{"open_id": "", "department_value": "internal-department-json"},
+		Properties: map[string]string{"user_id": "", "open_id": "", "department_value": "internal-department-json"},
 	}
 	profile := GetMaskedUserProfile(user, false)
 	if !reflect.DeepEqual(profile.MaskedFields, []string{"type", "properties.department_value"}) {
