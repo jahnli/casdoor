@@ -92,10 +92,10 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   // the signup application drives the 3rd-party login rows and the reset-code flow
   const [application, setApplication] = React.useState<any>(null);
 
-  const organizations = useOrganizationOptions();
-  const applications = useApplicationOptions(organizationName);
-  const groups = useGroupOptions(organizationName);
-  const groupList = useGroupList(organizationName);
+  const organizations = useOrganizationOptions(Setting.isAdminUser(account));
+  const applications = useApplicationOptions(Setting.isAdminUser(account) ? organizationName : "");
+  const groups = useGroupOptions(Setting.isAdminUser(account) ? organizationName : "");
+  const groupList = useGroupList(Setting.isAdminUser(account) ? organizationName : "");
 
   const persistedUser = React.useRef<any>(null);
   const {record: user, updateField, updateFields, loading, denied, mode, setMode, reload} = useEditRecord<any>({
@@ -113,12 +113,16 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   }, [user]);
 
   React.useEffect(() => {
+    if (!Setting.isAdminUser(account) || !organizationName) {
+      setOrganization({});
+      return;
+    }
     OrganizationBackend.getOrganization("admin", organizationName).then((res: any) => {
       if (res.status === "ok") {
         setOrganization(res.data ?? {});
       }
     });
-  }, [organizationName]);
+  }, [account, organizationName]);
 
   React.useEffect(() => {
     // in "add" mode the user is not persisted yet
@@ -155,6 +159,8 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
 
   const isAdmin = Setting.isLocalAdminUser(account);
   const isGlobalAdmin = Setting.isAdminUser(account);
+  const getMaskedProfileValue = (field: string, value?: string | string[]) =>
+    user.maskedFields?.includes(field) || value?.length ? "******" : "-";
   const isSelf = !!account && (user.id && account.id ? user.id === account.id : account.owner === user.owner && account.name === user.name);
   const changedSecurityFields = USER_SECURITY_FIELDS.filter((field) =>
     user[field] !== undefined && JSON.stringify(user[field]) !== JSON.stringify(persistedUser.current?.[field]),
@@ -278,17 +284,18 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   const rows: Record<string, React.ReactNode> = {
     "Organization": (
       <AccountItemRow name="Organization" labelKey="general:Organization">
-        <SearchableSelect
-          value={user.owner}
-          disabled={!Setting.isAdminUser(account)}
-          onChange={(v) => updateField("owner", v)}
-          options={organizations}
-        />
+        {isGlobalAdmin ? (
+          <SearchableSelect
+            value={user.owner}
+            onChange={(v) => updateField("owner", v)}
+            options={organizations}
+          />
+        ) : <Input value={getMaskedProfileValue("owner", user.owner)} disabled />}
       </AccountItemRow>
     ),
     "ID": (
       <AccountItemRow name="ID" labelKey="general:ID">
-        <Input value={user.id ?? ""} onChange={(e) => updateField("id", e.target.value)} />
+        <Input value={isGlobalAdmin ? user.id ?? "" : getMaskedProfileValue("id", user.id)} disabled={!isGlobalAdmin} onChange={(e) => updateField("id", e.target.value)} />
       </AccountItemRow>
     ),
     "Name": (
@@ -379,14 +386,16 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     ),
     "User type": (
       <AccountItemRow name="User type" labelKey="general:User type">
-        <SearchableSelect
-          value={user.type || "normal-user"}
-          onChange={(v) => updateField("type", v)}
-          options={(userOrganization.userTypes?.length > 0
-            ? userOrganization.userTypes
-            : ["normal-user"]
-          ).map((item: string) => ({value: item, label: item}))}
-        />
+        {isGlobalAdmin ? (
+          <SearchableSelect
+            value={user.type || "normal-user"}
+            onChange={(v) => updateField("type", v)}
+            options={(userOrganization.userTypes?.length > 0
+              ? userOrganization.userTypes
+              : ["normal-user"]
+            ).map((item: string) => ({value: item, label: item}))}
+          />
+        ) : <Input value={getMaskedProfileValue("type", user.type)} disabled />}
       </AccountItemRow>
     ),
     "Tag": (
@@ -409,27 +418,31 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     ),
     "Signup application": (
       <AccountItemRow name="Signup application" labelKey="general:Signup application">
-        <SearchableSelect
-          value={user.signupApplication ?? ""}
-          onChange={(v) => updateField("signupApplication", v)}
-          options={applications}
-        />
+        {isGlobalAdmin ? (
+          <SearchableSelect
+            value={user.signupApplication ?? ""}
+            onChange={(v) => updateField("signupApplication", v)}
+            options={applications}
+          />
+        ) : <Input value={getMaskedProfileValue("signupApplication", user.signupApplication)} disabled />}
       </AccountItemRow>
     ),
     "Groups": (
       <AccountItemRow name="Groups" labelKey="general:Groups">
-        <MultiSelect
-          value={user.groups ?? []}
-          onChange={(v) => {
-            // a user belongs to at most one Physical group
-            if (dropExtraPhysicalGroups(v, groupList)) {
-              Setting.showMessage("error", i18next.t("general:You can only select one physical group"));
-              return;
-            }
-            updateField("groups", v);
-          }}
-          options={groups}
-        />
+        {isGlobalAdmin ? (
+          <MultiSelect
+            value={user.groups ?? []}
+            onChange={(v) => {
+              // a user belongs to at most one Physical group
+              if (dropExtraPhysicalGroups(v, groupList)) {
+                Setting.showMessage("error", i18next.t("general:You can only select one physical group"));
+                return;
+              }
+              updateField("groups", v);
+            }}
+            options={groups}
+          />
+        ) : <Input value={getMaskedProfileValue("groups", user.groups)} disabled />}
       </AccountItemRow>
 
     ),
@@ -448,7 +461,10 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
       <AccountItemRow key={item.name} name={item.name} labelKey={item.labelKey} value={user.properties?.[item.property]}>
         <Input
           type={item.type}
-          value={user.properties?.[item.property] ?? ""}
+          value={!isGlobalAdmin && ["Open ID", "Department"].includes(item.name)
+            ? getMaskedProfileValue(`properties.${item.property}`, user.properties?.[item.property])
+            : user.properties?.[item.property] ?? ""}
+          disabled={!isGlobalAdmin && ["Open ID", "Department"].includes(item.name)}
           onChange={(e) => updateField("properties", {...user.properties, [item.property]: e.target.value})}
         />
       </AccountItemRow>,
@@ -839,11 +855,11 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
       <AccountItemRow name="MFA accounts" labelKey="user:MFA accounts" block>
         <div className="space-y-2">
           {/* the Casdoor Authenticator app takes these over by scanning the QR / opening the link */}
-          <p className="text-sm text-muted-foreground">
+          {accessToken ? <p className="text-sm text-muted-foreground">
             {i18next.t("user:Scan the QR code with Casdoor Authenticator to sync these MFA accounts to your phone")}
-          </p>
+          </p> : null}
           <CasdoorAuthenticatorLink />
-          <div className="flex flex-wrap gap-2">
+          {accessToken ? <div className="flex flex-wrap gap-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm">{i18next.t("general:QR Code")}</Button>
@@ -860,7 +876,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
                 <CasdoorAppUrl accessToken={accessToken ?? undefined} />
               </PopoverContent>
             </Popover>
-          </div>
+          </div> : null}
           <EditableTable
             rows={user.mfaAccounts ?? []}
             onChange={(rows) => updateField("mfaAccounts", rows)}

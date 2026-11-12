@@ -64,8 +64,8 @@ function toNameOptions(items: any[]): SearchableOption[] {
   }));
 }
 
-export function useOrganizationOptions(): SearchableOption[] {
-  const items = useList(() => OrganizationBackend.getOrganizations("admin", "", 1, PAGE_SIZE), []);
+export function useOrganizationOptions(enabled = true): SearchableOption[] {
+  const items = useList(() => enabled ? OrganizationBackend.getOrganizations("admin", "", 1, PAGE_SIZE) : null, [enabled]);
   return React.useMemo(() => toNameOptions(items), [items]);
 }
 

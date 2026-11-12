@@ -71,12 +71,8 @@ export default function MfaSetupPage() {
     if (!account) {
       return;
     }
-    // LDAP-synced users can have an empty "signupApplication", so fall back to
-    // the user-aware endpoint.
-    const applicationName = account.signupApplication ?? localStorage.getItem("applicationName") ?? "";
-    const promise = applicationName
-      ? ApplicationBackend.getApplication("admin", applicationName)
-      : ApplicationBackend.getUserApplication(account.owner, account.name);
+    // The server resolves the user's application from the authenticated session.
+    const promise = ApplicationBackend.getUserApplication(account.owner, account.name);
 
     promise
       .then((res: any) => {

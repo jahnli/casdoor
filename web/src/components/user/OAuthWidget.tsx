@@ -83,7 +83,9 @@ function OAuthRow({user, application, providerItem, account, onUnlinked}: Widget
     name = displayName ?? username ?? id ?? email ?? linkedValue;
   }
 
-  const isSelf = user.id === account?.id;
+  const isSelf = !!account && (user.id && account.id
+    ? user.id === account.id
+    : !!user.owner && user.owner === account.owner && user.name === account.name);
 
   const link = () => {
     if (needsWeChatQrDialog(provider)) {

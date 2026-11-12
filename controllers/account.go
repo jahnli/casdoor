@@ -456,11 +456,15 @@ func (c *ApiController) Logout() {
 			return
 		}
 
+		logoutUser := user
+		if bcOwner != "built-in" {
+			logoutUser = ""
+		}
 		if application == nil || application.Name == "app-built-in" || application.HomepageUrl == "" {
-			c.ResponseOk(user)
+			c.ResponseOk(logoutUser)
 			return
 		}
-		c.ResponseOk(user, application.HomepageUrl)
+		c.ResponseOk(logoutUser, application.HomepageUrl)
 		return
 	} else {
 		token, err := object.GetTokenByIdToken(idTokenHint)
@@ -798,7 +802,7 @@ func (c *ApiController) GetAccount() {
 	}
 
 	accessToken := ""
-	if !isSigninPending {
+	if !isSigninPending && c.IsGlobalAdmin() {
 		accessToken = c.GetSessionToken()
 		if accessToken == "" {
 			accessToken, err = object.GetAccessTokenByUser(user, c.Ctx.Request.Host)
@@ -811,12 +815,13 @@ func (c *ApiController) GetAccount() {
 	}
 	u.AccessToken = accessToken
 
+	profile := c.maskUserProfile(u)
 	resp := Response{
 		Status: "ok",
-		Sub:    user.Id,
+		Sub:    profile.Id,
 		Name:   user.Name,
-		Data:   u,
-		Data2:  organization,
+		Data:   profile,
+		Data2:  object.GetMaskedProfileOrganization(organization, c.IsGlobalAdmin()),
 	}
 	c.Data["json"] = resp
 	c.ServeJSON()
@@ -842,6 +847,13 @@ func (c *ApiController) GetUserinfo() {
 	}
 
 	scope, aud := c.GetSessionOidc()
+	if aud == "" && !c.IsGlobalAdmin() {
+		// Browser console sessions use the same profile policy; OAuth clients
+		// continue to receive the claims granted by their token and scope.
+		c.Ctx.Output.SetStatus(http.StatusForbidden)
+		c.ResponseError(c.T("auth:Unauthorized operation"))
+		return
+	}
 	host := c.Ctx.Request.Host
 
 	userInfo, err := object.GetUserInfo(user, scope, aud, host)
@@ -864,6 +876,11 @@ func (c *ApiController) GetUserinfo() {
 func (c *ApiController) GetUserinfo2() {
 	user, ok := c.RequireSignedInUser()
 	if !ok {
+		return
+	}
+	if _, aud := c.GetSessionOidc(); aud == "" && !c.IsGlobalAdmin() {
+		c.Ctx.Output.SetStatus(http.StatusForbidden)
+		c.ResponseError(c.T("auth:Unauthorized operation"))
 		return
 	}
 

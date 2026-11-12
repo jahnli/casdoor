@@ -227,6 +227,8 @@ type User struct {
 	// UidNumber is the POSIX uid published by the built-in LDAP server, 0 when unassigned.
 	UidNumber  int               `xorm:"index" json:"uidNumber"`
 	Properties map[string]string `json:"properties"`
+	// MaskedFields lists nonempty fields removed from a restricted profile response.
+	MaskedFields []string `xorm:"-" json:"maskedFields,omitempty"`
 
 	ThirdPartyLinks []*ThirdPartyLink `xorm:"-" json:"thirdPartyLinks,omitempty"`
 

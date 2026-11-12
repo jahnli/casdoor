@@ -101,7 +101,7 @@ func (c *ApiController) GetUsers() {
 				c.ResponseError(err.Error())
 				return
 			}
-			c.ResponseOk(users)
+			c.ResponseOk(c.maskUserProfiles(users))
 			return
 		}
 
@@ -111,7 +111,7 @@ func (c *ApiController) GetUsers() {
 			return
 		}
 
-		c.ResponseOk(users)
+		c.ResponseOk(c.maskUserProfiles(users))
 	} else {
 		limit := util.ParseInt(limit)
 		count, err := object.GetUserCount(owner, field, value, groupName)
@@ -133,7 +133,7 @@ func (c *ApiController) GetUsers() {
 			return
 		}
 
-		c.ResponseOk(users, paginator.Nums())
+		c.ResponseOk(c.maskUserProfiles(users), paginator.Nums())
 	}
 }
 
@@ -251,7 +251,7 @@ func (c *ApiController) GetUser() {
 		}
 	}
 
-	c.ResponseOk(user)
+	c.ResponseOk(c.maskUserProfile(user))
 }
 
 // UpdateUser
@@ -967,7 +967,7 @@ func (c *ApiController) GetSortedUsers() {
 		return
 	}
 
-	c.ResponseOk(users)
+	c.ResponseOk(c.maskUserProfiles(users))
 }
 
 // GetUserCount

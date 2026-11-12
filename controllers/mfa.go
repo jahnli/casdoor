@@ -77,7 +77,13 @@ func (c *ApiController) MfaSetupInitiate() {
 		issuer = organization.Name
 	}
 
-	mfaProps, err := MfaUtil.Initiate(user.GetId(), issuer)
+	displayUserId := user.GetId()
+	if mfaType == object.TotpType && !c.IsGlobalAdmin() {
+		// The authenticator label does not need the internal organization name.
+		displayUserId = user.Name
+		issuer = "Casdoor"
+	}
+	mfaProps, err := MfaUtil.Initiate(displayUserId, issuer)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return

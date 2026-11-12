@@ -475,6 +475,7 @@ func (c *ApiController) GetApplicationLogin() {
 	object.CheckEntryIp(clientIp, nil, application, nil, c.GetAcceptLanguage())
 
 	application = object.GetMaskedApplication(application, "")
+	application = c.maskLoginApplicationOrganization(application)
 	if msg != "" {
 		c.ResponseError(msg, application)
 	} else {
@@ -1075,6 +1076,11 @@ func (c *ApiController) Login() {
 			setHttpClient(idProvider, provider)
 
 			stateApplicationName := strings.Split(authForm.State, "-org-")[0]
+			if stateApplicationName == object.CurrentApplicationAlias && c.Ctx.Input.GetData("profileApplicationName") == application.Name {
+				// The callback retains the provider's original state. Only compare its
+				// application alias against the application resolved from this session.
+				stateApplicationName = application.Name
+			}
 			if authForm.State != conf.GetConfigString("authState") && stateApplicationName != application.Name {
 				c.ResponseError(fmt.Sprintf(c.T("auth:State expected: %s, but got: %s"), conf.GetConfigString("authState"), authForm.State))
 				return

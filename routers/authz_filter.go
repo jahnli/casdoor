@@ -602,6 +602,10 @@ func ApiFilter(ctx *context.Context) {
 		subOwner, subName, username = getImpersonateUser(ctx, subOwner, subName, username)
 	}
 	ctx.Input.SetData("currentUserId", username)
+	if err := resolveProfileAliases(ctx, username); err != nil {
+		responseError(ctx, err.Error())
+		return
+	}
 
 	// the Session row belongs to the signed-in user, not to the impersonated one
 	if sessionUser := getSessionUser(ctx); sessionUser != "" {

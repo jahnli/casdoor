@@ -18,7 +18,7 @@ export function useLogout() {
         const redirectUri = res.data2;
         if (redirectUri !== null && redirectUri !== undefined && redirectUri !== "") {
           Setting.goToLink(redirectUri);
-        } else if (owner !== "built-in") {
+        } else if (owner && owner !== "built-in" && owner !== "@current") {
           Setting.goToLink(`${Setting.getOriginUrl()}/login/${owner}`);
         } else {
           navigate("/");

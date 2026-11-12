@@ -103,7 +103,7 @@ export function Header({onOpenPalette}: {onOpenPalette: () => void}) {
             <DropdownMenuLabel className="truncate font-normal">
               <div className="text-sm font-medium">{account.displayName || account.name}</div>
               <div className="truncate text-xs text-muted-foreground">
-                {account.owner}/{account.name}
+                {Setting.isAdminUser(account) ? `${account.owner}/${account.name}` : account.name}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

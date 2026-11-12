@@ -124,7 +124,7 @@ func (c *ApiController) GetApplication() {
 	clientIp := util.GetClientIpFromRequest(c.Ctx.Request)
 	object.CheckEntryIp(clientIp, nil, application, nil, c.GetAcceptLanguage())
 
-	c.ResponseOk(object.GetMaskedApplication(application, userId))
+	c.ResponseOk(c.maskLoginApplicationOrganization(object.GetMaskedApplication(application, userId)))
 }
 
 // GetUserApplication
@@ -158,7 +158,7 @@ func (c *ApiController) GetUserApplication() {
 		return
 	}
 
-	c.ResponseOk(object.GetMaskedApplication(application, userId))
+	c.ResponseOk(object.GetMaskedProfileApplication(object.GetMaskedApplication(application, userId), c.IsGlobalAdmin()))
 }
 
 // GetOrganizationApplications
