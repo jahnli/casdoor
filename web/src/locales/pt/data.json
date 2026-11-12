@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Aprovação de cadastro",
+    "Signup approval - Tooltip": "Novos usuários cadastrados por este aplicativo, inclusive por provedores externos, ficam bloqueados até que um administrador os aprove na lista de usuários",
+    "Added %s applications": "%s aplicativos adicionados",
+    "Skipped the existing applications (%s)": "Aplicativos existentes ignorados (%s)"
   },
   "cert": {
     "Access secret": "Segredo de acesso",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Dica: nome de usuário",
     "Your account has been created!": "Sua conta foi criada!",
     "Your confirmed password is inconsistent with the password!": "Sua senha confirmada não é consistente com a senha!",
-    "sign in now": "Faça login agora"
+    "sign in now": "Faça login agora",
+    "You can sign in after the administrator approves your account": "Você poderá entrar depois que um administrador aprovar sua conta"
   },
   "site": {
     "Alert interval": "Intervalo de alerta",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Você precisa atualizar sua senha",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Você precisa atualizar sua senha antes de continuar usando sua conta; clique no botão \"Modificar senha...\" abaixo",
     "Zip code": "Código postal",
-    "input password": "Digite a senha"
+    "input password": "Digite a senha",
+    "Approve signup": "Aprovar",
+    "Pending approval": "Aguardando aprovação",
+    "Successfully approved": "Aprovado com sucesso",
+    "Sure to approve": "Confirmar aprovação",
+    "Waiting for approval, turn it off to approve the user": "Aguardando aprovação; desative para aprovar o usuário"
   },
   "verification": {
     "Is used": "Foi usado",

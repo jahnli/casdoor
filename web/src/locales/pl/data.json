@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Zatwierdzanie rejestracji",
+    "Signup approval - Tooltip": "Nowi użytkownicy zarejestrowani przez tę aplikację, także przez dostawców zewnętrznych, są zablokowani, dopóki administrator nie zatwierdzi ich na liście użytkowników",
+    "Added %s applications": "Dodano aplikacje: %s",
+    "Skipped the existing applications (%s)": "Pominięto istniejące aplikacje (%s)"
   },
   "cert": {
     "Access secret": "Sekret dostępu",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Nazwa użytkownika - etykietka",
     "Your account has been created!": "Twoje konto zostało utworzone!",
     "Your confirmed password is inconsistent with the password!": "Potwierdzone hasło nie zgadza się z hasłem!",
-    "sign in now": "zaloguj się teraz"
+    "sign in now": "zaloguj się teraz",
+    "You can sign in after the administrator approves your account": "Zalogujesz się, gdy administrator zatwierdzi Twoje konto"
   },
   "site": {
     "Alert interval": "Interwał alertu",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Musisz zaktualizować hasło",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Musisz zaktualizować hasło, zanim będziesz mógł dalej korzystać z konta. Kliknij poniżej przycisk „Zmień hasło...”",
     "Zip code": "Kod pocztowy",
-    "input password": "wprowadź hasło"
+    "input password": "wprowadź hasło",
+    "Approve signup": "Zatwierdź",
+    "Pending approval": "Oczekuje na zatwierdzenie",
+    "Successfully approved": "Zatwierdzono",
+    "Sure to approve": "Na pewno zatwierdzić",
+    "Waiting for approval, turn it off to approve the user": "Oczekuje na zatwierdzenie, wyłącz, aby zatwierdzić użytkownika"
   },
   "verification": {
     "Is used": "Zostało użyte",

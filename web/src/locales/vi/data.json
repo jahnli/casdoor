@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Phê duyệt đăng ký",
+    "Signup approval - Tooltip": "Người dùng mới đăng ký qua ứng dụng này, kể cả qua nhà cung cấp bên thứ ba, sẽ bị khóa cho đến khi quản trị viên phê duyệt trong danh sách người dùng",
+    "Added %s applications": "Đã thêm %s ứng dụng",
+    "Skipped the existing applications (%s)": "Đã bỏ qua các ứng dụng đã có (%s)"
   },
   "cert": {
     "Access secret": "Bí mật truy cập",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Gợi ý tên người dùng",
     "Your account has been created!": "Tài khoản của bạn đã được tạo!",
     "Your confirmed password is inconsistent with the password!": "Mật khẩu xác nhận của bạn không khớp với mật khẩu đã nhập!",
-    "sign in now": "Đăng nhập ngay bây giờ"
+    "sign in now": "Đăng nhập ngay bây giờ",
+    "You can sign in after the administrator approves your account": "Bạn có thể đăng nhập sau khi quản trị viên phê duyệt tài khoản"
   },
   "site": {
     "Alert interval": "Khoảng cảnh báo",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Bạn cần cập nhật mật khẩu",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Bạn cần cập nhật mật khẩu trước khi tiếp tục sử dụng tài khoản, vui lòng nhấn nút \"Đổi mật khẩu...\" bên dưới",
     "Zip code": "Mã bưu điện",
-    "input password": "Nhập mật khẩu"
+    "input password": "Nhập mật khẩu",
+    "Approve signup": "Phê duyệt",
+    "Pending approval": "Chờ phê duyệt",
+    "Successfully approved": "Đã phê duyệt",
+    "Sure to approve": "Chắc chắn phê duyệt",
+    "Waiting for approval, turn it off to approve the user": "Đang chờ phê duyệt, tắt để phê duyệt người dùng"
   },
   "verification": {
     "Is used": "Đã được sử dụng",

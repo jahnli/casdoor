@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Approbation des inscriptions",
+    "Signup approval - Tooltip": "Les nouveaux utilisateurs inscrits via cette application, y compris via des fournisseurs tiers, sont bloqués jusqu'à ce qu'un administrateur les approuve dans la liste des utilisateurs",
+    "Added %s applications": "%s applications ajoutées",
+    "Skipped the existing applications (%s)": "Applications existantes ignorées (%s)"
   },
   "cert": {
     "Access secret": "Clé d'accès",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Nom d'utilisateur - Infobulle",
     "Your account has been created!": "Votre compte a été créé !",
     "Your confirmed password is inconsistent with the password!": "Votre mot de passe confirmé est incompatible avec le mot de passe !",
-    "sign in now": "Connectez-vous maintenant"
+    "sign in now": "Connectez-vous maintenant",
+    "You can sign in after the administrator approves your account": "Vous pourrez vous connecter une fois votre compte approuvé par un administrateur"
   },
   "site": {
     "Alert interval": "Intervalle d'alerte",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Vous devez mettre à jour votre mot de passe",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Vous devez mettre à jour votre mot de passe avant de continuer à utiliser votre compte ; cliquez sur le bouton « Modifier le mot de passe... » ci-dessous",
     "Zip code": "Code postal",
-    "input password": "saisir le mot de passe"
+    "input password": "saisir le mot de passe",
+    "Approve signup": "Approuver",
+    "Pending approval": "En attente d'approbation",
+    "Successfully approved": "Approuvé avec succès",
+    "Sure to approve": "Confirmer l'approbation",
+    "Waiting for approval, turn it off to approve the user": "En attente d'approbation, désactivez-le pour approuver l'utilisateur"
   },
   "verification": {
     "Is used": "Est utilisé",

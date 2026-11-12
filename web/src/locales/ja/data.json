@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "登録の承認",
+    "Signup approval - Tooltip": "このアプリケーションで登録した新しいユーザー（外部プロバイダー経由を含む）は、管理者がユーザー一覧で承認するまでログインできません",
+    "Added %s applications": "%s 件のアプリケーションを追加しました",
+    "Skipped the existing applications (%s)": "既存のアプリケーションはスキップしました（%s）"
   },
   "cert": {
     "Access secret": "アクセスシークレット",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "ユーザー名 - ツールチップ",
     "Your account has been created!": "あなたのアカウントが作成されました！",
     "Your confirmed password is inconsistent with the password!": "確認されたパスワードは、パスワードと矛盾しています！",
-    "sign in now": "今すぐサインインしてください"
+    "sign in now": "今すぐサインインしてください",
+    "You can sign in after the administrator approves your account": "管理者が承認するとログインできます"
   },
   "site": {
     "Alert interval": "アラート間隔",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "パスワードを更新する必要があります",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "アカウントを引き続き利用するにはパスワードを更新する必要があります。下の「パスワードを変更...」ボタンをクリックしてください",
     "Zip code": "郵便番号",
-    "input password": "パスワードを入力してください"
+    "input password": "パスワードを入力してください",
+    "Approve signup": "承認",
+    "Pending approval": "承認待ち",
+    "Successfully approved": "承認しました",
+    "Sure to approve": "承認してもよろしいですか",
+    "Waiting for approval, turn it off to approve the user": "承認待ちです。オフにすると承認されます"
   },
   "verification": {
     "Is used": "使用済みか",

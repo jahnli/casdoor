@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "Bölgeniz telefonla kayıt yapmaya izin verilmiyor",
     "password or code is incorrect": "şifre veya kod yanlış",
     "password or code is incorrect, you have %s remaining chances": "şifre veya kod yanlış, %s hakkınız kaldı",
-    "unsupported password type: %s": "desteklenmeyen şifre türü: %s"
+    "unsupported password type: %s": "desteklenmeyen şifre türü: %s",
+    "Your account is waiting for the administrator's approval": "Hesabınız yönetici onayı bekliyor"
   },
   "enforcer": {
     "the adapter: %s is not found": "bağdaştırıcı: %s bulunamadı"

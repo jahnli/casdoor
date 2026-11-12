@@ -63,7 +63,12 @@ export default function UserListPage({
       sortable: true,
       searchable: true,
       searchPlaceholder: i18next.t("general:Search name or username"),
-      render: (_value, record) => <UserCell user={record} />,
+      render: (_value, record) => (
+        <div className="space-y-1">
+          <UserCell user={record} />
+          {record.pendingApproval ? <Badge variant="outline">{i18next.t("user:Pending approval")}</Badge> : null}
+        </div>
+      ),
     },
     textColumn({dataIndex: "affiliation", title: i18next.t("user:Affiliation"), width: 140, searchable: true}),
     {
@@ -129,6 +134,14 @@ export default function UserListPage({
     textColumn({dataIndex: "registerType", title: i18next.t("user:Register type"), width: 130, searchable: true}),
     textColumn({dataIndex: "registerSource", title: i18next.t("user:Register source"), width: 160, searchable: true}),
     boolColumn({dataIndex: "isAdmin", title: i18next.t("user:Is admin")}),
+    {
+      dataIndex: "pendingApproval",
+      title: i18next.t("user:Pending approval"),
+      width: 120,
+      sortable: true,
+      align: "center",
+      render: (value) => (value ? <Badge variant="outline">{i18next.t("user:Pending approval")}</Badge> : null),
+    },
     boolColumn({dataIndex: "isForbidden", title: i18next.t("user:Is forbidden"), invertColor: true}),
     boolColumn({dataIndex: "isDeleted", title: i18next.t("user:Is deleted"), invertColor: true}),
     {
@@ -190,6 +203,31 @@ export default function UserListPage({
       editUrl={(r) => `/users/${r.owner}/${r.name}`}
       remove={(r) => UserBackend.deleteUser(r)}
       rowActions={(record, _index, {refresh}) => [
+        record.pendingApproval && Setting.isAdminUser(account)
+          ? {
+            key: "approve",
+            label: i18next.t("user:Approve signup"),
+            destructive: false,
+            confirm: {title: i18next.t("user:Sure to approve"), description: `${record.name ?? ""}`},
+            onSelect: () =>
+              UserBackend.getUser(record.owner, record.name)
+                .then((res: any) => {
+                  if (res.status !== "ok" || !res.data) {
+                    throw new Error(res.msg);
+                  }
+                  return UserBackend.updateUser(record.owner, record.name, {...res.data, isForbidden: false});
+                })
+                .then((res: any) => {
+                  if (res.status === "ok") {
+                    Setting.showMessage("success", i18next.t("user:Successfully approved"));
+                    refresh();
+                  } else {
+                    Setting.showMessage("error", `${i18next.t("general:Failed to save")}: ${res.msg}`);
+                  }
+                })
+                .catch((error) => Setting.showMessage("error", `${i18next.t("general:Failed to save")}: ${error.message ?? error}`)),
+          }
+          : null,
         Setting.isLocalAdminUser(account) && record.name !== account?.name
           ? {
             key: "impersonate",
@@ -230,7 +268,7 @@ export default function UserListPage({
           }
           : null,
       ]}
-      actionColumnWidth={groupName ? 300 : 230}
+      actionColumnWidth={groupName ? 400 : 330}
       // the tree page has one route per group, so pin the column choices to the page
       tableId={embedded ? "/trees" : undefined}
     />

@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "Your region is not allow to signup by phone",
     "password or code is incorrect": "password or code is incorrect",
     "password or code is incorrect, you have %s remaining chances": "password or code is incorrect, you have %s remaining chances",
-    "unsupported password type: %s": "unsupported password type: %s"
+    "unsupported password type: %s": "unsupported password type: %s",
+    "Your account is waiting for the administrator's approval": "Your account is waiting for the administrator's approval"
   },
   "enforcer": {
     "the adapter: %s is not found": "the adapter: %s is not found"

@@ -362,6 +362,10 @@ export default function SignupPage({application: applicationProp}: {application?
         if (typeof res.data === "string") {
           username = res.data.split("/")[1];
         }
+        if (res.data2 === "pending-approval") {
+          navigate(`/result/${application.name}`, {state: {username, pendingApproval: true}});
+          return;
+        }
         const path = getResultPath();
         // the prompt page renders the signed-in account, so it has to be loaded first
         if (Setting.hasPromptPage(application)) {

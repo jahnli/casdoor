@@ -121,6 +121,7 @@ type Application struct {
 	EnablePassword               bool            `json:"enablePassword"`
 	EnableSignUp                 bool            `json:"enableSignUp"`
 	DisableSelfSignup            bool            `json:"disableSelfSignup"`
+	SignupApproval               bool            `json:"signupApproval"`
 	EnableGuestSignin            bool            `json:"enableGuestSignin"`
 	DisableSignin                bool            `json:"disableSignin"`
 	EnableSigninSession          bool            `json:"enableSigninSession"`
@@ -206,6 +207,7 @@ type Application struct {
 	CertObj *Cert `xorm:"-"`
 
 	RegistrationAccessToken string `xorm:"varchar(100)" json:"registrationAccessToken"`
+	TokenEndpointAuthMethod string `xorm:"varchar(100)" json:"tokenEndpointAuthMethod"`
 }
 
 func (application *Application) HasSigninMethod(name string) bool {

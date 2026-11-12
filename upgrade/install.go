@@ -31,6 +31,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/casdoor/casdoor/conf"
 	"github.com/casdoor/casdoor/util"
 )
 
@@ -47,7 +48,11 @@ func (progressWriter) Write(p []byte) (int, error) {
 }
 
 func getReleaseFileUrl(tag string, name string) string {
-	return fmt.Sprintf("%s/%s/%s", releaseDownloadUrl, tag, name)
+	baseUrl := strings.TrimRight(conf.GetConfigString("releaseDownloadUrl"), "/")
+	if baseUrl == "" {
+		baseUrl = releaseDownloadUrl
+	}
+	return fmt.Sprintf("%s/%s/%s", baseUrl, tag, name)
 }
 
 func download(url string, timeout time.Duration) (*http.Response, error) {

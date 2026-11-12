@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Registrierung erfordert Freigabe",
+    "Signup approval - Tooltip": "Neue Benutzer, die sich über diese Anwendung registrieren (auch über Drittanbieter), sind gesperrt, bis ein Administrator sie in der Benutzerliste freigibt",
+    "Added %s applications": "%s Anwendungen hinzugefügt",
+    "Skipped the existing applications (%s)": "Vorhandene Anwendungen übersprungen (%s)"
   },
   "cert": {
     "Access secret": "Zugriffsschlüssel",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Benutzername",
     "Your account has been created!": "Ihr Konto wurde erstellt!",
     "Your confirmed password is inconsistent with the password!": "Dein bestätigtes Passwort stimmt nicht mit dem Passwort überein!",
-    "sign in now": "Jetzt anmelden"
+    "sign in now": "Jetzt anmelden",
+    "You can sign in after the administrator approves your account": "Sie können sich anmelden, sobald ein Administrator Ihr Konto freigegeben hat"
   },
   "site": {
     "Alert interval": "Benachrichtigungsintervall",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Sie müssen Ihr Passwort aktualisieren",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Sie müssen Ihr Passwort aktualisieren, bevor Sie Ihr Konto weiter verwenden können. Klicken Sie unten auf die Schaltfläche „Passwort ändern...“",
     "Zip code": "Postleitzahl",
-    "input password": "Eingabe des Passworts"
+    "input password": "Eingabe des Passworts",
+    "Approve signup": "Freigeben",
+    "Pending approval": "Freigabe ausstehend",
+    "Successfully approved": "Erfolgreich freigegeben",
+    "Sure to approve": "Wirklich freigeben",
+    "Waiting for approval, turn it off to approve the user": "Wartet auf Freigabe, ausschalten, um den Benutzer freizugeben"
   },
   "verification": {
     "Is used": "Wurde verwendet",

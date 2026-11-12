@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Aprobación del registro",
+    "Signup approval - Tooltip": "Los nuevos usuarios que se registren con esta aplicación, incluso mediante proveedores externos, quedan bloqueados hasta que un administrador los apruebe en la lista de usuarios",
+    "Added %s applications": "Se añadieron %s aplicaciones",
+    "Skipped the existing applications (%s)": "Se omitieron las aplicaciones existentes (%s)"
   },
   "cert": {
     "Access secret": "Clave de acceso",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Nombre de usuario - Información adicional",
     "Your account has been created!": "¡Su cuenta ha sido creada!",
     "Your confirmed password is inconsistent with the password!": "¡Su contraseña confirmada no es coherente con la contraseña!",
-    "sign in now": "Inicie sesión ahora"
+    "sign in now": "Inicie sesión ahora",
+    "You can sign in after the administrator approves your account": "Podrá iniciar sesión cuando un administrador apruebe su cuenta"
   },
   "site": {
     "Alert interval": "Intervalo de alerta",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Debe actualizar su contraseña",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Debe actualizar su contraseña antes de seguir usando su cuenta; haga clic en el botón \"Modificar contraseña...\" de abajo",
     "Zip code": "Código postal",
-    "input password": "Ingresar contraseña"
+    "input password": "Ingresar contraseña",
+    "Approve signup": "Aprobar",
+    "Pending approval": "Pendiente de aprobación",
+    "Successfully approved": "Aprobado correctamente",
+    "Sure to approve": "¿Seguro que desea aprobar?",
+    "Waiting for approval, turn it off to approve the user": "Pendiente de aprobación; desactívelo para aprobar al usuario"
   },
   "verification": {
     "Is used": "Está usado",

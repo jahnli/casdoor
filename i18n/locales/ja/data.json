@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "あなたの地域は電話でサインアップすることができません",
     "password or code is incorrect": "パスワードまたはコードが正しくありません",
     "password or code is incorrect, you have %s remaining chances": "パスワードまたはコードが間違っています。あと %s 回の試行機会があります",
-    "unsupported password type: %s": "サポートされていないパスワードタイプ：%s"
+    "unsupported password type: %s": "サポートされていないパスワードタイプ：%s",
+    "Your account is waiting for the administrator's approval": "アカウントは管理者の承認待ちです"
   },
   "enforcer": {
     "the adapter: %s is not found": "アダプタ「%s」が見つかりません"

@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "У вашому регіоні реєстрація за телефоном недоступна",
     "password or code is incorrect": "пароль або код неправильний",
     "password or code is incorrect, you have %s remaining chances": "пароль або код неправильний, у вас залишилось %s спроб",
-    "unsupported password type: %s": "непідтримуваний тип пароля: %s"
+    "unsupported password type: %s": "непідтримуваний тип пароля: %s",
+    "Your account is waiting for the administrator's approval": "Ваш обліковий запис очікує підтвердження адміністратора"
   },
   "enforcer": {
     "the adapter: %s is not found": "адаптер: %s не знайдено"

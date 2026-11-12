@@ -1289,6 +1289,8 @@ func (c *ApiController) Login() {
 						user.Tag = application.DefaultTag
 					}
 
+					application.ApplySignupApproval(user)
+
 					var affected bool
 					affected, err = object.AddUser(user, c.GetAcceptLanguage())
 					if err != nil {

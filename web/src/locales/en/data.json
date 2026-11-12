@@ -217,7 +217,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Signup approval",
+    "Signup approval - Tooltip": "New users who sign up through this application, including through third-party providers, are forbidden until an administrator approves them in the user list",
+    "Added %s applications": "Added %s applications",
+    "Skipped the existing applications (%s)": "Skipped the existing applications (%s)"
   },
   "cert": {
     "Access secret": "Access secret",
@@ -1362,7 +1366,8 @@
     "Username - Tooltip": "The username to authenticate with the external service or identity provider",
     "Your account has been created!": "Your account has been created!",
     "Your confirmed password is inconsistent with the password!": "Your confirmed password is inconsistent with the password!",
-    "sign in now": "sign in now"
+    "sign in now": "sign in now",
+    "You can sign in after the administrator approves your account": "You can sign in after the administrator approves your account"
   },
   "site": {
     "Alert interval": "Alert interval",
@@ -1663,7 +1668,12 @@
     "You need to update your password": "You need to update your password",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below",
     "Zip code": "Zip code",
-    "input password": "input password"
+    "input password": "input password",
+    "Approve signup": "Approve signup",
+    "Pending approval": "Pending approval",
+    "Successfully approved": "Successfully approved",
+    "Sure to approve": "Sure to approve",
+    "Waiting for approval, turn it off to approve the user": "Waiting for approval, turn it off to approve the user"
   },
   "verification": {
     "Is used": "Is used",

@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "Tu región no está permitida para registrarse por teléfono",
     "password or code is incorrect": "contraseña o código incorrecto",
     "password or code is incorrect, you have %s remaining chances": "Contraseña o código incorrecto, tienes %s intentos restantes",
-    "unsupported password type: %s": "Tipo de contraseña no compatible: %s"
+    "unsupported password type: %s": "Tipo de contraseña no compatible: %s",
+    "Your account is waiting for the administrator's approval": "Su cuenta está pendiente de la aprobación de un administrador"
   },
   "enforcer": {
     "the adapter: %s is not found": "no se encontró el adaptador: %s"

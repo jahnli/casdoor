@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Підтвердження реєстрації",
+    "Signup approval - Tooltip": "Нові користувачі, які реєструються через цей застосунок (зокрема через сторонніх провайдерів), заблоковані, доки адміністратор не підтвердить їх у списку користувачів",
+    "Added %s applications": "Додано застосунків: %s",
+    "Skipped the existing applications (%s)": "Наявні застосунки пропущено (%s)"
   },
   "cert": {
     "Access secret": "Секрет доступу",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Ім'я користувача - підказка",
     "Your account has been created!": "Ваш обліковий запис створено!",
     "Your confirmed password is inconsistent with the password!": "Ваш підтверджений пароль не відповідає паролю!",
-    "sign in now": "увійти зараз"
+    "sign in now": "увійти зараз",
+    "You can sign in after the administrator approves your account": "Ви зможете увійти після того, як адміністратор підтвердить ваш обліковий запис"
   },
   "site": {
     "Alert interval": "Інтервал сповіщення",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Потрібно оновити пароль",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Перш ніж продовжити користуватися акаунтом, потрібно оновити пароль. Натисніть кнопку «Змінити пароль...» нижче",
     "Zip code": "Поштовий індекс",
-    "input password": "введіть пароль"
+    "input password": "введіть пароль",
+    "Approve signup": "Підтвердити",
+    "Pending approval": "Очікує підтвердження",
+    "Successfully approved": "Підтверджено",
+    "Sure to approve": "Точно підтвердити",
+    "Waiting for approval, turn it off to approve the user": "Очікує підтвердження, вимкніть, щоб підтвердити користувача"
   },
   "verification": {
     "Is used": "Використано",

@@ -103,7 +103,8 @@
     "Your region is not allow to signup by phone": "所在地区不支持手机号注册",
     "password or code is incorrect": "密码错误",
     "password or code is incorrect, you have %s remaining chances": "密码错误，您还有 %s 次尝试的机会",
-    "unsupported password type: %s": "不支持的密码类型: %s"
+    "unsupported password type: %s": "不支持的密码类型: %s",
+    "Your account is waiting for the administrator's approval": "您的账号正在等待管理员审核，审核通过后才能登录"
   },
   "enforcer": {
     "the adapter: %s is not found": "适配器: %s 未找到"

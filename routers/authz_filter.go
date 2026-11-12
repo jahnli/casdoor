@@ -15,6 +15,7 @@
 package routers
 
 import (
+	"bytes"
 	stdcontext "context"
 	"encoding/json"
 	"fmt"
@@ -218,6 +219,12 @@ func getObject(ctx *context.Context) (string, string, error) {
 	method := ctx.Request.Method
 	path := ctx.Request.URL.Path
 
+	// UploadApplications scopes rows to the uploading administrator's organization.
+	if path == "/api/upload-applications" {
+		owner, _ := util.GetOwnerAndNameFromIdNoCheck(getUsername(ctx))
+		return owner, "", nil
+	}
+
 	if strings.HasPrefix(path, "/api/server/") {
 		return ctx.Input.Param(":owner"), ctx.Input.Param(":name"), nil
 	}
@@ -340,24 +347,71 @@ func getObjectFromBody(ctx *context.Context, path string) (string, string) {
 		return ctx.Request.Form.Get("owner"), ctx.Request.Form.Get("name")
 	}
 
+	if items, ok := getBodyItems(body); ok {
+		for _, item := range items {
+			owner, name, ok := getObjectFromJson(item, path)
+			if ok && owner != "" {
+				return owner, name
+			}
+		}
+		return ownerNameFromForm(ctx)
+	}
+
+	owner, name, ok := getObjectFromJson(body, path)
+	if !ok {
+		// Form-urlencoded, multipart, or other non-JSON body (common for web FormData).
+		return ownerNameFromForm(ctx)
+	}
+	return owner, name
+}
+
+func getObjectsFromBody(ctx *context.Context, path string) []Object {
+	items, ok := getBodyItems(ctx.Input.RequestBody)
+	if !ok {
+		return nil
+	}
+
+	objects := []Object{}
+	for _, item := range items {
+		owner, name, ok := getObjectFromJson(item, path)
+		if ok {
+			objects = append(objects, Object{Owner: owner, Name: name})
+		}
+	}
+	return objects
+}
+
+func getBodyItems(body []byte) ([]json.RawMessage, bool) {
+	trimmed := bytes.TrimSpace(body)
+	if len(trimmed) == 0 || trimmed[0] != '[' {
+		return nil, false
+	}
+
+	var items []json.RawMessage
+	if err := json.Unmarshal(trimmed, &items); err != nil {
+		return nil, false
+	}
+	return items, true
+}
+
+func getObjectFromJson(body []byte, path string) (string, string, bool) {
 	if checkIsOrgOwnerObject(path) && !strings.HasSuffix(path, "-organization") {
 		var objWithOrg ObjectWithOrg
 		err := json.Unmarshal(body, &objWithOrg)
 		if err != nil {
-			return ownerNameFromForm(ctx)
+			return "", "", false
 		}
-		return objWithOrg.Organization, objWithOrg.Name
+		return objWithOrg.Organization, objWithOrg.Name, true
 	}
 
 	var obj Object
 	err := json.Unmarshal(body, &obj)
 	if err != nil {
-		// Form-urlencoded, multipart, or other non-JSON body (common for web FormData).
-		return ownerNameFromForm(ctx)
+		return "", "", false
 	}
 
 	if strings.HasSuffix(path, "-organization") {
-		return obj.Name, obj.Name
+		return obj.Name, obj.Name, true
 	}
 
 	if path == "/api/delete-resource" {
@@ -367,7 +421,7 @@ func getObjectFromBody(ctx *context.Context, path string) (string, string) {
 		}
 	}
 
-	return obj.Owner, obj.Name
+	return obj.Owner, obj.Name, true
 }
 
 // getObjects returns every object the request may act on. The authorization layer
@@ -377,7 +431,7 @@ func getObjectFromBody(ctx *context.Context, path string) (string, string) {
 // of their own organization and executed against another organization's object.
 func getObjects(ctx *context.Context) ([]Object, error) {
 	path := ctx.Request.URL.Path
-	if path == "/api/mcp" && ctx.Request.Method == http.MethodPost {
+	if object.IsBuiltinMcpPath(path) && ctx.Request.Method == http.MethodPost {
 		objects, err := getMcpObjects(ctx)
 		if err != nil {
 			return nil, err
@@ -412,6 +466,10 @@ func getObjects(ctx *context.Context) ([]Object, error) {
 
 	bodyOwner, bodyName := getObjectFromBody(ctx, path)
 	objects = appendObject(objects, bodyOwner, bodyName)
+
+	for _, obj := range getObjectsFromBody(ctx, path) {
+		objects = appendObject(objects, obj.Owner, obj.Name)
+	}
 
 	formOwner, formName := ownerNameFromForm(ctx)
 	objects = appendObject(objects, formOwner, formName)
@@ -448,6 +506,10 @@ func getUrlPath(ctx *context.Context) string {
 
 	if strings.HasPrefix(urlPath, "/scim") {
 		return "/scim"
+	}
+
+	if object.IsBuiltinMcpPath(urlPath) {
+		return "/api/mcp"
 	}
 
 	if strings.HasPrefix(urlPath, "/api/login/oauth") {
@@ -659,7 +721,8 @@ func checkDynamicClientSession(ctx *context.Context, urlPath string) bool {
 		responseError(ctx, err.Error())
 		return false
 	}
-	if application == nil || isClientSessionApiAllowed(application, getSessionUser(ctx), urlPath) {
+	// the application is gone (e.g. a dynamic client deleted itself): the session can no longer be limited by it
+	if application != nil && isClientSessionApiAllowed(application, getSessionUser(ctx), urlPath) {
 		return true
 	}
 
@@ -686,8 +749,11 @@ func isRestrictedClientSession(ctx *context.Context) (bool, error) {
 	}
 
 	application, err := object.GetApplicationByClientId(aud)
-	if err != nil || application == nil {
+	if err != nil {
 		return false, err
+	}
+	if application == nil {
+		return true, nil
 	}
 	return !isClientSessionApiAllowed(application, getSessionUser(ctx), "/login/oauth/authorize"), nil
 }

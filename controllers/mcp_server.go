@@ -136,6 +136,8 @@ func (c *ApiController) ProxyServer() {
 		}
 	}
 
+	// The proxy writes the response; Beego must not render a template afterwards.
+	c.EnableRender = false
 	proxy.ServeHTTP(c.Ctx.ResponseWriter, c.Ctx.Request)
 }
 

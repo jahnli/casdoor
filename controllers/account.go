@@ -274,6 +274,8 @@ func (c *ApiController) Signup() {
 		user.Tag = application.DefaultTag
 	}
 
+	application.ApplySignupApproval(user)
+
 	affected, err := object.AddUser(user, c.GetAcceptLanguage())
 	if err != nil {
 		c.ResponseError(err.Error())
@@ -300,8 +302,11 @@ func (c *ApiController) Signup() {
 		}
 	}
 
-	c.renewSessionIdForUser(user.GetId())
-	c.SetSessionUsername(user.GetId())
+	// Do not create a session or authorization code until the user is approved.
+	if !user.PendingApproval {
+		c.renewSessionIdForUser(user.GetId())
+		c.SetSessionUsername(user.GetId())
+	}
 
 	if authForm.Email != "" {
 		err = object.DisableVerificationCode(authForm.Email)
@@ -324,6 +329,11 @@ func (c *ApiController) Signup() {
 
 	userId := user.GetId()
 	util.LogInfo(c.Ctx, "API: [%s] is signed up as new user", userId)
+
+	if user.PendingApproval {
+		c.ResponseOk(userId, "pending-approval")
+		return
+	}
 
 	// Check if this is an OAuth flow and automatically generate code
 	clientId := c.Ctx.Input.Query("clientId")
@@ -742,8 +752,14 @@ func (c *ApiController) GetAccount() {
 		return
 	}
 
+	isSigninPending, err := object.IsSigninPending(user)
+	if err != nil {
+		c.ResponseError(err.Error())
+		return
+	}
+
 	managedAccounts := c.Ctx.Input.Query("managedAccounts")
-	if managedAccounts == "1" {
+	if managedAccounts == "1" && !isSigninPending {
 		user, err = object.ExtendManagedAccountsWithUser(user)
 		if err != nil {
 			c.ResponseError(err.Error())
@@ -781,14 +797,17 @@ func (c *ApiController) GetAccount() {
 		u.CountryCode = organization.CountryCodes[0]
 	}
 
-	accessToken := c.GetSessionToken()
-	if accessToken == "" {
-		accessToken, err = object.GetAccessTokenByUser(user, c.Ctx.Request.Host)
-		if err != nil {
-			c.ResponseError(err.Error())
-			return
+	accessToken := ""
+	if !isSigninPending {
+		accessToken = c.GetSessionToken()
+		if accessToken == "" {
+			accessToken, err = object.GetAccessTokenByUser(user, c.Ctx.Request.Host)
+			if err != nil {
+				c.ResponseError(err.Error())
+				return
+			}
+			c.SetSessionToken(accessToken)
 		}
-		c.SetSessionToken(accessToken)
 	}
 	u.AccessToken = accessToken
 

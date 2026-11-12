@@ -213,7 +213,11 @@
     "External groups": "External groups",
     "External groups - Tooltip": "Groups of other organizations whose direct members can sign in to this application, in the format of \"organization/group\"",
     "External users": "External users",
-    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page"
+    "External users - Tooltip": "Users of other organizations who can sign in to this application with their own accounts, in the format of \"organization/username\", they can also enter \"organization/username\" on the sign-in page",
+    "Signup approval": "Kayıt onayı",
+    "Signup approval - Tooltip": "Bu uygulama üzerinden (üçüncü taraf sağlayıcılar dahil) kaydolan yeni kullanıcılar, bir yönetici kullanıcı listesinde onaylayana kadar engellenir",
+    "Added %s applications": "%s uygulama eklendi",
+    "Skipped the existing applications (%s)": "Mevcut uygulamalar atlandı (%s)"
   },
   "cert": {
     "Access secret": "Erişim sırrı",
@@ -1355,7 +1359,8 @@
     "Username - Tooltip": "Kullanıcı adı - Araç ipucu",
     "Your account has been created!": "Hesabınız oluşturuldu!",
     "Your confirmed password is inconsistent with the password!": "Onayladığınız parola parolayla uyuşmuyor!",
-    "sign in now": "şimdi giriş yap"
+    "sign in now": "şimdi giriş yap",
+    "You can sign in after the administrator approves your account": "Yönetici hesabınızı onayladıktan sonra giriş yapabilirsiniz"
   },
   "site": {
     "Alert interval": "Uyarı aralığı",
@@ -1637,7 +1642,12 @@
     "You need to update your password": "Parolanızı güncellemeniz gerekiyor",
     "Your password must be updated before you can continue to use your account, please click the \"Modify password...\" button below": "Hesabınızı kullanmaya devam etmeden önce parolanızı güncellemeniz gerekiyor; lütfen aşağıdaki \"Parolayı değiştir...\" düğmesine tıklayın",
     "Zip code": "Posta kodu",
-    "input password": "şifreyi girin"
+    "input password": "şifreyi girin",
+    "Approve signup": "Onayla",
+    "Pending approval": "Onay bekliyor",
+    "Successfully approved": "Başarıyla onaylandı",
+    "Sure to approve": "Onaylamak istediğinize emin misiniz",
+    "Waiting for approval, turn it off to approve the user": "Onay bekliyor, kullanıcıyı onaylamak için kapatın"
   },
   "verification": {
     "Is used": "Kullanıldı mı",
