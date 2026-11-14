@@ -111,6 +111,11 @@ export default function IntegrationEditPage() {
       children: <Link className="underline-offset-4 hover:underline" to={`/applications/${integration.owner}/${integration.application}`}>{integration.application}</Link>,
     },
     {
+      label: i18next.t("server:Agent"),
+      hidden: !integration.application || !files["application.json"]?.agent,
+      children: <Link className="underline-offset-4 hover:underline" to={`/agents/${integration.owner}/${integration.name}`}>{integration.name}</Link>,
+    },
+    {
       label: i18next.t("general:Provider"),
       hidden: !integration.provider,
       children: <Link className="underline-offset-4 hover:underline" to={`/providers/${integration.owner}/${integration.provider}`}>{integration.provider}</Link>,

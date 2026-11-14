@@ -1299,6 +1299,7 @@
     "regex match": "regex match"
   },
   "server": {
+    "Agent": "Agent",
     "Edit MCP Server": "Edit MCP Server",
     "Found servers": "Found servers",
     "New MCP Server": "New MCP Server",

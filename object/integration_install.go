@@ -134,6 +134,8 @@ type applicationTemplate struct {
 	GrantTypes       []string `json:"grantTypes"`
 	TokenFormat      string   `json:"tokenFormat"`
 	TokenGroupFormat string   `json:"tokenGroupFormat"`
+	// Agent makes the application the OAuth client of an AI agent of the same name, so its tokens carry the agent
+	Agent bool `json:"agent"`
 }
 
 type themeFields struct {
@@ -456,6 +458,15 @@ func installAppIntegration(integration *Integration, bundle *IntegrationBundle, 
 	if existing != nil {
 		return fmt.Errorf("an application named %s already exists, choose another name", integration.Name)
 	}
+	if template.Agent {
+		existingAgent, err := getAgent(integration.Owner, integration.Name)
+		if err != nil {
+			return err
+		}
+		if existingAgent != nil {
+			return fmt.Errorf("an agent named %s already exists, choose another name", integration.Name)
+		}
+	}
 
 	grantTypes := template.GrantTypes
 	if len(grantTypes) == 0 {
@@ -500,6 +511,28 @@ func installAppIntegration(integration *Integration, bundle *IntegrationBundle, 
 	}
 
 	integration.Application = application.Name
+
+	if template.Agent {
+		agent := &Agent{
+			Owner:       integration.Owner,
+			Name:        integration.Name,
+			CreatedTime: util.GetCurrentTime(),
+			DisplayName: integration.DisplayName,
+			Url:         variables["appUrl"],
+			Application: application.Name,
+		}
+		added, err := AddAgent(agent)
+		if err != nil || !added {
+			if err == nil {
+				err = fmt.Errorf("failed to add agent: %s", integration.Name)
+			}
+			_, rollbackErr := DeleteApplication(application)
+			if rollbackErr != nil {
+				return fmt.Errorf("failed to add agent: %v; failed to remove application: %w", err, rollbackErr)
+			}
+			return err
+		}
+	}
 	return nil
 }
 
@@ -848,7 +881,28 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 	switch integration.Type {
 	case "app":
 		if application != nil {
-			_, err = DeleteApplication(application)
+			if integration.Bundle != "" {
+				bundle := &IntegrationBundle{}
+				err = json.Unmarshal([]byte(integration.Bundle), bundle)
+				if err != nil {
+					return false, err
+				}
+				template := applicationTemplate{}
+				err = renderIntegrationFile(bundle, "application.json", integration.Variables, &template)
+				if err != nil {
+					return false, err
+				}
+				if template.Agent {
+					var agent *Agent
+					agent, err = getAgent(integration.Owner, integration.Name)
+					if err == nil && agent != nil && agent.Application == integration.Application {
+						_, err = DeleteAgent(agent)
+					}
+				}
+			}
+			if err == nil {
+				_, err = DeleteApplication(application)
+			}
 		}
 	case "action":
 		if integration.Provider != "" {
