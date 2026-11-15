@@ -748,7 +748,13 @@
     "SMS action client secret help": "O segredo de API fornecido pelo serviço de SMS. Você também pode preenchê-lo depois na página do provedor.",
     "SMS action install summary": "Adiciona um provedor de SMS {name}. O código dele roda dentro do Semi em uma sandbox e só pode enviar requisições aos hosts permitidos.",
     "SMS action installed description": "Este provedor de SMS executa a ação. Preencha as chaves, o remetente e o modelo na página do provedor e depois adicione-o aos provedores de um aplicativo.",
-    "Uninstall SMS action description": "Isso exclui o provedor de SMS {name}. Os aplicativos que o usam não poderão mais enviar códigos de verificação com ele."
+    "Uninstall SMS action description": "Isso exclui o provedor de SMS {name}. Os aplicativos que o usam não poderão mais enviar códigos de verificação com ele.",
+    "Choose the module too": "Esta ação também precisa do módulo {name}: escolha-o junto com o bundle.json.",
+    "Install from file": "Instalar de arquivo",
+    "Install from file help": "Instalar uma integração que não está no Marketplace: escolha o bundle.json gerado pelo build e, para uma ação, também o módulo .wasm",
+    "Install from file warning": "Instalada a partir de um arquivo, não do Casdoor Marketplace, por isso ninguém a revisou. Instale apenas integrações em que confia.",
+    "Installed from file": "Instalada de arquivo",
+    "Not a bundle file": "Escolha o bundle.json de uma integração, gerado pelo build do casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 dia",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Máx. de conexões abertas",
     "Max open connections - Tooltip": "Número máximo de conexões abertas com o banco de dados, 0 significa ilimitado",
     "Head HTML": "HTML do cabeçalho",
-    "Head HTML - Tooltip": "HTML confiável inserido no <head> de todas as páginas de todas as organizações, incluindo as páginas de login e o console, por exemplo tags <script> para carregar uma biblioteca JavaScript. Somente administradores globais podem alterá-lo"
+    "Head HTML - Tooltip": "HTML confiável inserido no <head> de todas as páginas de todas as organizações, incluindo as páginas de login e o console, por exemplo tags <script> para carregar uma biblioteca JavaScript. Somente administradores globais podem alterá-lo",
+    "Allowed custom HTML URLs": "URLs permitidas no HTML personalizado",
+    "Allowed custom HTML URLs - Tooltip": "Prefixos de URL, por ex. https://www.youtube.com/embed/, dos quais os administradores da organização podem carregar imagens, fontes, frames e outros arquivos no HTML e CSS personalizados das aplicações, além deste Casdoor, seus provedores de armazenamento e os hosts de fontes e CDN integrados",
+    "Allowed custom HTML elements": "Elementos permitidos no HTML personalizado",
+    "Allowed custom HTML elements - Tooltip": "Elementos, por ex. iframe e video, que os administradores da organização podem usar no HTML personalizado das aplicações além dos elementos de layout e texto integrados. script não pode ser adicionado; o src desses elementos deve começar com uma URL permitida",
+    "Default Email provider": "Provedor de e-mail padrão",
+    "Default Email provider - Tooltip": "Provedor de e-mail global usado pelos aplicativos que não têm um provedor de e-mail próprio, por exemplo para os códigos de verificação. O provedor de e-mail do próprio aplicativo sempre tem prioridade"
   },
   "signup": {
     "Accept": "Aceitar",

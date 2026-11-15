@@ -748,7 +748,13 @@
     "SMS action client secret help": "API secret do dịch vụ SMS cấp. Bạn cũng có thể điền sau trên trang nhà cung cấp.",
     "SMS action install summary": "Thêm một nhà cung cấp SMS {name}. Mã của nó chạy trong Semi trong môi trường cách ly và chỉ có thể gửi yêu cầu đến các máy chủ được phép.",
     "SMS action installed description": "Nhà cung cấp SMS này chạy action. Điền khóa, người gửi và mẫu tin trên trang nhà cung cấp, rồi thêm nó vào danh sách nhà cung cấp của một ứng dụng.",
-    "Uninstall SMS action description": "Thao tác này xóa nhà cung cấp SMS {name}. Các ứng dụng dùng nó sẽ không thể gửi mã xác minh bằng nó nữa."
+    "Uninstall SMS action description": "Thao tác này xóa nhà cung cấp SMS {name}. Các ứng dụng dùng nó sẽ không thể gửi mã xác minh bằng nó nữa.",
+    "Choose the module too": "Hành động này còn cần mô-đun {name}: hãy chọn cùng với bundle.json.",
+    "Install from file": "Cài từ tệp",
+    "Install from file help": "Cài một tích hợp không có trong Marketplace: chọn bundle.json do bản build tạo ra, với hành động thì chọn thêm mô-đun .wasm",
+    "Install from file warning": "Cài từ tệp, không phải từ Casdoor Marketplace, nên chưa ai kiểm duyệt. Chỉ cài các tích hợp bạn tin tưởng.",
+    "Installed from file": "Đã cài từ tệp",
+    "Not a bundle file": "Hãy chọn bundle.json của một tích hợp, do bản build của casdoor-integrations tạo ra (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 ngày",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Số kết nối mở tối đa",
     "Max open connections - Tooltip": "Số kết nối tối đa được mở tới cơ sở dữ liệu, 0 nghĩa là không giới hạn",
     "Head HTML": "HTML phần đầu",
-    "Head HTML - Tooltip": "HTML tin cậy được chèn vào <head> của mọi trang thuộc mọi tổ chức, kể cả trang đăng nhập và bảng điều khiển, ví dụ thẻ <script> để tải một thư viện JavaScript. Chỉ quản trị viên toàn cục mới có thể thay đổi"
+    "Head HTML - Tooltip": "HTML tin cậy được chèn vào <head> của mọi trang thuộc mọi tổ chức, kể cả trang đăng nhập và bảng điều khiển, ví dụ thẻ <script> để tải một thư viện JavaScript. Chỉ quản trị viên toàn cục mới có thể thay đổi",
+    "Allowed custom HTML URLs": "URL được phép trong HTML tùy chỉnh",
+    "Allowed custom HTML URLs - Tooltip": "Các tiền tố URL, ví dụ https://www.youtube.com/embed/, mà quản trị viên tổ chức có thể tải hình ảnh, phông chữ, khung và tệp khác trong HTML và CSS tùy chỉnh của ứng dụng, ngoài Casdoor này, các nhà cung cấp lưu trữ và các máy chủ phông chữ và CDN có sẵn",
+    "Allowed custom HTML elements": "Phần tử được phép trong HTML tùy chỉnh",
+    "Allowed custom HTML elements - Tooltip": "Các phần tử, ví dụ iframe và video, mà quản trị viên tổ chức có thể dùng trong HTML tùy chỉnh của ứng dụng ngoài các phần tử bố cục và văn bản có sẵn. Không thể thêm script; src của các phần tử này phải bắt đầu bằng một URL được phép",
+    "Default Email provider": "Nhà cung cấp email mặc định",
+    "Default Email provider - Tooltip": "Nhà cung cấp email toàn cục dùng cho các ứng dụng chưa có nhà cung cấp email riêng, ví dụ để gửi mã xác minh. Nhà cung cấp email riêng của ứng dụng luôn được ưu tiên"
   },
   "signup": {
     "Accept": "Chấp nhận",

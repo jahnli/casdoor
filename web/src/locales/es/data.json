@@ -748,7 +748,13 @@
     "SMS action client secret help": "El secreto de API que le dio el servicio de SMS. También puede introducirlo más tarde en la página del proveedor.",
     "SMS action install summary": "Añade un proveedor de SMS {name}. Su código se ejecuta dentro de Semi en un entorno aislado y solo puede enviar solicitudes a los hosts permitidos.",
     "SMS action installed description": "Este proveedor de SMS ejecuta la acción. Introduzca sus claves, el remitente y la plantilla en la página del proveedor y añádalo a los proveedores de una aplicación.",
-    "Uninstall SMS action description": "Esto elimina el proveedor de SMS {name}. Las aplicaciones que lo usan ya no podrán enviar códigos de verificación con él."
+    "Uninstall SMS action description": "Esto elimina el proveedor de SMS {name}. Las aplicaciones que lo usan ya no podrán enviar códigos de verificación con él.",
+    "Choose the module too": "Esta acción también necesita su módulo {name}: elíjalo junto con bundle.json.",
+    "Install from file": "Instalar desde archivo",
+    "Install from file help": "Instalar una integración que no está en el Marketplace: elija el bundle.json generado por su build y, para una acción, también su módulo .wasm",
+    "Install from file warning": "Instalada desde un archivo, no desde el Casdoor Marketplace, así que nadie la ha revisado. Instale solo integraciones de confianza.",
+    "Installed from file": "Instalada desde archivo",
+    "Not a bundle file": "Elija el bundle.json de una integración, generado por el build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 día",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Máx. conexiones abiertas",
     "Max open connections - Tooltip": "Número máximo de conexiones abiertas a la base de datos, 0 significa ilimitado",
     "Head HTML": "HTML de cabecera",
-    "Head HTML - Tooltip": "HTML de confianza que se inserta en el <head> de todas las páginas de todas las organizaciones, incluidas las páginas de inicio de sesión y la consola, p. ej. etiquetas <script> para cargar una biblioteca JavaScript. Solo los administradores globales pueden cambiarlo"
+    "Head HTML - Tooltip": "HTML de confianza que se inserta en el <head> de todas las páginas de todas las organizaciones, incluidas las páginas de inicio de sesión y la consola, p. ej. etiquetas <script> para cargar una biblioteca JavaScript. Solo los administradores globales pueden cambiarlo",
+    "Allowed custom HTML URLs": "URL permitidas en HTML personalizado",
+    "Allowed custom HTML URLs - Tooltip": "Prefijos de URL, p. ej. https://www.youtube.com/embed/, desde los que los administradores de organización pueden cargar imágenes, fuentes, marcos y otros archivos en el HTML y CSS personalizados de las aplicaciones, además de este Casdoor, sus proveedores de almacenamiento y los hosts de fuentes y CDN integrados",
+    "Allowed custom HTML elements": "Elementos permitidos en HTML personalizado",
+    "Allowed custom HTML elements - Tooltip": "Elementos, p. ej. iframe y video, que los administradores de organización pueden usar en el HTML personalizado de las aplicaciones además de los elementos de diseño y texto integrados. No se puede añadir script; el src de estos elementos debe empezar por una URL permitida",
+    "Default Email provider": "Proveedor de correo predeterminado",
+    "Default Email provider - Tooltip": "Proveedor de correo global que usan las aplicaciones que no tienen un proveedor de correo propio, por ejemplo para los códigos de verificación. El proveedor de correo propio de una aplicación siempre tiene prioridad"
   },
   "signup": {
     "Accept": "Aceptar",

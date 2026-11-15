@@ -316,7 +316,12 @@ func UpdateProvider(id string, provider *Provider) (bool, error) {
 	}
 
 	if name != provider.Name {
-		err := providerChangeTrigger(owner, name, provider.Name)
+		err = checkProviderNameAvailable(provider, owner, name)
+		if err != nil {
+			return false, err
+		}
+
+		err = providerChangeTrigger(owner, name, provider.Name)
 		if err != nil {
 			return false, err
 		}
@@ -380,6 +385,10 @@ func AddProvider(provider *Provider) (bool, error) {
 	}
 
 	if err := validateAuditProvider(provider); err != nil {
+		return false, err
+	}
+
+	if err := checkProviderNameAvailable(provider, "", ""); err != nil {
 		return false, err
 	}
 
@@ -751,4 +760,21 @@ func callProviderLogoutUrl(provider *Provider, accessToken string) {
 	if resp.StatusCode >= 400 {
 		util.LogWarning(nil, "InvokeCustomProviderLogout: logout URL %s returned status %d for provider %s", provider.CustomLogoutUrl, resp.StatusCode, provider.Name)
 	}
+}
+
+func checkProviderNameAvailable(provider *Provider, oldOwner string, oldName string) error {
+	provider.Name = strings.TrimSpace(provider.Name)
+	if provider.Name == "" {
+		return errors.New("provider name can't be empty")
+	}
+
+	existing := Provider{}
+	exist, err := ormer.Engine.Where("name = ?", provider.Name).Get(&existing)
+	if err != nil {
+		return err
+	}
+	if exist && !(existing.Owner == oldOwner && existing.Name == oldName) {
+		return fmt.Errorf("the provider name \"%s\" already exists, provider names must be unique across all organizations, please use another name", provider.Name)
+	}
+	return nil
 }

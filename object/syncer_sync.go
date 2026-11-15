@@ -86,7 +86,7 @@ func (syncer *Syncer) syncUsers() error {
 				}
 			} else {
 				if user.PreHash == oHash {
-					if !syncer.IsReadOnly {
+					if syncer.writesUsersBack() {
 						updatedOUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
 						if err != nil {
 							return err
@@ -141,7 +141,7 @@ func (syncer *Syncer) syncUsers() error {
 		}
 	}
 
-	if !syncer.IsReadOnly {
+	if syncer.writesUsersBack() {
 		for _, user := range users {
 			primary := syncer.getUserValue(user, key)
 			if _, ok := myOUsers[primary]; !ok {

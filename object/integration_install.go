@@ -71,6 +71,7 @@ type MarketplaceIntegration struct {
 type MarketplaceRevoked struct {
 	Id      string `json:"id"`
 	Version string `json:"version"`
+	Reason  string `json:"reason,omitempty"`
 }
 
 type MarketplaceIndex struct {
@@ -105,7 +106,21 @@ type IntegrationBundle struct {
 	Files    map[string]json.RawMessage `json:"files"`
 
 	// the directory the bundle was downloaded from, where the other files of the version are
-	baseUrl string
+	baseUrl    string
+	isLocal    bool
+	localFiles map[string][]byte
+}
+
+// fetch downloads another file of the version
+func (bundle *IntegrationBundle) fetch(path string) ([]byte, error) {
+	if bundle.isLocal {
+		data, ok := bundle.localFiles[path]
+		if !ok {
+			return nil, fmt.Errorf("choose %s together with bundle.json", path)
+		}
+		return data, nil
+	}
+	return fetchMarketplaceFile(fmt.Sprintf("%s/%s", bundle.baseUrl, path))
 }
 
 // actionFile is the action.json of an action: what it does and the module that does it
@@ -127,6 +142,8 @@ type IntegrationInstallRequest struct {
 	// provider: the client the other identity provider issued
 	ClientId     string `json:"clientId"`
 	ClientSecret string `json:"clientSecret"`
+	Bundle       string `json:"bundle"`
+	Module       string `json:"module"`
 }
 
 type applicationTemplate struct {
@@ -159,9 +176,10 @@ var (
 )
 
 var (
-	variablePattern  = regexp.MustCompile(`\{\{\s*([a-zA-Z][a-zA-Z0-9]*)\s*\}\}`)
-	colorPattern     = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
-	installNameRegex = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]*$`)
+	variablePattern    = regexp.MustCompile(`\{\{\s*([a-zA-Z][a-zA-Z0-9]*)\s*\}\}`)
+	colorPattern       = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
+	installNameRegex   = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]*$`)
+	integrationIdRegex = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 )
 
 func getMarketplaceUrls() []string {
@@ -238,11 +256,22 @@ func GetMarketplaceIndex(refresh bool) (*MarketplaceIndex, error) {
 // platforms only used in China, unless the admin uses Casdoor in Chinese.
 func GetMarketplaceIndexForLanguage(refresh bool, lang string) (*MarketplaceIndex, error) {
 	index, err := GetMarketplaceIndex(refresh)
-	if err != nil || strings.HasPrefix(lang, "zh") {
-		return index, err
+	if err != nil {
+		return nil, err
 	}
+	refreshMarketplaceStatus()
 
 	res := *index
+	res.Revoked = append([]*MarketplaceRevoked{}, index.Revoked...)
+	for _, revoked := range getMarketplaceServerRevoked() {
+		if findRevoked(index.Revoked, revoked.Id, revoked.Version) == nil {
+			res.Revoked = append(res.Revoked, revoked)
+		}
+	}
+	if strings.HasPrefix(lang, "zh") {
+		return &res, nil
+	}
+
 	res.Integrations = []*MarketplaceIntegration{}
 	for _, item := range index.Integrations {
 		if item.Region != "cn" {
@@ -266,16 +295,29 @@ func GetMarketplaceIntegration(id string) (*MarketplaceIntegration, error) {
 	return nil, fmt.Errorf("the integration: %s is not in the Marketplace", id)
 }
 
-func isIntegrationRevoked(index *MarketplaceIndex, id string, version string) bool {
-	for _, revoked := range index.Revoked {
+func findRevoked(list []*MarketplaceRevoked, id string, version string) *MarketplaceRevoked {
+	for _, revoked := range list {
 		if revoked.Id == id && (revoked.Version == "" || revoked.Version == version) {
-			return true
+			return revoked
 		}
 	}
-	return false
+	return nil
 }
 
-func getIntegrationBundle(item *MarketplaceIntegration, version string) (*IntegrationBundle, string, error) {
+// getIntegrationRevoked returns the withdrawal of a version in the index or, as of the last time the Marketplace page
+// was opened, on the Marketplace server, or nil when it is not withdrawn
+func getIntegrationRevoked(index *MarketplaceIndex, id string, version string) *MarketplaceRevoked {
+	revoked := findRevoked(getMarketplaceServerRevoked(), id, version)
+	if revoked == nil {
+		revoked = findRevoked(index.Revoked, id, version)
+	}
+	return revoked
+}
+
+// getIntegrationBundle downloads the bundle of a version and checks it. It first checks with the Marketplace server
+// that the version is still published and what checksum the bundle must have, and downloads the bundle from the server
+// when the CDN copy does not have it. A page view uses a shorter metadata timeout than an install.
+func getIntegrationBundle(item *MarketplaceIntegration, version string, forInstall bool) (*IntegrationBundle, string, error) {
 	index, err := GetMarketplaceIndex(false)
 	if err != nil {
 		return nil, "", err
@@ -283,8 +325,13 @@ func getIntegrationBundle(item *MarketplaceIntegration, version string) (*Integr
 	if version == "" {
 		version = item.Latest
 	}
-	if isIntegrationRevoked(index, item.Id, version) {
-		return nil, "", fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace", item.Id, version)
+	// the official Marketplace server, when it can be reached, says itself whether the version is withdrawn
+	var revokedErr error
+	if revoked := getIntegrationRevoked(index, item.Id, version); revoked != nil {
+		revokedErr = fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace", item.Id, version)
+		if revoked.Reason != "" {
+			revokedErr = fmt.Errorf("%w: %s", revokedErr, revoked.Reason)
+		}
 	}
 
 	var marketplaceVersion *MarketplaceVersion
@@ -293,18 +340,46 @@ func getIntegrationBundle(item *MarketplaceIntegration, version string) (*Integr
 			marketplaceVersion = v
 		}
 	}
+	if revokedErr != nil && (marketplaceVersion == nil || !isOfficialMarketplace()) {
+		return nil, "", revokedErr
+	}
 	if marketplaceVersion == nil {
 		return nil, "", fmt.Errorf("the integration: %s has no version %s", item.Id, version)
 	}
 
-	bundleUrl := joinMarketplaceUrl(index.BaseUrl, marketplaceVersion.Url)
+	baseUrl := index.BaseUrl
+	expectedSha256 := marketplaceVersion.Sha256
+	var meta *MarketplaceVersionMeta
+	serverUrl := ""
+	if isOfficialMarketplace() {
+		meta, serverUrl = getMarketplaceVersionMeta(item, marketplaceVersion, !forInstall)
+		if meta != nil {
+			if meta.Status == "Revoked" {
+				if meta.Reason != "" {
+					return nil, "", integrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace: %s", item.Id, version, meta.Reason)}
+				}
+				return nil, "", integrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace", item.Id, version)}
+			}
+			if meta.Sha256 != "" {
+				expectedSha256 = meta.Sha256
+			}
+		}
+	}
+	if meta == nil && revokedErr != nil {
+		return nil, "", revokedErr
+	}
+
+	bundleUrl := joinMarketplaceUrl(baseUrl, marketplaceVersion.Url)
 	data, err := fetchMarketplaceFile(bundleUrl)
+	if err == nil && !isSha256(data, expectedSha256) && meta != nil && baseUrl != serverUrl {
+		// the CDN copy is stale or not what was published, the Marketplace server has the published one
+		bundleUrl = joinMarketplaceUrl(serverUrl, marketplaceVersion.Url)
+		data, err = fetchMarketplaceFile(bundleUrl)
+	}
 	if err != nil {
 		return nil, "", err
 	}
-
-	hash := sha256.Sum256(data)
-	if !strings.EqualFold(hex.EncodeToString(hash[:]), marketplaceVersion.Sha256) {
+	if !isSha256(data, expectedSha256) {
 		return nil, "", fmt.Errorf("the checksum of %s %s does not match the Marketplace index", item.Id, version)
 	}
 
@@ -321,6 +396,11 @@ func getIntegrationBundle(item *MarketplaceIntegration, version string) (*Integr
 	return bundle, string(data), nil
 }
 
+func isSha256(data []byte, expected string) bool {
+	hash := sha256.Sum256(data)
+	return strings.EqualFold(hex.EncodeToString(hash[:]), expected)
+}
+
 // GetMarketplaceBundle returns the manifest and content files of an integration version, checked against the index.
 func GetMarketplaceBundle(id string, version string) (json.RawMessage, error) {
 	item, err := GetMarketplaceIntegration(id)
@@ -328,11 +408,72 @@ func GetMarketplaceBundle(id string, version string) (json.RawMessage, error) {
 		return nil, err
 	}
 
-	_, bundleText, err := getIntegrationBundle(item, version)
+	_, bundleText, err := getIntegrationBundle(item, version, false)
 	if err != nil {
 		return nil, err
 	}
 	return json.RawMessage(bundleText), nil
+}
+
+// GetInstallIntegrationType returns the type of the integration a request installs
+func GetInstallIntegrationType(req *IntegrationInstallRequest) (string, error) {
+	if req.Bundle != "" {
+		bundle, err := parseLocalBundle(req.Bundle)
+		if err != nil {
+			return "", err
+		}
+		return bundle.Manifest.Type, nil
+	}
+
+	item, err := GetMarketplaceIntegration(req.IntegrationId)
+	if err != nil {
+		return "", err
+	}
+	return item.Type, nil
+}
+
+func parseLocalBundle(text string) (*IntegrationBundle, error) {
+	bundle := &IntegrationBundle{}
+	err := json.Unmarshal([]byte(text), bundle)
+	manifest := bundle.Manifest
+	if err != nil || manifest == nil || !integrationIdRegex.MatchString(manifest.Id) || manifest.Version == "" {
+		return nil, fmt.Errorf("the file is not the bundle.json of an integration")
+	}
+
+	return bundle, nil
+}
+
+// getLocalIntegration reads an integration that isn't in the Marketplace, such as one written for this Casdoor
+// alone, from the bundle.json its build wrote and, for an action, the module next to it
+func getLocalIntegration(req *IntegrationInstallRequest) (*MarketplaceIntegration, *IntegrationBundle, error) {
+	bundle, err := parseLocalBundle(req.Bundle)
+	if err != nil {
+		return nil, nil, err
+	}
+	manifest := bundle.Manifest
+
+	bundle.isLocal = true
+	bundle.localFiles = map[string][]byte{}
+	if manifest.Type == "action" && req.Module != "" {
+		file, err := getActionFile(bundle)
+		if err != nil {
+			return nil, nil, err
+		}
+		module, err := base64.StdEncoding.DecodeString(req.Module)
+		if err != nil {
+			return nil, nil, fmt.Errorf("the module of the action is not valid base64")
+		}
+		bundle.localFiles[file.Module] = module
+	}
+
+	item := &MarketplaceIntegration{
+		Id:          manifest.Id,
+		Type:        manifest.Type,
+		Name:        manifest.Name,
+		Description: map[string]string{},
+		Latest:      manifest.Version,
+	}
+	return item, bundle, nil
 }
 
 func getIntegrationVariables(bundle *IntegrationBundle, input map[string]string) (map[string]string, error) {
@@ -628,7 +769,7 @@ func installActionIntegration(integration *Integration, bundle *IntegrationBundl
 		return err
 	}
 
-	module, err := fetchMarketplaceFile(fmt.Sprintf("%s/%s", bundle.baseUrl, file.Module))
+	module, err := bundle.fetch(file.Module)
 	if err != nil {
 		return err
 	}
@@ -798,12 +939,23 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 		return nil, fmt.Errorf("an integration named %s is already installed in %s", req.Name, req.Owner)
 	}
 
-	item, err := GetMarketplaceIntegration(req.IntegrationId)
-	if err != nil {
-		return nil, err
+	var item *MarketplaceIntegration
+	var bundle *IntegrationBundle
+	var bundleText string
+	source := ""
+	if req.Bundle != "" {
+		if !isGlobalAdmin {
+			return nil, fmt.Errorf("only a global admin can install an integration from a file")
+		}
+		item, bundle, err = getLocalIntegration(req)
+		bundleText = req.Bundle
+		source = "file"
+	} else {
+		item, err = GetMarketplaceIntegration(req.IntegrationId)
+		if err == nil {
+			bundle, bundleText, err = getIntegrationBundle(item, req.Version, true)
+		}
 	}
-
-	bundle, bundleText, err := getIntegrationBundle(item, req.Version)
 	if err != nil {
 		return nil, err
 	}
@@ -827,6 +979,7 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 		UpdatedTime:   util.GetCurrentTime(),
 		DisplayName:   displayName,
 		IntegrationId: item.Id,
+		Source:        source,
 		Type:          item.Type,
 		Version:       bundle.Manifest.Version,
 		Logo:          item.Logo,
@@ -893,9 +1046,10 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 					return false, err
 				}
 				if template.Agent {
-					var agent *Agent
-					agent, err = getAgent(integration.Owner, integration.Name)
-					if err == nil && agent != nil && agent.Application == integration.Application {
+					agent := &Agent{}
+					var found bool
+					found, err = ormer.Engine.Where("owner = ? AND application = ?", integration.Owner, integration.Application).Get(agent)
+					if err == nil && found {
 						_, err = DeleteAgent(agent)
 					}
 				}

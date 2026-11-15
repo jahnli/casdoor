@@ -16,9 +16,12 @@ package object
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 	"sync/atomic"
 	"time"
 
+	"github.com/casdoor/casdoor/conf"
 	"github.com/casdoor/casdoor/util"
 	"github.com/xorm-io/core"
 )
@@ -42,6 +45,14 @@ type Setting struct {
 
 	// applies to the organizations that do not set their own record retention days, 0 keeps the records forever
 	RecordRetentionDays int `json:"recordRetentionDays"`
+
+	// a global (admin-owned) Email provider used by the applications that do not list an Email provider of their own
+	DefaultEmailProvider string `xorm:"varchar(100)" json:"defaultEmailProvider"`
+
+	// the elements (e.g. iframe, video) and the URL prefixes of the files they load that organization admins may use
+	// in the custom HTML of applications, besides the built-in layout and text elements and file hosts
+	CustomHtmlAllowedTags []string `xorm:"mediumtext" json:"customHtmlAllowedTags"`
+	CustomHtmlAllowedUrls []string `xorm:"mediumtext" json:"customHtmlAllowedUrls"`
 
 	// trusted HTML (scripts, styles, meta tags) put into the <head> of every page of every organization
 	HeadHtml string `xorm:"mediumtext" json:"headHtml"`
@@ -113,8 +124,50 @@ func (setting *Setting) check() error {
 	if setting.RecordRetentionDays < 0 {
 		return fmt.Errorf("the record retention days cannot be negative")
 	}
+
+	setting.DefaultEmailProvider = strings.TrimSpace(setting.DefaultEmailProvider)
+	if setting.DefaultEmailProvider != "" {
+		provider, err := getProvider("admin", setting.DefaultEmailProvider)
+		if err != nil {
+			return err
+		}
+		if provider == nil || provider.Category != "Email" {
+			return fmt.Errorf("the default Email provider must be a global Email provider")
+		}
+	}
+
+	tags := []string{}
+	for _, tag := range setting.CustomHtmlAllowedTags {
+		tag = strings.ToLower(strings.Trim(strings.TrimSpace(tag), "<>/ "))
+		if tag == "" || util.InSlice(tags, tag) {
+			continue
+		}
+		if tag == "script" {
+			return fmt.Errorf("script cannot be allowed in custom HTML, a global admin can enable custom scripts of an application instead")
+		}
+		if !reHtmlTagName.MatchString(tag) {
+			return fmt.Errorf("%s is not an HTML element name", tag)
+		}
+		tags = append(tags, tag)
+	}
+	setting.CustomHtmlAllowedTags = tags
+
+	urls := []string{}
+	for _, prefix := range setting.CustomHtmlAllowedUrls {
+		prefix = strings.TrimSpace(prefix)
+		if prefix == "" || util.InSlice(urls, prefix) {
+			continue
+		}
+		if prefix == "*" || strings.HasPrefix(prefix, "data:") || strings.HasPrefix(prefix, "javascript:") {
+			return fmt.Errorf("%s is not a URL prefix", prefix)
+		}
+		urls = append(urls, prefix)
+	}
+	setting.CustomHtmlAllowedUrls = urls
 	return nil
 }
+
+var reHtmlTagName = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
 
 // apply only touches the main database's pool, the syncers' databases keep their own
 func (setting *Setting) apply() {
@@ -129,8 +182,23 @@ func (setting *Setting) apply() {
 
 	ormer.Engine.SetConnMaxLifetime(time.Duration(setting.DbConnMaxLifetime) * time.Second)
 
+	conf.SetHasDefaultEmailProvider(setting.DefaultEmailProvider != "")
+	conf.SetCustomHtmlAllowed(setting.CustomHtmlAllowedTags, setting.CustomHtmlAllowedUrls)
 	updatedTime, _ := time.Parse(time.RFC3339, setting.UpdatedTime)
 	currentHeadHtml.Store(&headHtmlState{html: setting.HeadHtml, updatedTime: updatedTime})
+}
+
+func getDefaultEmailProvider() (*Provider, error) {
+	setting, err := GetSetting()
+	if err != nil || setting == nil || setting.DefaultEmailProvider == "" {
+		return nil, err
+	}
+
+	provider, err := getProvider("admin", setting.DefaultEmailProvider)
+	if err != nil || provider == nil || provider.Category != "Email" {
+		return nil, err
+	}
+	return provider, nil
 }
 
 func initBuiltInSetting() *Setting {

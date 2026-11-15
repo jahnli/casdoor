@@ -40,6 +40,8 @@ export let MaxItemsForFlatMenu = 7;
 export let ThemeShowcase = false;
 export let MarketplaceUrl = "https://cdn.jsdelivr.net/gh/casdoor/casdoor-integrations@dist";
 
+export let CustomHtmlAllowedTags: string[] = [];
+export let HasDefaultEmailProvider = false;
 // setConfig updates the frontend configuration from backend
 export function setConfig(config: Record<string, any>) {
   if (!config) {
@@ -71,6 +73,12 @@ export function setConfig(config: Record<string, any>) {
   }
   if (config.marketplaceUrl) {
     MarketplaceUrl = config.marketplaceUrl;
+  }
+  if (Array.isArray(config.customHtmlAllowedTags)) {
+    CustomHtmlAllowedTags = config.customHtmlAllowedTags;
+  }
+  if (config.hasDefaultEmailProvider !== undefined) {
+    HasDefaultEmailProvider = config.hasDefaultEmailProvider;
   }
 }
 

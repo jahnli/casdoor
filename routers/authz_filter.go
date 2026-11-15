@@ -221,7 +221,11 @@ func getObject(ctx *context.Context) (string, string, error) {
 
 	// UploadApplications scopes rows to the uploading administrator's organization.
 	if path == "/api/upload-applications" {
-		owner, _ := util.GetOwnerAndNameFromIdNoCheck(getUsername(ctx))
+		username := getUsername(ctx)
+		if username == "" {
+			return "", "", nil
+		}
+		owner, _ := util.GetOwnerAndNameFromIdNoCheck(username)
 		return owner, "", nil
 	}
 

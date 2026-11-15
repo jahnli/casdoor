@@ -748,7 +748,13 @@
     "SMS action client secret help": "Sekret API otrzymany od usługi SMS. Możesz go też wpisać później na stronie dostawcy.",
     "SMS action install summary": "Dodaje dostawcę SMS {name}. Jego kod działa w Semi w piaskownicy i może wysyłać żądania tylko do dozwolonych hostów.",
     "SMS action installed description": "Ten dostawca SMS uruchamia akcję. Wpisz jego klucze, nadawcę i szablon na stronie dostawcy, a następnie dodaj go do dostawców aplikacji.",
-    "Uninstall SMS action description": "Spowoduje to usunięcie dostawcy SMS {name}. Aplikacje, które go używają, nie będą już mogły wysyłać nim kodów weryfikacyjnych."
+    "Uninstall SMS action description": "Spowoduje to usunięcie dostawcy SMS {name}. Aplikacje, które go używają, nie będą już mogły wysyłać nim kodów weryfikacyjnych.",
+    "Choose the module too": "Ta akcja potrzebuje też modułu {name}: wybierz go razem z bundle.json.",
+    "Install from file": "Zainstaluj z pliku",
+    "Install from file help": "Zainstaluj integrację spoza Marketplace: wybierz bundle.json wygenerowany przez build, a dla akcji także jej moduł .wasm",
+    "Install from file warning": "Zainstalowana z pliku, a nie z Casdoor Marketplace, więc nikt jej nie sprawdził. Instaluj tylko zaufane integracje.",
+    "Installed from file": "Zainstalowana z pliku",
+    "Not a bundle file": "Wybierz bundle.json integracji, wygenerowany przez build casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 dzień",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Maks. otwartych połączeń",
     "Max open connections - Tooltip": "Maksymalna liczba otwartych połączeń z bazą danych, 0 oznacza brak limitu",
     "Head HTML": "HTML nagłówka",
-    "Head HTML - Tooltip": "Zaufany HTML wstawiany do <head> każdej strony wszystkich organizacji, w tym stron logowania i konsoli, np. znaczniki <script> ładujące bibliotekę JavaScript. Mogą go zmieniać tylko administratorzy globalni"
+    "Head HTML - Tooltip": "Zaufany HTML wstawiany do <head> każdej strony wszystkich organizacji, w tym stron logowania i konsoli, np. znaczniki <script> ładujące bibliotekę JavaScript. Mogą go zmieniać tylko administratorzy globalni",
+    "Allowed custom HTML URLs": "Dozwolone adresy URL w niestandardowym HTML",
+    "Allowed custom HTML URLs - Tooltip": "Prefiksy URL, np. https://www.youtube.com/embed/, z których administratorzy organizacji mogą ładować obrazy, czcionki, ramki i inne pliki w niestandardowym HTML i CSS aplikacji, oprócz tego Casdoora, jego dostawców pamięci masowej oraz wbudowanych hostów czcionek i CDN",
+    "Allowed custom HTML elements": "Dozwolone elementy w niestandardowym HTML",
+    "Allowed custom HTML elements - Tooltip": "Elementy, np. iframe i video, których administratorzy organizacji mogą używać w niestandardowym HTML aplikacji oprócz wbudowanych elementów układu i tekstu. Nie można dodać script; src tych elementów musi zaczynać się od dozwolonego adresu URL",
+    "Default Email provider": "Domyślny dostawca e-mail",
+    "Default Email provider - Tooltip": "Globalny dostawca e-mail używany przez aplikacje, które nie mają własnego dostawcy e-mail, np. do kodów weryfikacyjnych. Własny dostawca e-mail aplikacji ma zawsze pierwszeństwo"
   },
   "signup": {
     "Accept": "Akceptuj",

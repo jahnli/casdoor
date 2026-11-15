@@ -129,7 +129,7 @@ func (c *ApiController) GetIntegration() {
 // InstallIntegration
 // @Title InstallIntegration
 // @Tag Integration API
-// @Description install an integration from the Casdoor Marketplace
+// @Description install an integration from the Casdoor Marketplace, or from its bundle.json (global admins only)
 // @Param   body    body   object.IntegrationInstallRequest  true        "The integration, its variables and where to install it"
 // @Success 200 {object} controllers.Response The Response object
 // @router /install-integration [post]
@@ -145,13 +145,13 @@ func (c *ApiController) InstallIntegration() {
 		return
 	}
 
-	item, err := object.GetMarketplaceIntegration(req.IntegrationId)
+	integrationType, err := object.GetInstallIntegrationType(&req)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return
 	}
 
-	switch item.Type {
+	switch integrationType {
 	case "app":
 		count, err := object.GetApplicationCount("", "", "")
 		if err != nil {

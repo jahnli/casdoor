@@ -748,7 +748,13 @@
     "SMS action client secret help": "SMS サービスから発行された API シークレットです。後でプロバイダーのページで入力することもできます。",
     "SMS action install summary": "{name} の SMS プロバイダーを追加します。そのコードは Semi 内のサンドボックスで実行され、許可されたホストにのみリクエストを送信できます。",
     "SMS action installed description": "この SMS プロバイダーはアクションを実行します。プロバイダーのページでキー、送信元、テンプレートを入力し、アプリケーションのプロバイダーに追加してください。",
-    "Uninstall SMS action description": "SMS プロバイダー {name} を削除します。これを使っているアプリケーションは、これで認証コードを送信できなくなります。"
+    "Uninstall SMS action description": "SMS プロバイダー {name} を削除します。これを使っているアプリケーションは、これで認証コードを送信できなくなります。",
+    "Choose the module too": "このアクションにはモジュール {name} も必要です。bundle.json と一緒に選択してください。",
+    "Install from file": "ファイルからインストール",
+    "Install from file help": "Marketplace にない連携をインストールします。ビルドで生成された bundle.json を選択し、アクションの場合は .wasm モジュールも選択してください",
+    "Install from file warning": "Casdoor Marketplace ではなくファイルからインストールするため、誰も審査していません。信頼できる連携だけをインストールしてください。",
+    "Installed from file": "ファイルからインストール済み",
+    "Not a bundle file": "連携の bundle.json を選択してください。casdoor-integrations のビルドで生成されます（dist/integrations/<id>/<version>/bundle.json）。"
   },
   "invitation": {
     "1 day": "1 日",
@@ -1311,7 +1317,13 @@
     "Max open connections": "最大オープン接続数",
     "Max open connections - Tooltip": "データベースへの最大同時接続数。0は無制限",
     "Head HTML": "ヘッドHTML",
-    "Head HTML - Tooltip": "すべての組織のすべてのページ（サインインページとコンソールを含む）の<head>に挿入される信頼済みHTML。例：JavaScriptライブラリを読み込む<script>タグ。グローバル管理者のみ変更できます"
+    "Head HTML - Tooltip": "すべての組織のすべてのページ（サインインページとコンソールを含む）の<head>に挿入される信頼済みHTML。例：JavaScriptライブラリを読み込む<script>タグ。グローバル管理者のみ変更できます",
+    "Allowed custom HTML URLs": "カスタムHTMLで許可するURL",
+    "Allowed custom HTML URLs - Tooltip": "組織管理者がアプリケーションのカスタムHTMLとCSSで画像、フォント、フレームなどのファイルを読み込めるURLプレフィックス（例：https://www.youtube.com/embed/）。このCasdoor、ストレージプロバイダー、組み込みのフォント・CDNホストは不要です",
+    "Allowed custom HTML elements": "カスタムHTMLで許可する要素",
+    "Allowed custom HTML elements - Tooltip": "組織管理者がアプリケーションのカスタムHTMLで、組み込みのレイアウト・テキスト要素以外に使える要素（例：iframe、video）。scriptは追加できません。これらの要素のsrcは許可されたURLで始まる必要があります",
+    "Default Email provider": "デフォルトのメールプロバイダー",
+    "Default Email provider - Tooltip": "独自のメールプロバイダーを設定していないアプリケーションが、確認コードなどの送信に使うグローバルなメールプロバイダー。アプリケーション自身のメールプロバイダーが常に優先されます"
   },
   "signup": {
     "Accept": "受け入れる",

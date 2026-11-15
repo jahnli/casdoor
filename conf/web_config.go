@@ -14,16 +14,62 @@
 
 package conf
 
+import "sync/atomic"
+
+// hasDefaultEmailProvider mirrors whether the global setting names a default Email provider
+var hasDefaultEmailProvider atomic.Bool
+
+func SetHasDefaultEmailProvider(has bool) {
+	hasDefaultEmailProvider.Store(has)
+}
+
+type customHtmlAllowed struct {
+	tags []string
+	urls []string
+}
+
+// customHtmlAllowedState mirrors the global settings of what organization admins may use in custom HTML
+var customHtmlAllowedState atomic.Pointer[customHtmlAllowed]
+
+func SetCustomHtmlAllowed(tags []string, urls []string) {
+	customHtmlAllowedState.Store(&customHtmlAllowed{tags: tags, urls: urls})
+}
+
+// GetCustomHtmlAllowedTags returns the elements that organization admins may use in the custom HTML of
+// applications besides the built-in ones, set in the global settings. A script still needs custom scripts enabled.
+func GetCustomHtmlAllowedTags() []string {
+	res := []string{}
+	if state := customHtmlAllowedState.Load(); state != nil {
+		for _, tag := range state.tags {
+			if tag != "script" {
+				res = append(res, tag)
+			}
+		}
+	}
+	return res
+}
+
+// GetCustomHtmlAllowedUrls returns the URL prefixes, set in the global settings, from which organization admins
+// may load images, fonts, frames and other files in the custom HTML and CSS of applications
+func GetCustomHtmlAllowedUrls() []string {
+	if state := customHtmlAllowedState.Load(); state != nil {
+		return state.urls
+	}
+	return nil
+}
+
 type WebConfig struct {
-	ShowGithubCorner    bool   `json:"showGithubCorner"`
-	ForceLanguage       string `json:"forceLanguage"`
-	DefaultLanguage     string `json:"defaultLanguage"`
-	IsDemoMode          bool   `json:"isDemoMode"`
-	StaticBaseUrl       string `json:"staticBaseUrl"`
-	DefaultApplication  string `json:"defaultApplication"`
-	MaxItemsForFlatMenu int64  `json:"maxItemsForFlatMenu"`
-	ThemeShowcase       bool   `json:"themeShowcase"`
-	MarketplaceUrl      string `json:"marketplaceUrl"`
+	ShowGithubCorner        bool     `json:"showGithubCorner"`
+	ForceLanguage           string   `json:"forceLanguage"`
+	DefaultLanguage         string   `json:"defaultLanguage"`
+	IsDemoMode              bool     `json:"isDemoMode"`
+	StaticBaseUrl           string   `json:"staticBaseUrl"`
+	DefaultApplication      string   `json:"defaultApplication"`
+	MaxItemsForFlatMenu     int64    `json:"maxItemsForFlatMenu"`
+	ThemeShowcase           bool     `json:"themeShowcase"`
+	MarketplaceUrl          string   `json:"marketplaceUrl"`
+	HasDefaultEmailProvider bool     `json:"hasDefaultEmailProvider"`
+	CustomHtmlAllowedTags   []string `json:"customHtmlAllowedTags"`
 }
 
 func GetWebConfig() *WebConfig {
@@ -54,5 +100,7 @@ func GetWebConfig() *WebConfig {
 		config.MarketplaceUrl = GetConfigString("marketplaceUrl")
 	}
 
+	config.CustomHtmlAllowedTags = GetCustomHtmlAllowedTags()
+	config.HasDefaultEmailProvider = hasDefaultEmailProvider.Load()
 	return config
 }

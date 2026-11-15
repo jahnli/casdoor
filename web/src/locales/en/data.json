@@ -754,7 +754,13 @@
     "SMS action client secret help": "The API secret the SMS service gave you. You can also fill it in on the provider page later.",
     "SMS action install summary": "Adds a {name} SMS provider. Its code runs inside Semi in a sandbox and can only send requests to the allowed hosts.",
     "SMS action installed description": "This SMS provider runs the action. Fill in its keys, sender and template on the provider page, then add it to the providers of an application.",
-    "Uninstall SMS action description": "This deletes the SMS provider {name}. Applications that use it can no longer send verification codes with it."
+    "Uninstall SMS action description": "This deletes the SMS provider {name}. Applications that use it can no longer send verification codes with it.",
+    "Choose the module too": "This action also needs its module {name}: choose it together with bundle.json.",
+    "Install from file": "Install from file",
+    "Install from file help": "Install an integration that isn't in the Marketplace: choose the bundle.json its build wrote, and for an action also its .wasm module",
+    "Install from file warning": "Installed from a file, not from the Casdoor Marketplace, so nobody has reviewed it. Only install integrations you trust.",
+    "Installed from file": "Installed from file",
+    "Not a bundle file": "Choose the bundle.json of an integration, written by the build of casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 day",
@@ -1321,7 +1327,13 @@
     "Max open connections": "Max open connections",
     "Max open connections - Tooltip": "Maximum number of open connections to the database, 0 means unlimited",
     "Head HTML": "Head HTML",
-    "Head HTML - Tooltip": "Trusted HTML put into the <head> of every page of every organization, including the sign-in pages and the console, e.g. <script> tags to load a JavaScript library. Only global admins can change it"
+    "Head HTML - Tooltip": "Trusted HTML put into the <head> of every page of every organization, including the sign-in pages and the console, e.g. <script> tags to load a JavaScript library. Only global admins can change it",
+    "Allowed custom HTML URLs": "Allowed custom HTML URLs",
+    "Allowed custom HTML URLs - Tooltip": "URL prefixes, e.g. https://www.youtube.com/embed/, from which organization admins may load images, fonts, frames and other files in the custom HTML and CSS of applications, besides this Casdoor, its storage providers and the built-in font and CDN hosts",
+    "Allowed custom HTML elements": "Allowed custom HTML elements",
+    "Allowed custom HTML elements - Tooltip": "Elements, e.g. iframe and video, that organization admins may use in the custom HTML of applications besides the built-in layout and text elements. script cannot be added, the src of these elements has to start with an allowed URL",
+    "Default Email provider": "Default Email provider",
+    "Default Email provider - Tooltip": "A global Email provider used by the applications that do not list an Email provider of their own, e.g. for their verification codes. An application's own Email provider always comes first"
   },
   "signup": {
     "Accept": "Accept",

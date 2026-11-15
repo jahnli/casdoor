@@ -748,7 +748,13 @@
     "SMS action client secret help": "SMS hizmetinin size verdiği API gizli anahtarı. Daha sonra sağlayıcı sayfasında da girebilirsiniz.",
     "SMS action install summary": "Bir {name} SMS sağlayıcısı ekler. Kodu Semi içinde bir korumalı alanda çalışır ve yalnızca izin verilen sunuculara istek gönderebilir.",
     "SMS action installed description": "Bu SMS sağlayıcısı eylemi çalıştırır. Anahtarlarını, göndericiyi ve şablonu sağlayıcı sayfasında girin, ardından bir uygulamanın sağlayıcılarına ekleyin.",
-    "Uninstall SMS action description": "Bu, {name} SMS sağlayıcısını siler. Onu kullanan uygulamalar artık bununla doğrulama kodu gönderemez."
+    "Uninstall SMS action description": "Bu, {name} SMS sağlayıcısını siler. Onu kullanan uygulamalar artık bununla doğrulama kodu gönderemez.",
+    "Choose the module too": "Bu eylem {name} modülüne de ihtiyaç duyar: bundle.json ile birlikte seçin.",
+    "Install from file": "Dosyadan yükle",
+    "Install from file help": "Marketplace'te olmayan bir entegrasyonu yükleyin: derlemenin oluşturduğu bundle.json dosyasını, eylemler için ayrıca .wasm modülünü seçin",
+    "Install from file warning": "Casdoor Marketplace'ten değil dosyadan yüklendiği için kimse incelemedi. Yalnızca güvendiğiniz entegrasyonları yükleyin.",
+    "Installed from file": "Dosyadan yüklendi",
+    "Not a bundle file": "Bir entegrasyonun casdoor-integrations derlemesiyle oluşturulan bundle.json dosyasını seçin (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 gün",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Maks. açık bağlantı",
     "Max open connections - Tooltip": "Veritabanına açık olabilecek en fazla bağlantı sayısı, 0 sınırsız demektir",
     "Head HTML": "Head HTML",
-    "Head HTML - Tooltip": "Giriş sayfaları ve konsol dahil tüm organizasyonların her sayfasının <head> bölümüne eklenen güvenilir HTML, örneğin bir JavaScript kütüphanesi yükleyen <script> etiketleri. Yalnızca genel yöneticiler değiştirebilir"
+    "Head HTML - Tooltip": "Giriş sayfaları ve konsol dahil tüm organizasyonların her sayfasının <head> bölümüne eklenen güvenilir HTML, örneğin bir JavaScript kütüphanesi yükleyen <script> etiketleri. Yalnızca genel yöneticiler değiştirebilir",
+    "Allowed custom HTML URLs": "Özel HTML'de izin verilen URL'ler",
+    "Allowed custom HTML URLs - Tooltip": "Kuruluş yöneticilerinin uygulamaların özel HTML ve CSS'inde resim, yazı tipi, çerçeve ve diğer dosyaları yükleyebileceği URL önekleri, ör. https://www.youtube.com/embed/; bu Casdoor, depolama sağlayıcıları ve yerleşik yazı tipi ve CDN sunucuları ayrıca eklenmez",
+    "Allowed custom HTML elements": "Özel HTML'de izin verilen öğeler",
+    "Allowed custom HTML elements - Tooltip": "Kuruluş yöneticilerinin uygulamaların özel HTML'inde yerleşik düzen ve metin öğelerine ek olarak kullanabileceği öğeler, ör. iframe ve video. script eklenemez; bu öğelerin src değeri izin verilen bir URL ile başlamalıdır",
+    "Default Email provider": "Varsayılan e-posta sağlayıcısı",
+    "Default Email provider - Tooltip": "Kendi e-posta sağlayıcısı olmayan uygulamaların doğrulama kodları gibi e-postalar için kullandığı genel e-posta sağlayıcısı. Uygulamanın kendi e-posta sağlayıcısı her zaman önceliklidir"
   },
   "signup": {
     "Accept": "Kabul Et",

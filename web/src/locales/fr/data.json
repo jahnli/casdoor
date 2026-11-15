@@ -748,7 +748,13 @@
     "SMS action client secret help": "Le secret d'API fourni par le service SMS. Vous pouvez aussi le saisir plus tard sur la page du fournisseur.",
     "SMS action install summary": "Ajoute un fournisseur SMS {name}. Son code s'exécute dans Semi dans un bac à sable et ne peut envoyer des requêtes qu'aux hôtes autorisés.",
     "SMS action installed description": "Ce fournisseur SMS exécute l'action. Saisissez ses clés, l'expéditeur et le modèle sur la page du fournisseur, puis ajoutez-le aux fournisseurs d'une application.",
-    "Uninstall SMS action description": "Cela supprime le fournisseur SMS {name}. Les applications qui l'utilisent ne pourront plus envoyer de codes de vérification avec."
+    "Uninstall SMS action description": "Cela supprime le fournisseur SMS {name}. Les applications qui l'utilisent ne pourront plus envoyer de codes de vérification avec.",
+    "Choose the module too": "Cette action a aussi besoin de son module {name} : choisissez-le avec bundle.json.",
+    "Install from file": "Installer depuis un fichier",
+    "Install from file help": "Installer une intégration absente du Marketplace : choisissez le bundle.json produit par son build et, pour une action, aussi son module .wasm",
+    "Install from file warning": "Installée depuis un fichier et non depuis le Casdoor Marketplace : personne ne l'a vérifiée. N'installez que des intégrations de confiance.",
+    "Installed from file": "Installée depuis un fichier",
+    "Not a bundle file": "Choisissez le bundle.json d'une intégration, produit par le build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
   },
   "invitation": {
     "1 day": "1 jour",
@@ -1311,7 +1317,13 @@
     "Max open connections": "Connexions ouvertes max.",
     "Max open connections - Tooltip": "Nombre maximal de connexions ouvertes à la base de données, 0 signifie illimité",
     "Head HTML": "HTML d'en-tête",
-    "Head HTML - Tooltip": "HTML de confiance inséré dans le <head> de chaque page de toutes les organisations, y compris les pages de connexion et la console, par ex. des balises <script> pour charger une bibliothèque JavaScript. Seuls les administrateurs globaux peuvent le modifier"
+    "Head HTML - Tooltip": "HTML de confiance inséré dans le <head> de chaque page de toutes les organisations, y compris les pages de connexion et la console, par ex. des balises <script> pour charger une bibliothèque JavaScript. Seuls les administrateurs globaux peuvent le modifier",
+    "Allowed custom HTML URLs": "URL autorisées dans le HTML personnalisé",
+    "Allowed custom HTML URLs - Tooltip": "Préfixes d'URL, par ex. https://www.youtube.com/embed/, depuis lesquels les administrateurs d'organisation peuvent charger des images, polices, cadres et autres fichiers dans le HTML et le CSS personnalisés des applications, en plus de ce Casdoor, de ses fournisseurs de stockage et des hôtes de polices et CDN intégrés",
+    "Allowed custom HTML elements": "Éléments autorisés dans le HTML personnalisé",
+    "Allowed custom HTML elements - Tooltip": "Éléments, par ex. iframe et video, que les administrateurs d'organisation peuvent utiliser dans le HTML personnalisé des applications en plus des éléments de mise en page et de texte intégrés. script ne peut pas être ajouté ; le src de ces éléments doit commencer par une URL autorisée",
+    "Default Email provider": "Fournisseur d'e-mail par défaut",
+    "Default Email provider - Tooltip": "Fournisseur d'e-mail global utilisé par les applications qui n'ont pas leur propre fournisseur d'e-mail, par exemple pour les codes de vérification. Le fournisseur d'e-mail propre à une application est toujours prioritaire"
   },
   "signup": {
     "Accept": "Accepter",
