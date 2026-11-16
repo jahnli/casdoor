@@ -118,7 +118,15 @@ export default function UserListPage({
     dateColumn("lastSigninTime", i18next.t("user:Last signin time")),
     textColumn({dataIndex: "lastSigninIp", title: i18next.t("user:Last signin IP"), width: 150, searchable: true}),
     dateColumn(),
-    organizationColumn(120),
+    {
+      ...organizationColumn(120),
+      // Account profiles mask the owner; the list's organization query supplies its display text.
+      render: (value) => (
+        <Link to={`/organizations/${value}`} className="underline-offset-4 hover:underline">
+          {value === "@current" ? (organization.name && organization.name !== "@current" ? organization.name : "-") : value}
+        </Link>
+      ),
+    },
     {
       dataIndex: "signupApplication",
       title: i18next.t("general:Application"),
