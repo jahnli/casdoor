@@ -119,6 +119,18 @@ func (l *LdapAutoSynchronizer) syncOnce(ldap *Ldap) {
 	}
 	defer conn.Close()
 
+	// Fetch the complete user list and remove missing accounts before syncing.
+	users, err := conn.GetLdapUsers(ldap)
+	if err != nil {
+		logs.Warning(fmt.Sprintf("autoSync failed for %s, error %s", ldap.Id, err))
+		return
+	}
+	deleted, err := cleanupLdapUsers(ldap, users, conn.Conn)
+	if err != nil {
+		logs.Warning("LDAP autosync cleanup failed for %s after %d deletions: %s", ldap.Id, deleted, err)
+		return
+	}
+
 	// Sync groups first if enabled (so they exist before assigning users)
 	if ldap.EnableGroups {
 		groups, err := conn.GetLdapGroups(ldap)
@@ -134,12 +146,6 @@ func (l *LdapAutoSynchronizer) syncOnce(ldap *Ldap) {
 		}
 	}
 
-	users, err := conn.GetLdapUsers(ldap)
-	if err != nil {
-		logs.Warning(fmt.Sprintf("autoSync failed for %s, error %s", ldap.Id, err))
-		return
-	}
-
 	existed, failed, err := SyncLdapUsers(ldap.Owner, AutoAdjustLdapUser(users), ldap.Id, "en")
 	if err != nil {
 		logs.Warning(fmt.Sprintf("autoSync failed for %s, error %s", ldap.Id, err))
@@ -148,9 +154,9 @@ func (l *LdapAutoSynchronizer) syncOnce(ldap *Ldap) {
 
 	if len(failed) != 0 {
 		logs.Warning(fmt.Sprintf("ldap autosync,%d new users,but %d user failed during :", len(users)-len(existed)-len(failed), len(failed)), failed)
-	} else {
-		logs.Info(fmt.Sprintf("ldap autosync success, %d new users, %d existing users", len(users)-len(existed), len(existed)))
+		return
 	}
+	logs.Info(fmt.Sprintf("ldap autosync success, %d new users, %d existing users, %d deleted users", len(users)-len(existed), len(existed), deleted))
 }
 
 // LdapAutoSynchronizerStartUpAll

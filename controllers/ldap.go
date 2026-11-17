@@ -34,8 +34,9 @@ type LdapResp struct {
 // }
 
 type LdapSyncResp struct {
-	Exist  []object.LdapUser `json:"exist"`
-	Failed []object.LdapUser `json:"failed"`
+	Exist   []object.LdapUser `json:"exist"`
+	Failed  []object.LdapUser `json:"failed"`
+	Deleted int               `json:"deleted"`
 }
 
 func (c *ApiController) requireLdapOfOwner(owner string, ldapId string) bool {
@@ -327,8 +328,18 @@ func (c *ApiController) SyncLdapUsers() {
 		return
 	}
 
+	deleted := 0
+	if len(failed) == 0 {
+		deleted, err = object.CleanupLdapUsers(owner, ldapId)
+		if err != nil {
+			c.ResponseError(fmt.Sprintf("LDAP users synced, but cleanup failed after %d deletions: %s", deleted, err))
+			return
+		}
+	}
+
 	c.ResponseOk(&LdapSyncResp{
-		Exist:  exist,
-		Failed: failed,
+		Exist:   exist,
+		Failed:  failed,
+		Deleted: deleted,
 	})
 }
