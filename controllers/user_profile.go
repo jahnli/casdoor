@@ -38,7 +38,7 @@ func (c *ApiController) maskLoginApplicationOrganization(application *object.App
 	if c.Ctx.Input.GetData("profileApplicationName") == application.Name {
 		return object.GetMaskedProfileApplication(application, false)
 	}
-	actor := c.getCurrentUser()
+	actor := c.GetCurrentUser()
 	if actor == nil || actor.Owner != application.Organization {
 		return application
 	}

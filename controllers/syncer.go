@@ -119,7 +119,7 @@ func (c *ApiController) UpdateSyncer() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdateSyncer(id, &syncer, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.UpdateSyncer(id, &syncer, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
 	c.ServeJSON()
 }
 
@@ -145,7 +145,7 @@ func (c *ApiController) AddSyncer() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddSyncer(&syncer))
+	c.Data["json"] = WrapActionResponse(object.AddSyncer(&syncer))
 	c.ServeJSON()
 }
 
@@ -164,7 +164,7 @@ func (c *ApiController) DeleteSyncer() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteSyncer(&syncer))
+	c.Data["json"] = WrapActionResponse(object.DeleteSyncer(&syncer))
 	c.ServeJSON()
 }
 

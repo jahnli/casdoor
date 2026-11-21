@@ -36,7 +36,8 @@
     "UserCode Expired": "Benutzercode abgelaufen",
     "UserCode Invalid": "Benutzercode ungültig",
     "the application for user %s is not found": "Die Anwendung für Benutzer %s wurde nicht gefunden",
-    "the organization: %s is not found": "Die Organisation: %s wurde nicht gefunden"
+    "the organization: %s is not found": "Die Organisation: %s wurde nicht gefunden",
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Der Benutzer: %s darf sich nicht bei der Anwendung: %s anmelden, die Berechtigungen der Organisation: %s erlauben es nicht"
   },
   "cas": {
     "Service %s and %s do not match": "Service %s und %s stimmen nicht überein"
@@ -253,5 +254,16 @@
   "webauthn": {
     "Found no credentials for this user": "Für diesen Benutzer wurden keine Anmeldeinformationen gefunden",
     "Please call WebAuthnSigninBegin first": "Bitte rufen Sie zuerst WebAuthnSigninBegin auf"
+  },
+  "mfa": {
+    "Step-up verification is not enabled for the application: %s": "Die Step-up-Verifizierung ist für die Anwendung %s nicht aktiviert",
+    "The MFA type: %s is not allowed for step-up verification by the application": "Der MFA-Typ %s ist für die Step-up-Verifizierung dieser Anwendung nicht erlaubt",
+    "The step-up token has already been used": "Das Step-up-Token wurde bereits verwendet",
+    "The step-up token is invalid: %s": "Das Step-up-Token ist ungültig: %s",
+    "The step-up token was issued for another action": "Das Step-up-Token wurde für eine andere Aktion ausgestellt",
+    "The token is not a step-up token": "Das Token ist kein Step-up-Token",
+    "The user has no recovery codes": "Der Benutzer hat keine Wiederherstellungscodes",
+    "The user has not enabled the MFA type: %s": "Der Benutzer hat den MFA-Typ %s nicht aktiviert",
+    "This code has already been used, please wait for the next one": "Dieser Code wurde bereits verwendet, bitte warten Sie auf den nächsten"
   }
 }

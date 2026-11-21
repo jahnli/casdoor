@@ -175,7 +175,7 @@ func UpdateCert(id string, cert *Cert) (bool, error) {
 		}
 	}
 
-	err = cert.populateContent()
+	err = cert.PopulateContent()
 	if err != nil {
 		return false, err
 	}
@@ -212,7 +212,7 @@ func CheckCertName(cert *Cert, oldId string, lang string) error {
 }
 
 func AddCert(cert *Cert) (bool, error) {
-	err := cert.populateContent()
+	err := cert.PopulateContent()
 	if err != nil {
 		return false, err
 	}
@@ -238,7 +238,7 @@ func (p *Cert) GetId() string {
 	return fmt.Sprintf("%s/%s", p.Owner, p.Name)
 }
 
-func (p *Cert) populateContent() error {
+func (p *Cert) PopulateContent() error {
 	if p.Certificate != "" && p.PrivateKey != "" {
 		return nil
 	}
@@ -264,7 +264,7 @@ func (p *Cert) populateContent() error {
 	}
 
 	if len(p.CryptoAlgorithm) < 3 {
-		err := fmt.Errorf("populateContent() error, unsupported crypto algorithm: %s", p.CryptoAlgorithm)
+		err := fmt.Errorf("PopulateContent() error, unsupported crypto algorithm: %s", p.CryptoAlgorithm)
 		return err
 	}
 
@@ -286,7 +286,7 @@ func (p *Cert) populateContent() error {
 	} else if sigAlgorithm == "PS" {
 		certificate, privateKey, err = generateRsaPssKeys(p.BitSize, shaSize, p.ExpireInYears, p.Name, p.Owner)
 	} else {
-		err = fmt.Errorf("populateContent() error, unsupported signature algorithm: %s", sigAlgorithm)
+		err = fmt.Errorf("PopulateContent() error, unsupported signature algorithm: %s", sigAlgorithm)
 	}
 	if err != nil {
 		return err
@@ -333,7 +333,7 @@ func RenewCert(cert *Cert) (bool, error) {
 	return UpdateCert(cert.GetId(), cert)
 }
 
-func getCertByApplication(application *Application) (*Cert, error) {
+func GetCertByApplication(application *Application) (*Cert, error) {
 	if application.Cert != "" {
 		return GetCertEx(util.GetId(application.Organization, application.Cert))
 	} else {

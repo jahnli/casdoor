@@ -36,7 +36,8 @@
     "UserCode Expired": "Kullanıcı Kodu Süresi Doldu",
     "UserCode Invalid": "Kullanıcı Kodu Geçersiz",
     "the application for user %s is not found": "%s kullanıcısı için uygulama bulunamadı",
-    "the organization: %s is not found": "Organizasyon: %s bulunamadı"
+    "the organization: %s is not found": "Organizasyon: %s bulunamadı",
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Kullanıcı: %s, uygulama: %s için oturum açamaz, kuruluş: %s izinleri buna izin vermiyor"
   },
   "cas": {
     "Service %s and %s do not match": "Servis %s ve %s eşleşmiyor"
@@ -253,5 +254,16 @@
   "webauthn": {
     "Found no credentials for this user": "Bu kullanıcı için kimlik bilgisi bulunamadı",
     "Please call WebAuthnSigninBegin first": "Lütfen önce WebAuthnSigninBegin çağırın"
+  },
+  "mfa": {
+    "Step-up verification is not enabled for the application: %s": "%s uygulaması için adım yükseltme doğrulaması etkin değil",
+    "The MFA type: %s is not allowed for step-up verification by the application": "%s MFA türüne bu uygulamanın adım yükseltme doğrulamasında izin verilmiyor",
+    "The step-up token has already been used": "Adım yükseltme belirteci zaten kullanıldı",
+    "The step-up token is invalid: %s": "Adım yükseltme belirteci geçersiz: %s",
+    "The step-up token was issued for another action": "Adım yükseltme belirteci başka bir işlem için verildi",
+    "The token is not a step-up token": "Belirteç bir adım yükseltme belirteci değil",
+    "The user has no recovery codes": "Kullanıcının kurtarma kodu yok",
+    "The user has not enabled the MFA type: %s": "Kullanıcı %s MFA türünü etkinleştirmemiş",
+    "This code has already been used, please wait for the next one": "Bu kod zaten kullanıldı, lütfen bir sonrakini bekleyin"
   }
 }

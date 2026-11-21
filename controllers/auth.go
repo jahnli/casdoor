@@ -608,9 +608,13 @@ func checkMfaEnable(c *ApiController, user *object.User, organization *object.Or
 	return c.promptMfaSetup(user, organization)
 }
 
-func getExistUserByBindingRule(providerItem *object.ProviderItem, application *object.Application, userInfo *idp.UserInfo) (user *object.User, err error) {
+func getExistUserByBindingRule(providerItem *object.ProviderItem, provider *object.Provider, application *object.Application, userInfo *idp.UserInfo) (user *object.User, err error) {
 	if providerItem.BindingRule == nil {
-		providerItem.BindingRule = &[]string{"Email", "Phone"}
+		if provider.Type == "DingTalk" {
+			providerItem.BindingRule = &[]string{"Email", "Phone", "Name"}
+		} else {
+			providerItem.BindingRule = &[]string{"Email", "Phone"}
+		}
 	}
 	if len(*providerItem.BindingRule) == 0 {
 		return nil, nil
@@ -644,7 +648,7 @@ func getExistUserByBindingRule(providerItem *object.ProviderItem, application *o
 		// This allows OAuth providers (e.g., Wecom) to automatically associate with
 		// existing users when usernames match, particularly useful for enterprise
 		// scenarios where signup is disabled and users already exist in Casdoor
-		if rule == "Name" {
+		if rule == "Name" && (provider.Type != "DingTalk" || (userInfo.UnionId != "" && userInfo.Username == userInfo.UnionId)) {
 			user, err = object.GetUserByName(application.Organization, userInfo.Username)
 			if err != nil {
 				return nil, err
@@ -750,11 +754,16 @@ func (c *ApiController) Login() {
 	}
 	defer c.recordLoginMetric(&authForm)
 
+	// the callback of a third-party provider posts no organization, the authorization request it comes back to carries it
+	if authForm.Organization == "" {
+		authForm.Organization = c.Ctx.Input.Query("organization")
+	}
+
 	verificationType := ""
 
 	// a magic link posts no username, the one-time token in the link is the credential.
 	// The passcode of a sign-in that already asked for MFA is answered further below
-	isMagicLinkSignin := authForm.SigninMethod == "Magic link" && c.getMfaUserSession() == ""
+	isMagicLinkSignin := authForm.SigninMethod == "Magic link" && c.GetMfaUserSession() == ""
 
 	if authForm.Username != "" || isMagicLinkSignin {
 		var user *object.User
@@ -911,7 +920,7 @@ func (c *ApiController) Login() {
 				c.ResponseError(err.Error())
 				return
 			} else if enableCaptcha {
-				captchaProvider, err := object.GetCaptchaProviderByApplication(util.GetId(application.Owner, application.Name), "false", c.GetAcceptLanguage())
+				captchaProvider, err := object.GetCaptchaProviderByApplicationObject(application, c.GetAcceptLanguage())
 				if err != nil {
 					c.ResponseError(err.Error())
 					return
@@ -1166,7 +1175,7 @@ func (c *ApiController) Login() {
 				c.Ctx.Input.SetParam("recordUserId", user.GetId())
 			} else if provider.Category == "OAuth" || provider.Category == "SAML" {
 				// Sign up via OAuth
-				user, err = getExistUserByBindingRule(providerItem, application, userInfo)
+				user, err = getExistUserByBindingRule(providerItem, provider, application, userInfo)
 				if err != nil {
 					c.ResponseError(err.Error())
 					return
@@ -1403,9 +1412,9 @@ func (c *ApiController) Login() {
 				resp = &Response{Status: "error", Msg: "Failed to link user account", Data: isLinked}
 			}
 		}
-	} else if c.getMfaUserSession() != "" {
+	} else if c.GetMfaUserSession() != "" {
 		var user *object.User
-		user, err = object.GetUser(c.getMfaUserSession())
+		user, err = object.GetUser(c.GetMfaUserSession())
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -1455,7 +1464,7 @@ func (c *ApiController) Login() {
 				return
 			}
 
-			err = object.VerifyMfaWithLimit(user, func() error { return c.verifyMfaPasscode(user, mfaUtil, authForm.Passcode) }, c.GetAcceptLanguage())
+			err = object.VerifyMfaWithLimit(user, func() error { return c.verifyMfaPasscode(user, mfaProps, authForm.Passcode) }, c.GetAcceptLanguage())
 			if err != nil {
 				c.responseSigninError(err, object.SigninReasonMfaFailed)
 				return
@@ -1516,7 +1525,7 @@ func (c *ApiController) Login() {
 				authForm.Provider = authForm.ProviderBack
 			}
 
-			user := c.getCurrentUser()
+			user := c.GetCurrentUser()
 			if user == nil {
 				c.ResponseError(c.T("auth:Unauthorized operation"))
 				return
@@ -1553,7 +1562,7 @@ func (c *ApiController) Login() {
 	}
 
 	if authForm.Language != "" {
-		user := c.getCurrentUser()
+		user := c.GetCurrentUser()
 		if user != nil {
 			user.Language = authForm.Language
 			_, err = object.UpdateUser(user.GetId(), user, []string{"language"}, user.IsAdmin)
@@ -1859,7 +1868,9 @@ func (c *ApiController) DeviceAuth() {
 		return
 	}
 
-	if !application.HasSigninMethod("Device login") {
+	// the device_code grant type is enough for an RFC 8628 client, the Device login sign-in method is the QR code on
+	// the login page and also allows the flow for the applications configured before the grant type was checked here
+	if !object.IsGrantTypeValid("urn:ietf:params:oauth:grant-type:device_code", application.GrantTypes) && !application.HasSigninMethod("Device login") {
 		c.responseDeviceAuthError(object.UnauthorizedClient, "device login is not enabled for this application")
 		return
 	}

@@ -212,6 +212,14 @@ func (c *ApiController) SendVerificationCode() {
 		return
 	}
 
+	// the codes and magic links of a shared application of a URL client_id go out with the organization's
+	// providers and sign-in methods, as its sign-in page showed them
+	application, err = object.GetSigninApplicationOfOrganization(application, application.Organization)
+	if err != nil {
+		c.ResponseError(err.Error())
+		return
+	}
+
 	// Check if "Forgot password?" signin item is visible when using forget verification
 	if vform.Method == ForgetVerification {
 		isForgotPasswordEnabled := false
@@ -258,7 +266,7 @@ func (c *ApiController) SendVerificationCode() {
 			c.ResponseError(object.GetUserForbiddenMessage(user, c.GetAcceptLanguage()))
 			return
 		}
-	} else if mfaUserSession := c.getMfaUserSession(); mfaUserSession != "" {
+	} else if mfaUserSession := c.GetMfaUserSession(); mfaUserSession != "" {
 		// mfaUserSession != "", means method is MfaAuthVerification
 		user, err = object.GetUser(mfaUserSession)
 		if err != nil {
@@ -267,7 +275,7 @@ func (c *ApiController) SendVerificationCode() {
 		}
 	} else if vform.Method == ResetVerification {
 		// For reset verification, get the current logged-in user
-		user = c.getCurrentUser()
+		user = c.GetCurrentUser()
 	} else if vform.Method == LoginVerification || vform.Method == MagicLinkVerification {
 		// For login verification, try to find user by email/phone for CAPTCHA check
 		// This is a preliminary lookup; the actual validation happens later in the switch statement
@@ -309,7 +317,7 @@ func (c *ApiController) SendVerificationCode() {
 
 	// Only verify CAPTCHA if it should be enabled
 	if enableCaptcha {
-		captchaProvider, err := object.GetCaptchaProviderByApplication(vform.ApplicationId, "false", c.GetAcceptLanguage())
+		captchaProvider, err := object.GetCaptchaProviderByApplicationObject(application, c.GetAcceptLanguage())
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -413,7 +421,7 @@ func (c *ApiController) SendVerificationCode() {
 				return
 			}
 		} else if vform.Method == ResetVerification {
-			user = c.getCurrentUser()
+			user = c.GetCurrentUser()
 		} else if vform.Method == MfaAuthVerification {
 			if user == nil {
 				c.ResponseError(c.T("general:Please sign in first"))
@@ -484,7 +492,7 @@ func (c *ApiController) SendVerificationCode() {
 			}
 		} else if vform.Method == ResetVerification || vform.Method == MfaSetupVerification {
 			if vform.CountryCode == "" {
-				if user = c.getCurrentUser(); user != nil {
+				if user = c.GetCurrentUser(); user != nil {
 					vform.CountryCode = user.GetCountryCode(vform.CountryCode)
 				}
 			}
@@ -590,7 +598,7 @@ func (c *ApiController) VerifyCaptcha() {
 // @router /reset-email-or-phone [post]
 // @Success 200 {object} object.Userinfo The Response object
 func (c *ApiController) ResetEmailOrPhone() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 

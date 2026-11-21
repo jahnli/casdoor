@@ -18,7 +18,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
 	"github.com/casdoor/casdoor/object"
 )
 

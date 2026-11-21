@@ -91,6 +91,9 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   const [removingMfa, setRemovingMfa] = React.useState(false);
   // the signup application drives the 3rd-party login rows and the reset-code flow
   const [application, setApplication] = React.useState<any>(null);
+  const [applicationLoaded, setApplicationLoaded] = React.useState(false);
+  const [applicationLoadError, setApplicationLoadError] = React.useState("");
+  const [applicationLoadVersion, setApplicationLoadVersion] = React.useState(0);
 
   const organizations = useOrganizationOptions(Setting.isAdminUser(account));
   const applications = useApplicationOptions(Setting.isAdminUser(account) ? organizationName : "");
@@ -129,12 +132,32 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     if (mode === "add" || !organizationName || !userName) {
       return;
     }
-    ApplicationBackend.getUserApplication(organizationName, userName).then((res: any) => {
-      if (res.status === "ok") {
-        setApplication(res.data ?? null);
-      }
-    });
-  }, [mode, organizationName, userName]);
+    let active = true;
+    setApplication(null);
+    setApplicationLoaded(false);
+    setApplicationLoadError("");
+    ApplicationBackend.getUserApplication(organizationName, userName)
+      .then((res: any) => {
+        if (!active) {
+          return;
+        }
+        if (res.status !== "ok" || !res.data) {
+          throw new Error(res.msg || i18next.t("general:Failed to load"));
+        }
+        setApplication(res.data);
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          setApplicationLoadError(error instanceof Error ? error.message : String(error));
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setApplicationLoaded(true);
+        }
+      });
+    return () => {active = false;};
+  }, [mode, organizationName, userName, applicationLoadVersion]);
 
   React.useEffect(() => {
     // in "add" mode the user has no application yet, so the accountItems layout is
@@ -153,7 +176,16 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
     return <UnauthorizedPage />;
   }
 
-  if (loading || user === null || (self && !account)) {
+  if (mode !== "add" && applicationLoadError) {
+    return (
+      <div role="alert" className="space-y-3 p-4">
+        <p className="text-sm text-destructive">{applicationLoadError}</p>
+        <Button onClick={() => setApplicationLoadVersion((version) => version + 1)}>{i18next.t("general:Refresh")}</Button>
+      </div>
+    );
+  }
+
+  if (loading || user === null || (self && !account) || (mode !== "add" && !applicationLoaded)) {
     return <Loading />;
   }
 
@@ -161,7 +193,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
   const isGlobalAdmin = Setting.isAdminUser(account);
   const getMaskedProfileValue = (field: string, value?: string | string[]) =>
     user.maskedFields?.includes(field) || value?.length ? "******" : "-";
-  const isSelf = !!account && (user.id && account.id ? user.id === account.id : account.owner === user.owner && account.name === user.name);
+  const isSelf = Setting.isSelfUser(account, user);
   const changedSecurityFields = USER_SECURITY_FIELDS.filter((field) =>
     user[field] !== undefined && JSON.stringify(user[field]) !== JSON.stringify(persistedUser.current?.[field]),
   );
@@ -1199,7 +1231,7 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         editableItems={mode === "view" ? [] : editableItems}
         canModifyAsAdmin={isGlobalAdmin}
       >
-        {visibleAccountItems.length === 0 ? (
+        {configuredItemNames.size === 0 ? (
           // the organization configures no account items (or has not loaded yet);
           // showing every row beats showing an empty form
           <div className={formGridClass}>

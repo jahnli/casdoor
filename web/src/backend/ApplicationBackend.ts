@@ -101,3 +101,13 @@ export function getSamlMetadata(owner, name, enablePostBinding) {
     },
   }).then(res => res.text());
 }
+
+export function getStepUpRecords(id: string) {
+  return fetch(`${Setting.ServerUrl}/api/get-step-up-records?id=${encodeURIComponent(id)}`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Accept-Language": Setting.getAcceptLanguage(),
+    },
+  }).then(res => res.json());
+}

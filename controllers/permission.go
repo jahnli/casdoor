@@ -144,7 +144,7 @@ func (c *ApiController) UpdatePermission() {
 			return
 		}
 		if oldPermission == nil {
-			c.Data["json"] = wrapActionResponse(false)
+			c.Data["json"] = WrapActionResponse(false)
 			c.ServeJSON()
 			return
 		}
@@ -163,7 +163,7 @@ func (c *ApiController) UpdatePermission() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdatePermission(id, &permission))
+	c.Data["json"] = WrapActionResponse(object.UpdatePermission(id, &permission))
 	c.ServeJSON()
 }
 
@@ -182,7 +182,7 @@ func (c *ApiController) UpdatePermissions() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdatePermissions(permissions))
+	c.Data["json"] = WrapActionResponse(object.UpdatePermissions(permissions))
 	c.ServeJSON()
 }
 
@@ -201,7 +201,7 @@ func (c *ApiController) AddPermission() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddPermissionWithCheck(&permission))
+	c.Data["json"] = WrapActionResponse(object.AddPermissionWithCheck(&permission))
 	c.ServeJSON()
 }
 
@@ -220,6 +220,6 @@ func (c *ApiController) DeletePermission() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeletePermission(&permission))
+	c.Data["json"] = WrapActionResponse(object.DeletePermission(&permission))
 	c.ServeJSON()
 }

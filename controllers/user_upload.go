@@ -56,11 +56,11 @@ func (c *ApiController) getUploadOrganization() (string, bool) {
 }
 
 func (c *ApiController) UploadUsers() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 
-	userObj := c.getCurrentUser()
+	userObj := c.GetCurrentUser()
 	if userObj == nil {
 		c.ResponseError(c.T("auth:Unauthorized operation"))
 		return

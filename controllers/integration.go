@@ -202,6 +202,6 @@ func (c *ApiController) DeleteIntegration() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UninstallIntegration(&integration, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.UninstallIntegration(&integration, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
 	c.ServeJSON()
 }

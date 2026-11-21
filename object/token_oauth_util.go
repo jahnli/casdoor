@@ -631,7 +631,7 @@ func RefreshToken(application *Application, grantType string, refreshToken strin
 	}
 
 	signingApplication := getSigningApplication(application, token.Organization)
-	cert, err := getCertByApplication(signingApplication)
+	cert, err := GetCertByApplication(signingApplication)
 	if err != nil {
 		return nil, err
 	}
@@ -716,11 +716,11 @@ func RefreshToken(application *Application, grantType string, refreshToken strin
 		return nil, err
 	}
 
-	// the shared application of a URL client_id works for the organization of its user
-	if application.IsShared && IsClientIdMetadataUrl(application.ClientId) && application.Organization != user.Owner {
-		sharedApplication := *application
-		sharedApplication.Organization = user.Owner
-		application = &sharedApplication
+	// the shared application of a URL client_id works for the organization of its user, whose sign-in and
+	// token settings the refreshed token keeps, exactly as the token of the authorization request did
+	application, err = GetApplicationOfOrganization(application, user.Owner)
+	if err != nil {
+		return nil, err
 	}
 
 	newAccessToken, newRefreshToken, newIdToken, tokenName, err := generateJwtTokenWithOptions(application, user, "", "", "", scope, resource, host, jwtTokenOptions{RefreshScope: oldTokenScope, SessionId: token.SessionId, DPoPJkt: dpopJkt})
@@ -812,7 +812,7 @@ func checkRefreshClientSecret(application *Application, token *Token, clientSecr
 }
 
 func ValidateJwtAssertion(clientAssertion string, application *Application, host string) (bool, *Claims, error) {
-	_, originBackend := getOriginFromHost(host)
+	_, originBackend := GetOriginFromHost(host)
 
 	clientCert, err := getCert(application.Owner, application.ClientCert)
 	if err != nil {

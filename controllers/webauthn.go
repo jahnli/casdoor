@@ -40,7 +40,7 @@ func (c *ApiController) WebAuthnSignupBegin() {
 		return
 	}
 
-	user := c.getCurrentUser()
+	user := c.GetCurrentUser()
 	if user == nil {
 		c.ResponseError(c.T("general:Please login first"))
 		return
@@ -83,7 +83,7 @@ func (c *ApiController) WebAuthnSignupFinish() {
 		return
 	}
 
-	user := c.getCurrentUser()
+	user := c.GetCurrentUser()
 	if user == nil {
 		c.ResponseError(c.T("general:Please login first"))
 		return
@@ -254,7 +254,12 @@ func (c *ApiController) WebAuthnSigninFinish() {
 
 func getWebAuthnSigninApplication(clientId string, responseType string, applicationName string, user *object.User) (*object.Application, error) {
 	if clientId != "" && responseType == ResponseTypeCode {
-		return object.GetApplicationByClientId(clientId)
+		application, err := object.GetApplicationByClientId(clientId)
+		if err != nil {
+			return nil, err
+		}
+		// the shared application of a URL client_id checks the sign-in methods of the organization the user signs in to
+		return object.GetSigninApplicationOfOrganization(application, object.GetCimdOrganization(clientId, user))
 	}
 	if applicationName != "" {
 		return object.GetApplication(util.GetId("admin", applicationName))

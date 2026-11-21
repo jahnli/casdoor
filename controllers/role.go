@@ -105,7 +105,7 @@ func (c *ApiController) UpdateRole() {
 			return
 		}
 		if oldRole == nil {
-			c.Data["json"] = wrapActionResponse(false)
+			c.Data["json"] = WrapActionResponse(false)
 			c.ServeJSON()
 			return
 		}
@@ -124,7 +124,7 @@ func (c *ApiController) UpdateRole() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdateRole(id, &role, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.UpdateRole(id, &role, c.IsGlobalAdmin(), c.GetAcceptLanguage()))
 	c.ServeJSON()
 }
 
@@ -147,7 +147,7 @@ func (c *ApiController) AddRole() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddRole(&role))
+	c.Data["json"] = WrapActionResponse(object.AddRole(&role))
 	c.ServeJSON()
 }
 
@@ -166,6 +166,6 @@ func (c *ApiController) DeleteRole() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteRole(&role))
+	c.Data["json"] = WrapActionResponse(object.DeleteRole(&role))
 	c.ServeJSON()
 }

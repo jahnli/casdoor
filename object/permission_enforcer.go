@@ -787,7 +787,7 @@ func GetAllActions(userId string) ([]string, error) {
 }
 
 func GetAllRoles(userId string) ([]string, error) {
-	roles, err := getRolesByUser(userId)
+	roles, err := GetRolesByUser(userId)
 	if err != nil {
 		return nil, err
 	}

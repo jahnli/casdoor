@@ -63,6 +63,11 @@ p, *, *, GET, /api/health, *, *
 p, *, *, *, /api/webhook, *, *
 p, *, *, GET, /api/get-qrcode, *, *
 p, *, *, GET, /api/get-webhook-event, *, *
+p, *, *, GET, /api/mfa/step-up/methods, *, *
+p, *, *, POST, /api/mfa/step-up/send-code, *, *
+p, *, *, POST, /api/mfa/step-up/verify, *, *
+p, *, *, POST, /api/mfa/step-up/redeem, *, *
+p, *, *, GET, /api/get-step-up-records, *, *
 p, *, *, GET, /api/get-captcha-status, *, *
 p, *, *, *, /api/login/oauth, *, *
 p, *, *, *, /api/oauth/register, *, *

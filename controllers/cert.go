@@ -89,7 +89,7 @@ func (c *ApiController) GetCerts() {
 // @Success 200 {array} object.Cert The Response object
 // @router /get-global-certs [get]
 func (c *ApiController) GetGlobalCerts() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 
@@ -172,7 +172,7 @@ func (c *ApiController) UpdateCert() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdateCert(id, &cert))
+	c.Data["json"] = WrapActionResponse(object.UpdateCert(id, &cert))
 	c.ServeJSON()
 }
 
@@ -196,7 +196,7 @@ func (c *ApiController) AddCert() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddCert(&cert))
+	c.Data["json"] = WrapActionResponse(object.AddCert(&cert))
 	c.ServeJSON()
 }
 
@@ -215,7 +215,7 @@ func (c *ApiController) DeleteCert() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteCert(&cert))
+	c.Data["json"] = WrapActionResponse(object.DeleteCert(&cert))
 	c.ServeJSON()
 }
 
@@ -256,6 +256,6 @@ func (c *ApiController) UpdateCertDomainExpire() {
 	}
 	cert.DomainExpireTime = domainExpireTime
 
-	c.Data["json"] = wrapActionResponse(object.UpdateCert(id, cert))
+	c.Data["json"] = WrapActionResponse(object.UpdateCert(id, cert))
 	c.ServeJSON()
 }

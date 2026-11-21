@@ -81,9 +81,9 @@ func refreshMarketplaceStatus() {
 		return
 	}
 	var err error
-	for _, serverUrl := range getMarketplaceServerUrls() {
+	for _, serverUrl := range GetMarketplaceServerUrls() {
 		var data []byte
-		data, err = fetchMarketplaceFileWithTimeout(serverUrl+"/status.json", marketplacePageTimeout)
+		data, err = FetchMarketplaceFileWithTimeout(serverUrl+"/status.json", marketplacePageTimeout)
 		if err != nil {
 			continue
 		}
@@ -100,8 +100,8 @@ func refreshMarketplaceStatus() {
 	setMarketplaceServerDown(err)
 }
 
-// integrationRevokedError is an install the Marketplace server refused because the version has been withdrawn
-type integrationRevokedError struct {
+// IntegrationRevokedError is an install the Marketplace server refused because the version has been withdrawn
+type IntegrationRevokedError struct {
 	error
 }
 
@@ -136,9 +136,9 @@ func getMarketplaceVersionMeta(item *MarketplaceIntegration, version *Marketplac
 	}
 
 	var err error
-	for _, serverUrl := range getMarketplaceServerUrls() {
+	for _, serverUrl := range GetMarketplaceServerUrls() {
 		var data []byte
-		data, err = fetchMarketplaceFileWithTimeout(joinMarketplaceUrl(serverUrl, path), timeout)
+		data, err = FetchMarketplaceFileWithTimeout(JoinMarketplaceUrl(serverUrl, path), timeout)
 		if err != nil {
 			continue
 		}
@@ -172,14 +172,14 @@ func metaPath(bundlePath string) string {
 }
 
 // Public metadata reads use no license headers or lifecycle reporting.
-func getMarketplaceServerUrls() []string {
+func GetMarketplaceServerUrls() []string {
 	if serverUrl := conf.GetConfigString("marketplaceServerUrl"); serverUrl != "" {
 		return []string{strings.TrimSuffix(serverUrl, "/")}
 	}
 	return []string{"https://marketplace.casdoor.com/data", "https://marketplace.casdoor.cn/data"}
 }
 
-func fetchMarketplaceFileWithTimeout(fileUrl string, timeout time.Duration) ([]byte, error) {
+func FetchMarketplaceFileWithTimeout(fileUrl string, timeout time.Duration) ([]byte, error) {
 	client := &http.Client{Timeout: timeout}
 	resp, err := client.Get(fileUrl)
 	if err != nil {

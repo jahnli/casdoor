@@ -14,7 +14,17 @@
 
 package object
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+)
+
+var (
+	originalDatabaseWriteSlots       = make(chan struct{}, 16)
+	originalDatabaseWriteRetryDelays = []time.Duration{0, 2 * time.Second, 10 * time.Second}
+	originalDatabaseWriteTimeout     = 30 * time.Second
+)
 
 func getDbSyncerForUser(user *User) (*Syncer, error) {
 	syncers, err := GetSyncers("admin")
@@ -38,11 +48,6 @@ func getEnabledSyncerForOrganization(organization string) (*Syncer, error) {
 
 	for _, syncer := range syncers {
 		if syncer.Organization == organization && syncer.IsEnabled {
-			err = syncer.initAdapter()
-			if err != nil {
-				return nil, err
-			}
-
 			return syncer, nil
 		}
 	}
@@ -50,17 +55,87 @@ func getEnabledSyncerForOrganization(organization string) (*Syncer, error) {
 }
 
 func AddUserToOriginalDatabase(user *User) error {
+	return writeUserToOriginalDatabase(user, true)
+}
+
+func UpdateUserToOriginalDatabase(user *User) error {
+	return writeUserToOriginalDatabase(user, false)
+}
+
+func writeUserToOriginalDatabase(user *User, isAdd bool) error {
 	syncer, err := getEnabledSyncerForOrganization(user.Owner)
 	if err != nil {
 		return err
 	}
-
-	if syncer == nil {
+	if syncer == nil || !syncer.writesUsersBack() {
 		return nil
 	}
 
-	if !syncer.writesUsersBack() {
+	data, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+	var userCopy User
+	if err = json.Unmarshal(data, &userCopy); err != nil {
+		return err
+	}
+
+	select {
+	case originalDatabaseWriteSlots <- struct{}{}:
+	default:
+		fmt.Printf("writeUserToOriginalDatabase() skipped user [%s] because too many writes are pending, the next sync of syncer [%s] will write it\n", user.GetId(), syncer.GetId())
 		return nil
+	}
+
+	go func() {
+		defer func() { <-originalDatabaseWriteSlots }()
+
+		var err error
+		for i, delay := range originalDatabaseWriteRetryDelays {
+			time.Sleep(delay)
+			err = writeUserToOriginalDatabaseWithTimeout(*syncer, &userCopy, isAdd)
+			if err == nil {
+				return
+			}
+			fmt.Printf("writeUserToOriginalDatabase() attempt %d for user [%s] failed: %s\n", i+1, userCopy.GetId(), err.Error())
+		}
+
+		recordSyncerError(syncer, fmt.Errorf("failed to write user [%s] back to the original database: %s", userCopy.GetId(), err.Error()))
+	}()
+
+	return nil
+}
+
+func writeUserToOriginalDatabaseWithTimeout(syncer Syncer, user *User, isAdd bool) error {
+	done := make(chan error, 1)
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				syncer.Close()
+				done <- fmt.Errorf("panic: %v", r)
+			}
+		}()
+
+		err := syncer.writeUserBack(user, isAdd)
+		closeErr := syncer.Close()
+		if err == nil {
+			err = closeErr
+		}
+		done <- err
+	}()
+
+	select {
+	case err := <-done:
+		return err
+	case <-time.After(originalDatabaseWriteTimeout):
+		return fmt.Errorf("timed out after %s", originalDatabaseWriteTimeout)
+	}
+}
+
+func (syncer *Syncer) writeUserBack(user *User, isAdd bool) error {
+	err := syncer.initAdapter()
+	if err != nil {
+		return err
 	}
 
 	var affiliationMap map[int]string
@@ -70,29 +145,18 @@ func AddUserToOriginalDatabase(user *User) error {
 			return err
 		}
 	}
-	updatedOUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
-	if err != nil {
-		return err
-	}
-	_, err = syncer.addUser(updatedOUser)
-	if err != nil {
-		return err
-	}
 
-	fmt.Printf("Add from user to oUser: %v\n", updatedOUser)
-	return nil
-}
+	if isAdd {
+		oUser, err := syncer.createOriginalUserFromUser(user, affiliationMap)
+		if err != nil {
+			return err
+		}
+		_, err = syncer.addUser(oUser)
+		if err != nil {
+			return err
+		}
 
-func UpdateUserToOriginalDatabase(user *User) error {
-	syncer, err := getEnabledSyncerForOrganization(user.Owner)
-	if err != nil {
-		return err
-	}
-	if syncer == nil {
-		return nil
-	}
-
-	if !syncer.writesUsersBack() {
+		fmt.Printf("Add from user to oUser: %v\n", oUser)
 		return nil
 	}
 
@@ -100,23 +164,19 @@ func UpdateUserToOriginalDatabase(user *User) error {
 	if err != nil {
 		return err
 	}
-
-	var affiliationMap map[int]string
-	if syncer.AffiliationTable != "" {
-		_, affiliationMap, err = syncer.getAffiliationMap()
-		if err != nil {
-			return err
-		}
+	if newUser == nil {
+		return nil
 	}
-	updatedOUser, err := syncer.createOriginalUserFromUser(newUser, affiliationMap)
+
+	oUser, err := syncer.createOriginalUserFromUser(newUser, affiliationMap)
 	if err != nil {
 		return err
 	}
-	_, err = syncer.updateUser(updatedOUser)
+	_, err = syncer.updateUser(oUser)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Update from user to oUser: %v\n", updatedOUser)
+	fmt.Printf("Update from user to oUser: %v\n", oUser)
 	return nil
 }

@@ -34,7 +34,7 @@ import (
 // @Success 200 {array} object.User The Response object
 // @router /get-global-users [get]
 func (c *ApiController) GetGlobalUsers() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 
@@ -183,7 +183,11 @@ func (c *ApiController) GetUser() {
 		}
 	} else {
 		if owner == "" {
-			owner = util.GetOwnerFromId(id)
+			owner, _, err = util.GetOwnerAndNameFromIdWithError(id)
+			if err != nil {
+				c.ResponseError(err.Error())
+				return
+			}
 		}
 
 		switch {
@@ -513,7 +517,7 @@ func (c *ApiController) UpdateUser() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(affected)
+	c.Data["json"] = WrapActionResponse(affected)
 	c.ServeJSON()
 }
 
@@ -549,13 +553,13 @@ func (c *ApiController) AddUser() {
 		user.RegisterType = "Add User"
 	}
 	if user.RegisterSource == "" {
-		currentUser := c.getCurrentUser()
+		currentUser := c.GetCurrentUser()
 		if currentUser != nil {
 			user.RegisterSource = currentUser.GetId()
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddUser(&user, c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.AddUser(&user, c.GetAcceptLanguage()))
 	c.ServeJSON()
 }
 
@@ -579,7 +583,7 @@ func (c *ApiController) DeleteUser() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteUser(&user))
+	c.Data["json"] = WrapActionResponse(object.DeleteUser(&user))
 	c.ServeJSON()
 }
 
@@ -654,7 +658,7 @@ func (c *ApiController) GetEmailAndPhone() {
 // @Success 200 {object} controllers.Response The Response object
 // @router /set-password [post]
 func (c *ApiController) SetPassword() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 
@@ -758,7 +762,7 @@ func (c *ApiController) SetPassword() {
 
 	isAdmin := c.IsAdmin()
 	if isAdmin {
-		if oldPassword != "" {
+		if oldPassword != "" && requestUserId == userId {
 			err = object.CheckPassword(targetUser, oldPassword, c.GetAcceptLanguage())
 			if err != nil {
 				c.ResponseError(err.Error())
@@ -1106,7 +1110,7 @@ func (c *ApiController) ExitImpersonateUser() {
 // @Success 200 {object} controllers.Response The Response object
 // @router /verify-identification [post]
 func (c *ApiController) VerifyIdentification() {
-	if !c.requireGlobalAdmin() {
+	if !c.RequireGlobalAdmin() {
 		return
 	}
 

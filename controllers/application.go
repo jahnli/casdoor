@@ -158,6 +158,19 @@ func (c *ApiController) GetUserApplication() {
 		return
 	}
 
+	if application.Organization != user.Owner {
+		organization, err := object.GetOrganizationByUser(user)
+		if err != nil {
+			c.ResponseError(err.Error())
+			return
+		}
+		if organization != nil {
+			applicationCopy := *application
+			applicationCopy.OrganizationObj = organization
+			application = &applicationCopy
+		}
+	}
+
 	c.ResponseOk(object.GetMaskedProfileApplication(object.GetMaskedApplication(application, userId), c.IsGlobalAdmin()))
 }
 
@@ -256,7 +269,7 @@ func (c *ApiController) UpdateApplication() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdateApplication(id, &application, c.IsGlobalAdmin(), c.GetAcceptLanguage(), columns))
+	c.Data["json"] = WrapActionResponse(object.UpdateApplication(id, &application, c.IsGlobalAdmin(), c.GetAcceptLanguage(), columns))
 	c.ServeJSON()
 }
 
@@ -323,7 +336,7 @@ func (c *ApiController) AddApplication() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddApplication(&application, c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.AddApplication(&application, c.GetAcceptLanguage()))
 	c.ServeJSON()
 }
 
@@ -342,6 +355,6 @@ func (c *ApiController) DeleteApplication() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteApplication(&application))
+	c.Data["json"] = WrapActionResponse(object.DeleteApplication(&application))
 	c.ServeJSON()
 }

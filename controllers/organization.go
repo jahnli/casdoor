@@ -40,7 +40,7 @@ func (c *ApiController) GetOrganizations() {
 	organizationName := c.Ctx.Input.Query("organizationName")
 
 	isGlobalAdmin := c.IsGlobalAdmin()
-	currentUser := c.getCurrentUser()
+	currentUser := c.GetCurrentUser()
 	if !isGlobalAdmin && currentUser == nil {
 		c.ResponseError(c.T("general:Please sign in first"))
 		return
@@ -141,7 +141,7 @@ func (c *ApiController) UpdateOrganization() {
 
 	isGlobalAdmin, _ := c.isGlobalAdmin()
 
-	c.Data["json"] = wrapActionResponse(object.UpdateOrganization(id, &organization, isGlobalAdmin, c.GetAcceptLanguage()))
+	c.Data["json"] = WrapActionResponse(object.UpdateOrganization(id, &organization, isGlobalAdmin, c.GetAcceptLanguage()))
 	c.ServeJSON()
 }
 
@@ -192,7 +192,7 @@ func (c *ApiController) AddOrganization() {
 		organization.Languages = []string{"en", "es", "fr", "de", "ja", "zh", "vi", "pt", "tr", "pl", "uk"}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddOrganization(&organization))
+	c.Data["json"] = WrapActionResponse(object.AddOrganization(&organization))
 	c.ServeJSON()
 }
 
@@ -211,7 +211,7 @@ func (c *ApiController) DeleteOrganization() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteOrganization(&organization))
+	c.Data["json"] = WrapActionResponse(object.DeleteOrganization(&organization))
 	c.ServeJSON()
 }
 

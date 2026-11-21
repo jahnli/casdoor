@@ -259,7 +259,7 @@ func (c *ApiController) MfaSetupEnable() {
 		config.Secret = secret
 	} else if mfaType == object.EmailType {
 		if user.Email == "" {
-			if !c.requireGlobalAdmin() {
+			if !c.RequireGlobalAdmin() {
 				return
 			}
 			if dest == "" {
@@ -270,7 +270,7 @@ func (c *ApiController) MfaSetupEnable() {
 		}
 	} else if mfaType == object.SmsType {
 		if user.Phone == "" {
-			if !c.requireGlobalAdmin() {
+			if !c.RequireGlobalAdmin() {
 				return
 			}
 			if dest == "" {

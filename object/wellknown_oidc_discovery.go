@@ -116,7 +116,7 @@ func getOriginFromHostInternal(host string) (string, string) {
 	}
 }
 
-func getOriginFromHost(host string) (string, string) {
+func GetOriginFromHost(host string) (string, string) {
 	originF, originB := getOriginFromHostInternal(host)
 
 	originFrontend := conf.GetConfigString("originFrontend")
@@ -128,7 +128,7 @@ func getOriginFromHost(host string) (string, string) {
 }
 
 func GetOidcIssuer(host string) string {
-	_, originBackend := getOriginFromHost(host)
+	_, originBackend := GetOriginFromHost(host)
 	return originBackend
 }
 
@@ -173,7 +173,7 @@ func getOrganizationEndpoints(registrationEndpoint string, authorizationEndpoint
 }
 
 func GetOidcDiscovery(host string, applicationName string) OidcDiscovery {
-	originFrontend, originBackend := getOriginFromHost(host)
+	originFrontend, originBackend := GetOriginFromHost(host)
 
 	// Issuer must match the `iss` claim in JWT tokens so that clients can validate tokens correctly
 	issuer := originBackend
@@ -268,7 +268,38 @@ func GetOidcDiscoveryByOrganization(host string, organizationName string) (*Oidc
 	oidcDiscovery.Issuer = GetOrganizationIssuer(host, organization.Name)
 	oidcDiscovery.RegistrationEndpoint, oidcDiscovery.AuthorizationEndpoint = getOrganizationEndpoints(oidcDiscovery.RegistrationEndpoint, oidcDiscovery.AuthorizationEndpoint, organization.Name)
 	oidcDiscovery.ClientIdMetadataDocumentSupported = IsClientIdMetadataDocumentSupported(organization.Name)
+
+	scopes, err := getOrganizationApplicationScopes(organization.Name)
+	if err != nil {
+		return nil, err
+	}
+	for _, scope := range scopes {
+		if !util.InSlice(oidcDiscovery.ScopesSupported, scope) {
+			oidcDiscovery.ScopesSupported = append(oidcDiscovery.ScopesSupported, scope)
+		}
+	}
+
 	return &oidcDiscovery, nil
+}
+
+// getOrganizationApplicationScopes returns the names of the custom scopes of the applications of an organization, so that
+// clients that only know the issuer of the organization see them in scopes_supported
+func getOrganizationApplicationScopes(organizationName string) ([]string, error) {
+	applications := []*Application{}
+	err := ormer.Engine.Cols("scopes").Where("organization = ?", organizationName).Asc("created_time").Find(&applications)
+	if err != nil {
+		return nil, err
+	}
+
+	res := []string{}
+	for _, application := range applications {
+		for _, scope := range application.Scopes {
+			if scope != nil && scope.Name != "" && !util.InSlice(res, scope.Name) {
+				res = append(res, scope.Name)
+			}
+		}
+	}
+	return res, nil
 }
 
 // getSigningCerts leaves out the certs that can't sign the tokens of Casdoor: a certificate without its private key, and
@@ -319,7 +350,7 @@ func GetJsonWebKeySet(applicationName string) (jose.JSONWebKeySet, error) {
 		applicationId := util.GetId("admin", applicationName)
 		application, err := GetApplication(applicationId)
 		if err == nil && application != nil {
-			cert, err := getCertByApplication(application)
+			cert, err := GetCertByApplication(application)
 			if err == nil && cert != nil {
 				certs = []*Cert{cert}
 			}
@@ -415,7 +446,7 @@ func GetWebFinger(resource string, rels []string, host string, applicationName s
 }
 
 func GetDeviceAuthResponse(deviceCode string, userCode string, cancelToken string, host string, expiresIn int) DeviceAuthResponse {
-	originFrontend, _ := getOriginFromHost(host)
+	originFrontend, _ := GetOriginFromHost(host)
 
 	return DeviceAuthResponse{
 		DeviceCode:      deviceCode,

@@ -80,7 +80,7 @@ func TestRetiredUserMetricsConfiguration(t *testing.T) {
 	if fields := syncer.getCasdoorColumns(); !reflect.DeepEqual(fields, []string{"name"}) {
 		t.Fatalf("retired fields included in SQL columns: %v", fields)
 	}
-	if values := syncer.getMapFromOriginalUser(&User{Name: "alice"}); !reflect.DeepEqual(values, map[string]string{"username": "alice"}) {
+	if values := syncer.GetMapFromOriginalUser(&User{Name: "alice"}); !reflect.DeepEqual(values, map[string]string{"username": "alice"}) {
 		t.Fatalf("retired fields would overwrite remote data: %v", values)
 	}
 	if err := RunSyncer(syncer); err == nil {

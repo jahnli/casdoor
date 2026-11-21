@@ -283,7 +283,7 @@ func (c *ApiController) UpdateResource() {
 		}
 	}
 
-	c.Data["json"] = wrapActionResponse(object.UpdateResource(id, &resource))
+	c.Data["json"] = WrapActionResponse(object.UpdateResource(id, &resource))
 	c.ServeJSON()
 }
 
@@ -312,7 +312,7 @@ func (c *ApiController) AddResource() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.AddResource(&resource))
+	c.Data["json"] = WrapActionResponse(object.AddResource(&resource))
 	c.ServeJSON()
 }
 
@@ -386,7 +386,7 @@ func (c *ApiController) DeleteResource() {
 		return
 	}
 
-	c.Data["json"] = wrapActionResponse(object.DeleteResource(&resource))
+	c.Data["json"] = WrapActionResponse(object.DeleteResource(&resource))
 	c.ServeJSON()
 }
 
@@ -415,7 +415,7 @@ func (c *ApiController) UploadResource() {
 	description := c.Ctx.Input.Query("description")
 
 	if tag == "avatar" || strings.HasPrefix(tag, "idCard") {
-		if !c.requireGlobalAdmin() {
+		if !c.RequireGlobalAdmin() {
 			return
 		}
 	}

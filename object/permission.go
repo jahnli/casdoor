@@ -429,9 +429,14 @@ func GetPermissionsByRole(roleId string) ([]*Permission, error) {
 	return res, nil
 }
 
-func GetPermissionsByResource(resourceId string) ([]*Permission, error) {
+// GetPermissionsByResource returns the permissions of the organization on the resource, of all organizations when owner is empty.
+func GetPermissionsByResource(owner string, resourceId string) ([]*Permission, error) {
 	permissions := []*Permission{}
-	err := ormer.Engine.Where("resources like ?", "%"+resourceId+"\"%").Find(&permissions)
+	session := ormer.Engine.Where("resources like ?", "%"+resourceId+"\"%")
+	if owner != "" {
+		session = session.And("owner = ?", owner)
+	}
+	err := session.Find(&permissions)
 	if err != nil {
 		return permissions, err
 	}
@@ -500,7 +505,7 @@ func getPermissionsAndRolesByUser(userId string) ([]*Permission, []*Role, error)
 		}
 	}
 
-	roles, err := getRolesByUser(userId)
+	roles, err := GetRolesByUser(userId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -586,7 +591,7 @@ func (p *Permission) GetModelAndAdapter() string {
 	return util.GetId(p.Model, p.Adapter)
 }
 
-func (p *Permission) isUserHit(name string) bool {
+func (p *Permission) IsUserHit(name string) bool {
 	targetOrg, targetName, err := util.GetOwnerAndNameFromIdWithError(name)
 	if err != nil {
 		return false
@@ -626,7 +631,7 @@ func (p *Permission) isGroupHit(userId string) bool {
 }
 
 func (p *Permission) isRoleHit(userId string) bool {
-	targetRoles, err := getRolesByUser(userId)
+	targetRoles, err := GetRolesByUser(userId)
 	if err != nil {
 		return false
 	}

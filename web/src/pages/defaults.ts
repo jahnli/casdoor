@@ -475,6 +475,7 @@ export function newWebhook(account: Account) {
     name: `webhook_${randomName}`,
     createdTime: now(),
     organization: organizationName,
+    type: "HTTP",
     url: "https://example.com/callback",
     method: "POST",
     contentType: "application/json",

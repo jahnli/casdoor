@@ -120,7 +120,7 @@ func (bundle *IntegrationBundle) fetch(path string) ([]byte, error) {
 		}
 		return data, nil
 	}
-	return fetchMarketplaceFile(fmt.Sprintf("%s/%s", bundle.baseUrl, path))
+	return FetchMarketplaceFile(fmt.Sprintf("%s/%s", bundle.baseUrl, path))
 }
 
 // actionFile is the action.json of an action: what it does and the module that does it
@@ -190,7 +190,7 @@ func getMarketplaceUrls() []string {
 	return []string{strings.TrimSuffix(marketplaceUrl, "/")}
 }
 
-func fetchMarketplaceFile(fileUrl string) ([]byte, error) {
+func FetchMarketplaceFile(fileUrl string) ([]byte, error) {
 	client := &http.Client{Timeout: 15 * time.Second}
 	resp, err := client.Get(fileUrl)
 	if err != nil {
@@ -204,7 +204,7 @@ func fetchMarketplaceFile(fileUrl string) ([]byte, error) {
 	return io.ReadAll(io.LimitReader(resp.Body, 32<<20))
 }
 
-func joinMarketplaceUrl(baseUrl string, path string) string {
+func JoinMarketplaceUrl(baseUrl string, path string) string {
 	if path == "" || strings.HasPrefix(path, "https://") || strings.HasPrefix(path, "http://") {
 		return path
 	}
@@ -224,7 +224,7 @@ func GetMarketplaceIndex(refresh bool) (*MarketplaceIndex, error) {
 	var data []byte
 	var err error
 	for _, baseUrl = range getMarketplaceUrls() {
-		data, err = fetchMarketplaceFile(baseUrl + "/index.json")
+		data, err = FetchMarketplaceFile(baseUrl + "/index.json")
 		if err == nil {
 			break
 		}
@@ -241,9 +241,9 @@ func GetMarketplaceIndex(refresh bool) (*MarketplaceIndex, error) {
 
 	index.BaseUrl = baseUrl
 	for _, item := range index.Integrations {
-		item.Logo = joinMarketplaceUrl(baseUrl, item.Logo)
+		item.Logo = JoinMarketplaceUrl(baseUrl, item.Logo)
 		for i, screenshot := range item.Screenshots {
-			item.Screenshots[i] = joinMarketplaceUrl(baseUrl, screenshot)
+			item.Screenshots[i] = JoinMarketplaceUrl(baseUrl, screenshot)
 		}
 	}
 
@@ -314,10 +314,10 @@ func getIntegrationRevoked(index *MarketplaceIndex, id string, version string) *
 	return revoked
 }
 
-// getIntegrationBundle downloads the bundle of a version and checks it. It first checks with the Marketplace server
+// GetIntegrationBundle downloads the bundle of a version and checks it. It first checks with the Marketplace server
 // that the version is still published and what checksum the bundle must have, and downloads the bundle from the server
 // when the CDN copy does not have it. A page view uses a shorter metadata timeout than an install.
-func getIntegrationBundle(item *MarketplaceIntegration, version string, forInstall bool) (*IntegrationBundle, string, error) {
+func GetIntegrationBundle(item *MarketplaceIntegration, version string, forInstall bool) (*IntegrationBundle, string, error) {
 	index, err := GetMarketplaceIndex(false)
 	if err != nil {
 		return nil, "", err
@@ -356,9 +356,9 @@ func getIntegrationBundle(item *MarketplaceIntegration, version string, forInsta
 		if meta != nil {
 			if meta.Status == "Revoked" {
 				if meta.Reason != "" {
-					return nil, "", integrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace: %s", item.Id, version, meta.Reason)}
+					return nil, "", IntegrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace: %s", item.Id, version, meta.Reason)}
 				}
-				return nil, "", integrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace", item.Id, version)}
+				return nil, "", IntegrationRevokedError{fmt.Errorf("the integration: %s %s has been withdrawn from the Marketplace", item.Id, version)}
 			}
 			if meta.Sha256 != "" {
 				expectedSha256 = meta.Sha256
@@ -369,12 +369,12 @@ func getIntegrationBundle(item *MarketplaceIntegration, version string, forInsta
 		return nil, "", revokedErr
 	}
 
-	bundleUrl := joinMarketplaceUrl(baseUrl, marketplaceVersion.Url)
-	data, err := fetchMarketplaceFile(bundleUrl)
+	bundleUrl := JoinMarketplaceUrl(baseUrl, marketplaceVersion.Url)
+	data, err := FetchMarketplaceFile(bundleUrl)
 	if err == nil && !isSha256(data, expectedSha256) && meta != nil && baseUrl != serverUrl {
 		// the CDN copy is stale or not what was published, the Marketplace server has the published one
-		bundleUrl = joinMarketplaceUrl(serverUrl, marketplaceVersion.Url)
-		data, err = fetchMarketplaceFile(bundleUrl)
+		bundleUrl = JoinMarketplaceUrl(serverUrl, marketplaceVersion.Url)
+		data, err = FetchMarketplaceFile(bundleUrl)
 	}
 	if err != nil {
 		return nil, "", err
@@ -408,7 +408,7 @@ func GetMarketplaceBundle(id string, version string) (json.RawMessage, error) {
 		return nil, err
 	}
 
-	_, bundleText, err := getIntegrationBundle(item, version, false)
+	_, bundleText, err := GetIntegrationBundle(item, version, false)
 	if err != nil {
 		return nil, err
 	}
@@ -953,7 +953,7 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 	} else {
 		item, err = GetMarketplaceIntegration(req.IntegrationId)
 		if err == nil {
-			bundle, bundleText, err = getIntegrationBundle(item, req.Version, true)
+			bundle, bundleText, err = GetIntegrationBundle(item, req.Version, true)
 		}
 	}
 	if err != nil {
@@ -964,7 +964,7 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 	if err != nil {
 		return nil, err
 	}
-	_, originBackend := getOriginFromHost(host)
+	_, originBackend := GetOriginFromHost(host)
 	variables["casdoorUrl"] = originBackend
 
 	displayName := bundle.Manifest.Name["en"]
