@@ -18,7 +18,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/casdoor/casdoor/object"
+	"github.com/casdoor/casdoor/util"
 )
 
 // RevokeConsent revokes a consent record
@@ -91,6 +93,18 @@ func (c *ApiController) RevokeConsent() {
 	}
 	userObj.ApplicationScopes = newScopes
 	success, err := object.UpdateUser(userObj.GetId(), userObj, nil, false)
+	if err != nil {
+		c.ResponseError(err.Error())
+		return
+	}
+
+	// the tokens the application already holds carry the revoked scopes, so they stop working and
+	// the application has to ask again
+	_, applicationName, err := util.GetOwnerAndNameFromIdWithError(consent.Application)
+	if err != nil {
+		applicationName = consent.Application
+	}
+	_, err = object.ExpireTokenByUserAndApplication(userObj.Owner, userObj.Name, applicationName)
 	if err != nil {
 		c.ResponseError(err.Error())
 		return

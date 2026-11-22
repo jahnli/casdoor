@@ -83,6 +83,8 @@ p, *, *, POST, /api/set-password, *, *
 p, *, *, GET, /api/get-init-admin-status, *, *
 p, *, *, POST, /api/init-admin-password, *, *
 p, *, *, POST, /api/send-verification-code, *, *
+p, *, *, GET, /api/get-my-sessions, *, *
+p, *, *, POST, /api/delete-my-session, *, *
 p, *, *, GET, /api/get-captcha, *, *
 p, *, *, GET, /api/get-altcha-challenge, *, *
 p, *, *, POST, /api/verify-captcha, *, *

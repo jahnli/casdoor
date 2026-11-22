@@ -11,6 +11,7 @@
     "Invalid token": "Jeton invalide",
     "Please sign in again": "Veuillez vous reconnecter",
     "Requested scope exceeds original device authorization scope": "La portée demandée dépasse celle de l'autorisation d'appareil d'origine",
+    "Signing in with a verification code or a magic link is not enabled for your account": "La connexion avec un code de vérification ou un lien magique n'est pas activée pour votre compte",
     "State expected: %s, but got: %s": "État attendu : %s, mais obtenu : %s",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account via %s, please use another way to sign up": "Le compte pour le fournisseur : %s et le nom d'utilisateur : %s (%s) n'existe pas et n'est pas autorisé à s'inscrire en tant que nouveau compte via %s, veuillez utiliser une autre méthode pour vous inscrire",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account, please contact your IT support": "Le compte pour le fournisseur : %s et le nom d'utilisateur : %s (%s) n'existe pas et n'est pas autorisé à s'inscrire comme nouveau compte, veuillez contacter votre support informatique",
@@ -79,6 +80,7 @@
     "Please register using the username corresponding to the invitation code": "Veuillez vous inscrire avec le nom d'utilisateur correspondant au code d'invitation",
     "Session outdated, please login again": "Session expirée, veuillez vous connecter à nouveau",
     "The account has already linked another %s account": "The account has already linked another %s account",
+    "The email domain: %s is not allowed to sign up": "Le domaine d'e-mail : %s n'est pas autorisé à s'inscrire",
     "The invitation code has already been used": "Le code d'invitation a déjà été utilisé",
     "The password must contain at least one special character": "Le mot de passe doit contenir au moins un caractère spécial",
     "The password must contain at least one uppercase letter, one lowercase letter and one digit": "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre",
@@ -190,6 +192,7 @@
     "Too many requests, please try again later": "Trop de requêtes, veuillez réessayer plus tard"
   },
   "session": {
+    "The current session cannot be ended here, sign out instead": "La session actuelle ne peut pas être fermée ici, déconnectez-vous plutôt",
     "session id %s is the current session and cannot be deleted": "L'ID de session %s correspond à la session actuelle et ne peut pas être supprimé"
   },
   "storage": {

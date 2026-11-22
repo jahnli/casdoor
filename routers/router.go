@@ -258,6 +258,8 @@ func InitAPI() {
 	web.Router("/api/add-session", &controllers.ApiController{}, "POST:AddSession")
 	web.Router("/api/delete-session", &controllers.ApiController{}, "POST:DeleteSession")
 	web.Router("/api/is-session-duplicated", &controllers.ApiController{}, "GET:IsSessionDuplicated")
+	web.Router("/api/get-my-sessions", &controllers.ApiController{}, "GET:GetMySessions")
+	web.Router("/api/delete-my-session", &controllers.ApiController{}, "POST:DeleteMySession")
 
 	web.Router("/api/get-tokens", &controllers.ApiController{}, "GET:GetTokens")
 	web.Router("/api/get-token", &controllers.ApiController{}, "GET:GetToken")
@@ -335,6 +337,10 @@ func InitAPI() {
 	web.Router("/api/login/oauth/refresh_token", &controllers.ApiController{}, "POST:RefreshToken")
 	web.Router("/api/login/oauth/introspect", &controllers.ApiController{}, "POST:IntrospectToken")
 	web.Router("/api/login/oauth/revoke", &controllers.ApiController{}, "POST:RevokeToken")
+	web.Router("/api/login/oauth/par", &controllers.ApiController{}, "POST:PushAuthorizationRequest")
+	web.Router("/api/login/oauth/bc-authorize", &controllers.ApiController{}, "POST:BackchannelAuthenticate")
+	web.Router("/api/login/oauth/ciba-request", &controllers.ApiController{}, "GET:GetCibaRequest")
+	web.Router("/api/login/oauth/ciba-answer", &controllers.ApiController{}, "POST:AnswerCibaRequest")
 	web.Router("/api/oauth/register", &controllers.ApiController{}, "POST:DynamicClientRegister")
 	web.Router("/api/oauth/register/:clientId", &controllers.ApiController{}, "GET:DynamicClientRead;PUT:DynamicClientUpdate;DELETE:DynamicClientDelete")
 

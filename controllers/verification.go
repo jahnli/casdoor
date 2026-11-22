@@ -363,6 +363,13 @@ func (c *ApiController) SendVerificationCode() {
 			return
 		}
 
+		if vform.Method == SignupVerification {
+			if msg := object.CheckSignupEmailDomain(organization, vform.Dest, c.GetAcceptLanguage()); msg != "" {
+				c.ResponseError(msg)
+				return
+			}
+		}
+
 		if vform.Method == ResetVerification && !isUserDestMergeable(user, object.VerifyTypeEmail, vform.Dest, "") {
 			c.ResponseError(c.T("check:Email already exists"))
 			return
@@ -383,6 +390,18 @@ func (c *ApiController) SendVerificationCode() {
 			// so does the signup page after a sign-in with it
 			if user == nil && (vform.Method == ForgetVerification || !application.IsVerificationCodeSignupEnabled(object.VerifyTypeEmail) && !application.IsCodeSigninSignupEnabled(object.VerifyTypeEmail)) {
 				c.ResponseError(c.T("verification:the user does not exist, please sign up first"))
+				return
+			}
+
+			if user == nil {
+				if msg := object.CheckSignupEmailDomain(organization, vform.Dest, c.GetAcceptLanguage()); msg != "" {
+					c.ResponseError(msg)
+					return
+				}
+			}
+
+			if vform.Method == LoginVerification && !application.IsCodeSigninAllowedForUser(user) {
+				c.ResponseError(c.T("auth:Signing in with a verification code or a magic link is not enabled for your account"))
 				return
 			}
 
@@ -416,6 +435,14 @@ func (c *ApiController) SendVerificationCode() {
 					c.ResponseError(err.Error())
 					return
 				}
+
+				if msg := object.CheckSignupEmailDomain(organization, vform.Dest, c.GetAcceptLanguage()); msg != "" {
+					c.ResponseError(msg)
+					return
+				}
+			} else if !application.IsCodeSigninAllowedForUser(user) {
+				c.ResponseError(c.T("auth:Signing in with a verification code or a magic link is not enabled for your account"))
+				return
 			} else if user.IsDeleted || user.IsForbidden {
 				c.ResponseError(object.GetUserForbiddenMessage(user, c.GetAcceptLanguage()))
 				return
@@ -475,6 +502,11 @@ func (c *ApiController) SendVerificationCode() {
 				return
 			} else if user == nil && (vform.Method == ForgetVerification || !application.IsVerificationCodeSignupEnabled(object.VerifyTypePhone) && !application.IsCodeSigninSignupEnabled(object.VerifyTypePhone)) {
 				c.ResponseError(c.T("verification:the user does not exist, please sign up first"))
+				return
+			}
+
+			if vform.Method == LoginVerification && !application.IsCodeSigninAllowedForUser(user) {
+				c.ResponseError(c.T("auth:Signing in with a verification code or a magic link is not enabled for your account"))
 				return
 			}
 

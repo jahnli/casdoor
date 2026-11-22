@@ -11,6 +11,7 @@
     "Invalid token": "Token inválido",
     "Please sign in again": "Faça login novamente",
     "Requested scope exceeds original device authorization scope": "O escopo solicitado excede o escopo da autorização de dispositivo original",
+    "Signing in with a verification code or a magic link is not enabled for your account": "O login com código de verificação ou link mágico não está habilitado para sua conta",
     "State expected: %s, but got: %s": "Estado esperado: %s, mas recebido: %s",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account via %s, please use another way to sign up": "A conta do provedor: %s e nome de usuário: %s (%s) não existe e não é permitido criar nova conta via %s, por favor, use outra forma de cadastro",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account, please contact your IT support": "A conta do provedor: %s e nome de usuário: %s (%s) não existe e não é permitido criar nova conta, entre em contato com o suporte de TI",
@@ -79,6 +80,7 @@
     "Please register using the username corresponding to the invitation code": "Por favor, registre-se usando o nome de usuário correspondente ao código de convite",
     "Session outdated, please login again": "Sessão expirada, faça login novamente",
     "The account has already linked another %s account": "The account has already linked another %s account",
+    "The email domain: %s is not allowed to sign up": "O domínio de e-mail: %s não tem permissão para se cadastrar",
     "The invitation code has already been used": "O código de convite já foi utilizado",
     "The password must contain at least one special character": "A senha deve conter pelo menos um caractere especial",
     "The password must contain at least one uppercase letter, one lowercase letter and one digit": "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um dígito",
@@ -190,6 +192,7 @@
     "Too many requests, please try again later": "Muitas solicitações, tente novamente mais tarde"
   },
   "session": {
+    "The current session cannot be ended here, sign out instead": "A sessão atual não pode ser encerrada aqui, saia da conta em vez disso",
     "session id %s is the current session and cannot be deleted": "ID da sessão %s é a sessão atual e não pode ser excluída"
   },
   "storage": {

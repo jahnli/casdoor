@@ -1,4 +1,4 @@
-
+import * as React from "react";
 import i18next from "i18next";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
@@ -7,11 +7,14 @@ import {TableCell} from "@/components/ui/table";
 import {CodeEditor} from "@/components/common/CodeEditor";
 import {SelectField} from "@/components/common/SelectField";
 import {TagsInput} from "@/components/common/TagsInput";
+import {MultiSelect} from "@/components/common/MultiSelect";
+import * as GroupBackend from "@/backend/GroupBackend";
 import {ThemeEditor} from "@/components/common/ThemeEditor";
 import {EditableTable} from "@/components/crud/EditableTable";
 import {ApplicationPromptPreview, ApplicationSignupSigninPreview} from "@/components/application/ApplicationPreview";
 import {AGREEMENT_UNCHECKED_RULE} from "@/components/auth/AgreementModal";
 import {FormRow} from "@/components/crud/FormRow";
+import {SkipMfaColumnTitle} from "@/components/application/SkipMfaColumnTitle";
 import {useAccount} from "@/hooks/use-account";
 import type {ApplicationTabProps} from "@/components/application/types";
 import {enumSelectOptions, type EnumMap} from "@/lib/enum-labels";
@@ -54,6 +57,9 @@ function getDefaultSigninMethodRule(name: string): string {
   const rules = Object.keys(SIGNIN_METHOD_RULES[name] ?? {});
   return rules.length > 0 ? rules[0] : "None";
 }
+
+// the methods that prove only a mailbox or a phone, a password sign-in always takes the MFA challenge
+const MFA_SKIPPABLE_SIGNIN_METHODS = ["Verification code", "Magic link"];
 
 const SIGNIN_METHOD_NAMES: {name: string; labelKey: string}[] = [
   {name: "Password", labelKey: "general:Password"},
@@ -212,6 +218,30 @@ function getSigninItemRuleOptions(name: string) {
 }
 
 /** The "UI Customization" tab: the blocks the sign-in and sign-up pages are built from. */
+/** the groups that may sign in with a verification code or a magic link, none means everyone */
+function CodeSigninGroupsSelect({application, updateField}: ApplicationTabProps) {
+  const [groups, setGroups] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    if (!application.organization) {
+      return;
+    }
+    GroupBackend.getGroups(application.organization).then((res: any) => {
+      if (res.status === "ok") {
+        setGroups(res.data ?? []);
+      }
+    });
+  }, [application.organization]);
+
+  return (
+    <MultiSelect
+      value={application.codeSigninGroups ?? []}
+      onChange={(v) => updateField("codeSigninGroups", v)}
+      options={groups.map((group) => ({value: `${group.owner}/${group.name}`, label: group.displayName || group.name}))}
+      placeholder={i18next.t("general:All")}
+    />
+  );
+}
+
 export function ApplicationUiCustomizationTab({application, updateField}: ApplicationTabProps) {
   const {account} = useAccount();
 
@@ -274,9 +304,23 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
                   />
                 ) : null,
             },
+            {
+              key: "skipMfa",
+              title: <SkipMfaColumnTitle />,
+              width: 110,
+              render: (row: any, _i, patch) =>
+                MFA_SKIPPABLE_SIGNIN_METHODS.includes(row.name) ? (
+                  <Switch checked={!!row.skipMfa} onCheckedChange={(v) => patch({skipMfa: v})} />
+                ) : null,
+            },
           ]}
         />
       </FormRow>
+      {(application.signinMethods ?? []).some((item: any) => ["Verification code", "Magic link"].includes(item.name)) ? (
+        <FormRow labelKey="application:Code signin groups">
+          <CodeSigninGroupsSelect application={application} updateField={updateField} />
+        </FormRow>
+      ) : null}
       <FormRow labelKey="provider:Signup HTML" block>
         <CodeEditor
           language="html"
@@ -586,6 +630,15 @@ export function ApplicationUiCustomizationTab({application, updateField}: Applic
           value={application.formBackgroundUrlMobile ?? ""}
           onChange={(e) => updateField("formBackgroundUrlMobile", e.target.value)}
         />
+      </FormRow>
+      <FormRow block labelKey="application:Background URL Dark">
+        <Input
+          value={application.formBackgroundUrlDark ?? ""}
+          onChange={(e) => updateField("formBackgroundUrlDark", e.target.value)}
+        />
+      </FormRow>
+      <FormRow block labelKey="application:More background URLs">
+        <TagsInput value={application.formBackgroundUrls ?? []} onChange={(v) => updateField("formBackgroundUrls", v)} />
       </FormRow>
       <FormRow labelKey="application:Custom CSS" block>
         <CodeEditor

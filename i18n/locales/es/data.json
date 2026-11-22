@@ -11,6 +11,7 @@
     "Invalid token": "Token inválido",
     "Please sign in again": "Inicie sesión de nuevo",
     "Requested scope exceeds original device authorization scope": "El alcance solicitado supera el alcance de la autorización de dispositivo original",
+    "Signing in with a verification code or a magic link is not enabled for your account": "El inicio de sesión con un código de verificación o un enlace mágico no está habilitado para su cuenta",
     "State expected: %s, but got: %s": "Estado esperado: %s, pero se obtuvo: %s",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account via %s, please use another way to sign up": "La cuenta para el proveedor: %s y nombre de usuario: %s (%s) no existe y no está permitido registrarse como una cuenta nueva a través de %s, por favor use otro método para registrarse",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account, please contact your IT support": "La cuenta para el proveedor: %s y el nombre de usuario: %s (%s) no existe y no se permite registrarse como una nueva cuenta, por favor contacte a su soporte de TI",
@@ -79,6 +80,7 @@
     "Please register using the username corresponding to the invitation code": "Regístrese usando el nombre de usuario correspondiente al código de invitación",
     "Session outdated, please login again": "Sesión expirada, por favor vuelva a iniciar sesión",
     "The account has already linked another %s account": "The account has already linked another %s account",
+    "The email domain: %s is not allowed to sign up": "El dominio de correo electrónico: %s no tiene permitido registrarse",
     "The invitation code has already been used": "El código de invitación ya ha sido utilizado",
     "The password must contain at least one special character": "La contraseña debe contener al menos un carácter especial",
     "The password must contain at least one uppercase letter, one lowercase letter and one digit": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un dígito",
@@ -190,6 +192,7 @@
     "Too many requests, please try again later": "Demasiadas solicitudes, inténtelo de nuevo más tarde"
   },
   "session": {
+    "The current session cannot be ended here, sign out instead": "La sesión actual no se puede finalizar aquí, cierre la sesión en su lugar",
     "session id %s is the current session and cannot be deleted": "El ID de sesión %s es la sesión actual y no se puede eliminar"
   },
   "storage": {

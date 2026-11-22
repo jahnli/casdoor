@@ -11,6 +11,7 @@
     "Invalid token": "Mã thông báo không hợp lệ",
     "Please sign in again": "Vui lòng đăng nhập lại",
     "Requested scope exceeds original device authorization scope": "Phạm vi yêu cầu vượt quá phạm vi ủy quyền thiết bị ban đầu",
+    "Signing in with a verification code or a magic link is not enabled for your account": "Đăng nhập bằng mã xác minh hoặc liên kết ma thuật chưa được bật cho tài khoản của bạn",
     "State expected: %s, but got: %s": "Trạng thái dự kiến: %s, nhưng nhận được: %s",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account via %s, please use another way to sign up": "Tài khoản cho nhà cung cấp: %s và tên người dùng: %s (%s) không tồn tại và không được phép đăng ký làm tài khoản mới qua %s, vui lòng sử dụng cách khác để đăng ký",
     "The account for provider: %s and username: %s (%s) does not exist and is not allowed to sign up as new account, please contact your IT support": "Tài khoản cho nhà cung cấp: %s và tên người dùng: %s (%s) không tồn tại và không được phép đăng ký như một tài khoản mới, vui lòng liên hệ với bộ phận hỗ trợ công nghệ thông tin của bạn",
@@ -79,6 +80,7 @@
     "Please register using the username corresponding to the invitation code": "Vui lòng đăng ký bằng tên người dùng tương ứng với mã mời",
     "Session outdated, please login again": "Phiên làm việc hết hạn, vui lòng đăng nhập lại",
     "The account has already linked another %s account": "The account has already linked another %s account",
+    "The email domain: %s is not allowed to sign up": "Tên miền email: %s không được phép đăng ký",
     "The invitation code has already been used": "Mã mời đã được sử dụng",
     "The password must contain at least one special character": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
     "The password must contain at least one uppercase letter, one lowercase letter and one digit": "Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường và một chữ số",
@@ -190,6 +192,7 @@
     "Too many requests, please try again later": "Quá nhiều yêu cầu, vui lòng thử lại sau"
   },
   "session": {
+    "The current session cannot be ended here, sign out instead": "Không thể kết thúc phiên hiện tại tại đây, hãy đăng xuất",
     "session id %s is the current session and cannot be deleted": "id phiên %s là phiên hiện tại và không thể bị xóa"
   },
   "storage": {

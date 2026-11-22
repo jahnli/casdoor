@@ -40,6 +40,7 @@ const (
 	UnsupportedGrantType = "unsupported_grant_type"
 	InvalidScope         = "invalid_scope"
 	InvalidTarget        = "invalid_target"
+	AccessDenied         = "access_denied"
 	EndpointError        = "endpoint_error"
 	DeviceAuthExpiresIn  = 120
 	DeviceAuthInterval   = 5
@@ -512,6 +513,13 @@ func GetOAuthCode(userId string, clientId string, provider string, signinMethod 
 		return nil, err
 	}
 
+	if application.RequirePushedAuthorizationRequests && !consumeParAuthorization(clientId, redirectUri, state, nonce, challenge) {
+		return &Code{
+			Message: "error: this application only accepts authorization requests pushed to the PAR endpoint (RFC 9126)",
+			Code:    "",
+		}, nil
+	}
+
 	// the code is generated first: an ID token returned together with it carries its c_hash
 	rt, _ := ParseResponseType(responseType)
 	code := util.GenerateAuthorizationCode()
@@ -802,7 +810,7 @@ func checkRefreshClientSecret(application *Application, token *Token, clientSecr
 		return nil
 	}
 
-	if application.ClientSecret != clientSecret {
+	if !application.IsClientSecretValid(clientSecret) {
 		return &TokenError{
 			Error:            InvalidClient,
 			ErrorDescription: "client_secret is invalid",
@@ -1014,7 +1022,7 @@ func parseAndValidateSubjectToken(subjectToken string, requestingClientId string
 
 // createGuestUserToken creates a new guest user and returns a token for them.
 func createGuestUserToken(application *Application, clientSecret string, verifier string, lang string) (*Token, *TokenError, error) {
-	if clientSecret != "" && application.ClientSecret != clientSecret {
+	if clientSecret != "" && !application.IsClientSecretValid(clientSecret) {
 		return nil, &TokenError{
 			Error:            InvalidClient,
 			ErrorDescription: "client_secret is invalid",

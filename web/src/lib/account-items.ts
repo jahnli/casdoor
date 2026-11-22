@@ -23,7 +23,7 @@ export interface AccountItemRules {
   canModifyAsAdmin?: boolean;
 }
 
-export const USER_SECURITY_ITEMS = ["Face ID", "MFA accounts", "Multi-factor authentication", "WebAuthn credentials"];
+export const USER_SECURITY_ITEMS = ["Face ID", "MFA accounts", "Multi-factor authentication", "WebAuthn credentials", "Sessions"];
 export const USER_SECURITY_FIELDS = ["faceIds", "mfaAccounts", "webauthnCredentials"];
 
 export const ACCOUNT_PROPERTY_ITEMS = [
@@ -47,7 +47,7 @@ export const ACCOUNT_ITEM_ORDER = [
   "Signup application", "Register type", "Register source", "ID", "User ID", "Open ID",
   "User type", "Tag", "Is admin", "Is forbidden", "Roles", "Permissions", "Password", "Need update password", "Last change password time",
   "UID number", "IP whitelist", "Last signin time", "Last signin IP", "Is deleted", "Deleted time", "Properties", "Country/Region", "Location", "Address", "Addresses", "Consents",
-  "Multi-factor authentication", "WebAuthn credentials", "Face ID", "3rd-party logins", "MFA accounts", "MFA items", "Managed accounts",
+  "Multi-factor authentication", "WebAuthn credentials", "Face ID", "3rd-party logins", "Sessions", "MFA accounts", "MFA items", "Managed accounts",
   "Real name", "ID card type", "ID card", "ID card info", "ID verification",
 ];
 

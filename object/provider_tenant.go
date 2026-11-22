@@ -24,11 +24,14 @@ import (
 	notify "github.com/casdoor/notify2"
 )
 
-// isTenantProvider reports a provider an organization admin manages, as opposed to the global
-// ones ("admin") and the ones of "built-in", which only global admins manage. The hosts of a
-// tenant provider must not reach the intranet, like the webhooks of the organizations.
+// IsTenantOwner reports an organization whose providers are managed by organization admins.
+// Providers owned by "admin" or "built-in" are managed only by global admins.
+func IsTenantOwner(owner string) bool {
+	return owner != "admin" && owner != "built-in"
+}
+
 func isTenantProvider(provider *Provider) bool {
-	return provider.Owner != "admin" && provider.Owner != "built-in"
+	return IsTenantOwner(provider.Owner)
 }
 
 func checkTenantProviderHost(provider *Provider, host string) error {
@@ -57,6 +60,10 @@ func restrictTenantEmailProvider(provider *Provider, emailProvider email.EmailPr
 	case *email.HttpEmailProvider:
 		p.SetHttpClient(getTenantHttpClient(provider))
 	case *email.Microsoft365EmailProvider:
+		p.SetHttpClient(getTenantHttpClient(provider))
+	case *email.MicrosoftGraphEmailProvider:
+		p.SetHttpClient(getTenantHttpClient(provider))
+	case *email.GmailEmailProvider:
 		p.SetHttpClient(getTenantHttpClient(provider))
 	}
 }

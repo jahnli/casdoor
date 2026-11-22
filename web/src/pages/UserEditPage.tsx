@@ -25,6 +25,7 @@ import {formGridClass} from "@/components/crud/FormRow";
 import {AffiliationAddressSelect, AffiliationField, useAffiliation} from "@/components/user/AffiliationSelect";
 import {CasdoorAppQrCode, CasdoorAppUrl, CasdoorAuthenticatorLink} from "@/components/user/CasdoorAppConnector";
 import {ConsentTable} from "@/components/user/ConsentTable";
+import {MySessionTable} from "@/components/user/MySessionTable";
 import {FaceIdTable} from "@/components/user/FaceIdTable";
 import {CropperDivModal, UserImageField} from "@/components/user/CropperDivModal";
 import {ThirdPartyLogins} from "@/components/user/OAuthWidget";
@@ -102,7 +103,14 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
 
   const persistedUser = React.useRef<any>(null);
   const {record: user, updateField, updateFields, loading, denied, mode, setMode, reload} = useEditRecord<any>({
-    fetch: () => UserBackend.getUser(organizationName, userName),
+    // the account items can hide the organization and name from the user, but the page
+    // still needs them to recognize the signed-in user and to save to the right user
+    fetch: () => UserBackend.getUser(organizationName, userName).then((res: any) => {
+      if (res.status === "ok" && res.data) {
+        res.data = {...res.data, owner: res.data.owner || organizationName, name: res.data.name || userName};
+      }
+      return res;
+    }),
     transform: (record) => {
       persistedUser.current = Setting.deepCopy(record);
       return record;
@@ -1161,6 +1169,12 @@ export default function UserEditPage({self}: {self?: boolean} = {}) {
         <ConsentTable table={user.applicationScopes ?? []} onUpdateTable={reload} />
       </AccountItemRow>
     ),
+    // only the user can list and end its own sessions, administrators use the Sessions page
+    "Sessions": isSelf && mode !== "add" ? (
+      <AccountItemRow name="Sessions" labelKey="general:Sessions" block>
+        <MySessionTable />
+      </AccountItemRow>
+    ) : null,
   };
 
   // organizations whose account items predate these rows still see them, in the first tab

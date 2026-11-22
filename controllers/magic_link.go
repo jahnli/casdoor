@@ -83,6 +83,10 @@ func (c *ApiController) checkMagicLinkSignin(authForm *form.AuthForm) (*object.U
 		return nil, errors.New(c.T("check:The user is forbidden to sign in, please contact the administrator"))
 	}
 
+	if !application.IsCodeSigninAllowedForUser(user) {
+		return nil, errors.New(c.T("auth:Signing in with a verification code or a magic link is not enabled for your account"))
+	}
+
 	if !user.EmailVerified {
 		user.EmailVerified = true
 		_, err = object.UpdateUser(user.GetId(), user, []string{"email_verified"}, false)
@@ -116,6 +120,10 @@ func (c *ApiController) addMagicLinkUser(application *object.Application, magicL
 	err = object.CheckEntryIp(clientIp, nil, application, organization, c.GetAcceptLanguage())
 	if err != nil {
 		return nil, err
+	}
+
+	if msg := object.CheckSignupEmailDomain(organization, magicLink.Email, c.GetAcceptLanguage()); msg != "" {
+		return nil, errors.New(msg)
 	}
 
 	// an application that asks the signup page for an invitation code is not signed up
