@@ -134,7 +134,7 @@ export function ApplicationBasicTab({
         <div className="space-y-2">
           <Input value={application.logo ?? ""} onChange={(e) => updateField("logo", e.target.value)} />
           {application.logo ? (
-            <a href={application.logo} target="_blank" rel="noreferrer">
+            <a href={application.logo} target="_blank" rel="noreferrer" className="block w-fit">
               <img src={application.logo} alt="logo" className="h-14 max-w-[240px] rounded-md border bg-white object-contain p-1.5" />
             </a>
           ) : null}
@@ -156,7 +156,7 @@ export function ApplicationBasicTab({
           <div className="space-y-2">
             <Input value={application.logoDark ?? ""} onChange={(e) => updateField("logoDark", e.target.value)} />
             {application.logoDark ? (
-              <a href={application.logoDark} target="_blank" rel="noreferrer">
+              <a href={application.logoDark} target="_blank" rel="noreferrer" className="block w-fit">
                 <img
                   src={application.logoDark}
                   alt="logo dark"
