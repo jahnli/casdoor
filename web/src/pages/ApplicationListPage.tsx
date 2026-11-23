@@ -130,6 +130,7 @@ export default function ApplicationListPage({formItems}: {formItems?: any[]} = {
       columns={columns}
       formType="applications"
       formItems={formItems}
+      initialQuery={{pageSize: 50}}
       deps={[organizationName, isGlobal]}
       toolbar={Setting.isLocalAdminUser(account) ? ({refresh}) => (
         <XlsxImport

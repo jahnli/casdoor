@@ -93,6 +93,7 @@ export default function GroupListPage() {
         )
       }
       newRecord={account ? () => newGroup(account) : undefined}
+      actionColumnWidth={136}
       editUrl={(r) => `/groups/${r.owner}/${r.name}`}
       remove={(r) => GroupBackend.deleteGroup(r)}
       deleteDisabled={(r) =>

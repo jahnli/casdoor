@@ -43,6 +43,7 @@ export default function RoleListPage() {
         RoleBackend.getRoles(organizationName, q.page, q.pageSize, q.searchedColumn, q.searchText, q.sortField, q.sortOrder)
       }
       newRecord={account ? () => newRole(account) : undefined}
+      actionColumnWidth={136}
       editUrl={(r) => `/roles/${r.owner}/${r.name}`}
       remove={(r) => RoleBackend.deleteRole(r)}
     />

@@ -276,7 +276,7 @@ export default function UserListPage({
           }
           : null,
       ]}
-      actionColumnWidth={groupName ? 400 : 330}
+      actionColumnWidth={groupName ? 400 : 210}
       // the tree page has one route per group, so pin the column choices to the page
       tableId={embedded ? "/trees" : undefined}
     />

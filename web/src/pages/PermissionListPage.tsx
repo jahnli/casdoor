@@ -82,6 +82,7 @@ export default function PermissionListPage() {
         )
       }
       newRecord={account ? () => newPermission(account) : undefined}
+      actionColumnWidth={136}
       editUrl={(r) => `/permissions/${r.owner}/${r.name}`}
       remove={(r) => PermissionBackend.deletePermission(r)}
     />

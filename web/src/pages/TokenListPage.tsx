@@ -92,6 +92,7 @@ export default function TokenListPage() {
         ).then((res) => withAuditUsers(res))
       }
       newRecord={account ? () => newToken(account) : undefined}
+      actionColumnWidth={136}
       editUrl={(r) => `/tokens/${r.name}`}
       remove={(r) => TokenBackend.deleteToken(r)}
     />

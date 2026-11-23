@@ -78,7 +78,7 @@ export default function OrganizationListPage({formItems}: {formItems?: any[]} = 
       }
       newRecord={() => newOrganization(dayjs().format())}
       // Groups and Users are the primary actions here, not Edit
-      actionColumnWidth={330}
+      actionColumnWidth={244}
       rowActions={(record) => [
         {key: "groups", label: i18next.t("general:Groups"), href: `/trees/${record.name}`},
         {key: "users", label: i18next.t("general:Users"), href: `/organizations/${record.name}/users`},
