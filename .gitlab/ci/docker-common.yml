@@ -1,5 +1,5 @@
-# The available instance runner uses the "public" tag. Override RUNNER_TAG to
-# select a dedicated Linux/amd64 Docker runner when available.
+# Use the dedicated Linux/amd64 Docker runner tagged "docker" by default.
+# Override RUNNER_TAG to select another compatible runner.
 # Publishing requires a Docker executor with privileged mode and these volumes:
 #   privileged = true
 #   volumes = ["/certs/client", "/cache"]
