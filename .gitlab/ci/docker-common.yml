@@ -1,16 +1,21 @@
-# The runner must use a Docker executor with privileged mode and these volumes:
+# The available instance runner uses the "public" tag. Override RUNNER_TAG to
+# select a dedicated Linux/amd64 Docker runner when available.
+# Publishing requires a Docker executor with privileged mode and these volumes:
 #   privileged = true
 #   volumes = ["/certs/client", "/cache"]
 # Required masked CI/CD variables: DOCKER_USERNAME and DOCKER_TOKEN.
 # Protected variables are only available on protected branches or tags.
 
+.linux-container:
+  tags:
+    - $RUNNER_TAG
+
 prepare-version:
+  extends: .linux-container
   stage: prepare
   image:
     name: alpine/git:2.47.2
     entrypoint: [""]
-  tags:
-    - docker
   rules:
     - if: "$TASK_TYPE =~ /^(docker-publish|docker-multiarch)$/"
   script:
@@ -28,6 +33,7 @@ prepare-version:
     expire_in: 7 days
 
 .docker-publish:
+  extends: .linux-container
   stage: publish
   image: docker:29.10.0-cli
   services:
@@ -35,8 +41,6 @@ prepare-version:
       alias: docker
       variables:
         HEALTHCHECK_TCP_PORT: "2376"
-  tags:
-    - docker
   needs:
     - prepare-version
   resource_group: casdoor-docker-publish

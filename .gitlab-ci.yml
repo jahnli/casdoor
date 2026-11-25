@@ -15,6 +15,9 @@ variables:
   DOCKER_IMAGE:
     value: ""
     description: "Optional Docker Hub repository; defaults to DOCKER_USERNAME/casdoor"
+  RUNNER_TAG:
+    value: public
+    description: "Runner tag for a Linux/amd64 Docker executor; publishing requires privileged mode and a shared /certs/client volume"
   GIT_DEPTH: "0"
 
 stages:
