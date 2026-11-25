@@ -245,7 +245,8 @@
     "Valid": "Válido",
     "We will send a code to": "Enviaremos un código a",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "No has activado ninguna autenticación multifactor que acepte esta aplicación, configúrala primero en tu página de cuenta",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "el token de prueba caduca en {seconds} segundos y se puede canjear una vez"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "el token de prueba caduca en {seconds} segundos y se puede canjear una vez",
+    "Deleted": "Eliminada"
   },
   "cert": {
     "Access secret": "Clave de acceso",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Primero debes seleccionar una imagen",
     "empty": "vacío",
     "remove": "eliminar",
-    "RADIUS Clients": "Clientes RADIUS"
+    "RADIUS Clients": "Clientes RADIUS",
+    "Loading": "Cargando"
   },
   "group": {
     "Edit Group": "Editar grupo",
@@ -760,7 +762,7 @@
     "Provider installed description": "Se creó este proveedor. Añádalo a los proveedores de una aplicación para que aparezca en la página de inicio de sesión.",
     "Provider installed in application description": "Se creó este proveedor y se añadió a la página de inicio de sesión de la aplicación.",
     "Sources": "Fuentes",
-    "Theme application help": "La aplicación cuyas páginas de inicio de sesión reciben el tema. Su aspecto actual vuelve al desinstalar el tema.",
+    "Theme application help": "La aplicación cuyas páginas de inicio de sesión reciben el tema. Al desinstalarlo vuelve el aspecto que tenía antes de cualquier tema del Marketplace.",
     "Theme install summary": "Reemplaza el aspecto de las páginas de inicio de sesión de una aplicación. Al desinstalarlo se restaura el aspecto anterior.",
     "Theme installed description": "Este tema está aplicado a las páginas de inicio de sesión de la aplicación.",
     "Theme preview note": "Los campos vacíos se muestran con sus ejemplos. No cambia nada hasta que instale.",
@@ -782,7 +784,14 @@
     "Install from file help": "Instalar una integración que no está en el Marketplace: elija el bundle.json generado por su build y, para una acción, también su módulo .wasm",
     "Install from file warning": "Instalada desde un archivo, no desde el Casdoor Marketplace, así que nadie la ha revisado. Instale solo integraciones de confianza.",
     "Installed from file": "Instalada desde archivo",
-    "Not a bundle file": "Elija el bundle.json de una integración, generado por el build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Elija el bundle.json de una integración, generado por el build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Ya existe una aplicación llamada {name}, elija otro nombre.",
+    "Color format error": "Use un color como #7c3aed.",
+    "Integration name taken": "Esta organización ya tiene una integración llamada {name}, elija otro nombre.",
+    "Name format error": "Empiece con una letra o un dígito y use solo letras, dígitos, - y _.",
+    "Provider name taken": "Ya existe un proveedor llamado {name}, elija otro nombre.",
+    "Theme replaces": "Esta aplicación ya tiene el tema {name}. Al instalar se reemplaza.",
+    "URL format error": "Introduzca una URL http(s) completa, como https://example.com."
   },
   "invitation": {
     "1 day": "1 día",
@@ -914,7 +923,10 @@
     "sign up now": "Regístrate ahora",
     "username or Email": "Nombre de usuario o correo electrónico",
     "username or phone": "Nombre de usuario o teléfono",
-    "username, Email or phone": "Nombre de usuario, correo electrónico o teléfono"
+    "username, Email or phone": "Nombre de usuario, correo electrónico o teléfono",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Se han enviado un enlace de inicio de sesión y un código a su correo electrónico. Abra el enlace en este navegador o introduzca el código a continuación",
+    "Sign in again": "Iniciar sesión de nuevo",
+    "Sign-in interrupted": "El inicio de sesión se interrumpió. Inicie sesión de nuevo."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Cada vez que inicies sesión en tu cuenta, necesitarás tu contraseña y un código de autenticación",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Has habilitado la autenticación multifactor. Por favor, introduce el código de verificación de la notificación push",
     "Your email is": "Tu correo electrónico es",
     "Your phone is": "Tu teléfono es",
-    "preferred": "preferido"
+    "preferred": "preferido",
+    "Approve": "Aprobar",
+    "The sign-in request has expired": "La solicitud de inicio de sesión ha caducado"
   },
   "model": {
     "Advanced Editor": "Editor avanzado",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "El endpoint de producción está vacío",
     "Scan server": "Escanear servidor",
     "Scanned hosts": "Hosts escaneados",
-    "Token header": "Cabecera del token"
+    "Token header": "Cabecera del token",
+    "Agent": "Agente"
   },
   "setting": {
     "Cannot be more than the max open connections": "No puede superar el máximo de conexiones abiertas",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Direcciones IP de origen o rangos CIDR de este NAS, separados por comas, p. ej. 192.168.20.50,10.0.0.0/24. Si coinciden varios clientes, gana el rango más específico",
     "Shared secret": "Secreto compartido",
     "Shared secret - Tooltip": "El secreto compartido RADIUS configurado en este NAS. Las solicitudes de IP que no coinciden con ningún cliente usan radiusSecret de app.conf"
+  },
+  "edition": {
+    "Done": "Listo",
+    "Next": "Siguiente"
+  },
+  "enterprise": {
+    "Completed": "Finalizada",
+    "Skipped": "Omitidos"
+  },
+  "payment": {
+    "Message": "Mensaje"
+  },
+  "subscription": {
+    "Group": "Grupo"
   }
 }

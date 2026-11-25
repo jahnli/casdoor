@@ -38,7 +38,9 @@
     "UserCode Invalid": "UserCode недійсний",
     "the application for user %s is not found": "Додаток для користувача %s не знайдено",
     "the organization: %s is not found": "Організація: %s не знайдена",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Користувачу: %s не дозволено входити в додаток: %s згідно з дозволами організації: %s"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Користувачу: %s не дозволено входити в додаток: %s згідно з дозволами організації: %s",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "До цього застосунку можна ввійти лише з довіреного пристрою, встановіть агент пристрою Casdoor і зареєструйте цей пристрій",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "Сервіс %s і %s не збігаються"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "будь ласка, додайте Email-провайдера до списку \"Провайдери\" для додатка: %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Щоб надсилати магічні посилання, укажіть \"origin\" у conf/app.conf",
     "the user does not exist, please sign up first": "користувача не існує, спочатку зареєструйтесь",
-    "you can only send one code in %ds": "ви можете надсилати лише один код раз на %d секунд"
+    "you can only send one code in %ds": "ви можете надсилати лише один код раз на %d секунд",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "Це посилання запитано в іншому браузері. Поверніться до того браузера та введіть код: %s"
   },
   "webauthn": {
     "Found no credentials for this user": "Облікові дані для цього користувача не знайдено",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "У користувача немає кодів відновлення",
     "The user has not enabled the MFA type: %s": "Користувач не увімкнув тип MFA: %s",
     "This code has already been used, please wait for the next one": "Цей код уже використано, дочекайтеся наступного"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "Пристрій: %s не існує",
+    "The enrollment code is wrong or has expired": "Код реєстрації неправильний або прострочений",
+    "The flow: %s doesn't exist": "Потік: %s не існує"
   }
 }

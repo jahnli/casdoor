@@ -245,7 +245,8 @@
     "Valid": "Дійсний",
     "We will send a code to": "Ми надішлемо код на",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Ви не увімкнули жодної багатофакторної автентифікації, яку приймає ця програма, спершу налаштуйте її на сторінці облікового запису",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "токен підтвердження спливає через {seconds} с і може бути використаний один раз"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "токен підтвердження спливає через {seconds} с і може бути використаний один раз",
+    "Deleted": "Видалено"
   },
   "cert": {
     "Access secret": "Секрет доступу",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Спочатку ви повинні вибрати зображення",
     "empty": "порожній",
     "remove": "видалити",
-    "RADIUS Clients": "Клієнти RADIUS"
+    "RADIUS Clients": "Клієнти RADIUS",
+    "Loading": "Завантаження"
   },
   "group": {
     "Edit Group": "Редагувати групу",
@@ -760,7 +762,7 @@
     "Provider installed description": "Цього провайдера створено. Додайте його до провайдерів застосунку, щоб він з'явився на сторінці входу.",
     "Provider installed in application description": "Цього провайдера створено й додано на сторінку входу застосунку.",
     "Sources": "Джерела",
-    "Theme application help": "Застосунок, сторінки входу якого отримають тему. Поточний вигляд повернеться, коли ви видалите тему.",
+    "Theme application help": "Застосунок, сторінки входу якого отримають тему. Після видалення повернеться вигляд, який був до будь-якої теми з Marketplace.",
     "Theme install summary": "Замінює вигляд сторінок входу застосунку. Видалення відновлює попередній вигляд.",
     "Theme installed description": "Цю тему застосовано до сторінок входу застосунку.",
     "Theme preview note": "Порожні поля показано з прикладами. Нічого не зміниться до встановлення.",
@@ -782,7 +784,14 @@
     "Install from file help": "Встановити інтеграцію, якої немає в Marketplace: виберіть bundle.json, створений збіркою, а для дії також її модуль .wasm",
     "Install from file warning": "Встановлено з файлу, а не з Casdoor Marketplace, тож її ніхто не перевіряв. Встановлюйте лише інтеграції, яким довіряєте.",
     "Installed from file": "Встановлено з файлу",
-    "Not a bundle file": "Виберіть bundle.json інтеграції, створений збіркою casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Виберіть bundle.json інтеграції, створений збіркою casdoor-integrations (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Застосунок з назвою {name} уже існує, виберіть іншу назву.",
+    "Color format error": "Вкажіть колір у форматі #7c3aed.",
+    "Integration name taken": "Ця організація вже має інтеграцію з назвою {name}, виберіть іншу назву.",
+    "Name format error": "Починайте з літери або цифри й використовуйте лише літери, цифри, - та _.",
+    "Provider name taken": "Постачальник з назвою {name} уже існує, виберіть іншу назву.",
+    "Theme replaces": "Цей застосунок уже має тему {name}. Встановлення замінить її.",
+    "URL format error": "Введіть повну адресу http(s), наприклад https://example.com."
   },
   "invitation": {
     "1 day": "1 день",
@@ -914,7 +923,10 @@
     "sign up now": "зареєструйтеся зараз",
     "username or Email": "ім'я користувача або email",
     "username or phone": "ім'я користувача або телефон",
-    "username, Email or phone": "ім'я користувача, email або телефон"
+    "username, Email or phone": "ім'я користувача, email або телефон",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Посилання для входу та код надіслано на вашу електронну пошту. Відкрийте посилання в цьому браузері або введіть код нижче",
+    "Sign in again": "Увійти знову",
+    "Sign-in interrupted": "Вхід було перервано. Увійдіть знову."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Кожного разу, коли ви входите в обліковий запис, вам знадобляться пароль і код автентифікації",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Ви ввімкнули багатофакторну автентифікацію, введіть код підтвердження з push-сповіщення",
     "Your email is": "Ваша електронна адреса",
     "Your phone is": "Ваш телефон",
-    "preferred": "основний"
+    "preferred": "основний",
+    "Approve": "Підтвердити",
+    "The sign-in request has expired": "Термін дії запиту на вхід минув"
   },
   "model": {
     "Advanced Editor": "Розширений редактор",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "Продакшн-кінцева точка порожня",
     "Scan server": "Сервер сканування",
     "Scanned hosts": "Відскановані хости",
-    "Token header": "Заголовок токена"
+    "Token header": "Заголовок токена",
+    "Agent": "Агент"
   },
   "setting": {
     "Cannot be more than the max open connections": "Не може перевищувати макс. кількість відкритих з'єднань",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Вихідні IP-адреси або діапазони CIDR цього NAS через кому, напр. 192.168.20.50,10.0.0.0/24. Якщо збігаються кілька клієнтів, перемагає найвужчий діапазон",
     "Shared secret": "Спільний секрет",
     "Shared secret - Tooltip": "Спільний секрет RADIUS, налаштований на цьому NAS. Запити з IP, що не збігаються з жодним клієнтом, використовують radiusSecret з app.conf"
+  },
+  "edition": {
+    "Done": "Готово",
+    "Next": "Далі"
+  },
+  "enterprise": {
+    "Completed": "Завершено",
+    "Skipped": "Пропущено"
+  },
+  "payment": {
+    "Message": "Повідомлення"
+  },
+  "subscription": {
+    "Group": "Група"
   }
 }

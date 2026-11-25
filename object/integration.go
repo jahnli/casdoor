@@ -44,7 +44,10 @@ type Integration struct {
 	// the theme fields of the application before a theme was installed, restored on uninstall
 	Backup string `xorm:"mediumtext" json:"backup"`
 	Bundle string `xorm:"mediumtext" json:"bundle"`
-	// the WebAssembly module of an action, base64 encoded
+	// the WebAssembly module of an action and its kind
+	Wasm []byte `xorm:"wasm longblob" json:"-"`
+	Kind string `xorm:"varchar(50)" json:"kind"`
+	// the module of an action installed before it was kept as bytes, base64 encoded
 	Module string `xorm:"mediumtext" json:"-"`
 }
 
@@ -59,7 +62,7 @@ func GetIntegrationCount(owner, field, value string) (int64, error) {
 
 func GetIntegrations(owner string) ([]*Integration, error) {
 	integrations := []*Integration{}
-	err := ormer.Engine.Desc("created_time").Omit("module").Find(&integrations, &Integration{Owner: owner})
+	err := ormer.Engine.Desc("created_time").Omit("wasm", "module").Find(&integrations, &Integration{Owner: owner})
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +72,7 @@ func GetIntegrations(owner string) ([]*Integration, error) {
 func GetPaginationIntegrations(owner string, offset, limit int, field, value, sortField, sortOrder string) ([]*Integration, error) {
 	integrations := []*Integration{}
 	session := GetSession(owner, offset, limit, field, value, sortField, sortOrder)
-	err := session.Omit("module").Find(&integrations, &Integration{Owner: owner})
+	err := session.Omit("wasm", "module").Find(&integrations, &Integration{Owner: owner})
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +103,42 @@ func GetIntegration(id string) (*Integration, error) {
 		return nil, err
 	}
 	return getIntegration(owner, name)
+}
+
+// GetIntegrationNameConflict returns what already has the name an integration of the type would be installed with:
+// "invalid", "integration", "application" or "provider", or "" when the name can be used.
+func GetIntegrationNameConflict(owner string, name string, integrationType string) (string, error) {
+	if !installNameRegex.MatchString(name) {
+		return "invalid", nil
+	}
+
+	integration, err := getIntegration(owner, name)
+	if err != nil {
+		return "", err
+	}
+	if integration != nil {
+		return "integration", nil
+	}
+
+	switch integrationType {
+	case "app":
+		application, err := getApplication("admin", name)
+		if err != nil {
+			return "", err
+		}
+		if application != nil {
+			return "application", nil
+		}
+	case "provider", "action":
+		existed, err := ormer.Engine.Exist(&Provider{Name: name})
+		if err != nil {
+			return "", err
+		}
+		if existed {
+			return "provider", nil
+		}
+	}
+	return "", nil
 }
 
 func addIntegration(integration *Integration) (bool, error) {

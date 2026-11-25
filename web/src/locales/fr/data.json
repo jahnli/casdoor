@@ -245,7 +245,8 @@
     "Valid": "Valide",
     "We will send a code to": "Nous enverrons un code à",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Vous n'avez activé aucune authentification multifacteur acceptée par cette application, configurez-la d'abord sur votre page de compte",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "le jeton de preuve expire dans {seconds} secondes et ne peut être utilisé qu'une fois"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "le jeton de preuve expire dans {seconds} secondes et ne peut être utilisé qu'une fois",
+    "Deleted": "Supprimé"
   },
   "cert": {
     "Access secret": "Clé d'accès",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Vous devez d'abord sélectionner une image",
     "empty": "vide",
     "remove": "supprimer",
-    "RADIUS Clients": "Clients RADIUS"
+    "RADIUS Clients": "Clients RADIUS",
+    "Loading": "Chargement"
   },
   "group": {
     "Edit Group": "Modifier le groupe",
@@ -760,7 +762,7 @@
     "Provider installed description": "Ce fournisseur a été créé. Ajoutez-le aux fournisseurs d'une application pour l'afficher sur la page de connexion.",
     "Provider installed in application description": "Ce fournisseur a été créé et ajouté à la page de connexion de l'application.",
     "Sources": "Sources",
-    "Theme application help": "L'application dont les pages de connexion reçoivent le thème. Son apparence actuelle revient quand vous désinstallez le thème.",
+    "Theme application help": "L'application dont les pages de connexion reçoivent le thème. La désinstallation rétablit l'apparence qu'elle avait avant tout thème du Marketplace.",
     "Theme install summary": "Remplace l'apparence des pages de connexion d'une application. La désinstallation restaure l'apparence précédente.",
     "Theme installed description": "Ce thème est appliqué aux pages de connexion de l'application.",
     "Theme preview note": "Les champs vides sont affichés avec leurs exemples. Rien ne change avant l'installation.",
@@ -782,7 +784,14 @@
     "Install from file help": "Installer une intégration absente du Marketplace : choisissez le bundle.json produit par son build et, pour une action, aussi son module .wasm",
     "Install from file warning": "Installée depuis un fichier et non depuis le Casdoor Marketplace : personne ne l'a vérifiée. N'installez que des intégrations de confiance.",
     "Installed from file": "Installée depuis un fichier",
-    "Not a bundle file": "Choisissez le bundle.json d'une intégration, produit par le build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Choisissez le bundle.json d'une intégration, produit par le build de casdoor-integrations (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Une application nommée {name} existe déjà, choisissez un autre nom.",
+    "Color format error": "Utilisez une couleur comme #7c3aed.",
+    "Integration name taken": "Cette organisation a déjà une intégration nommée {name}, choisissez un autre nom.",
+    "Name format error": "Commencez par une lettre ou un chiffre et n'utilisez que des lettres, des chiffres, - et _.",
+    "Provider name taken": "Un fournisseur nommé {name} existe déjà, choisissez un autre nom.",
+    "Theme replaces": "Cette application a déjà le thème {name}. L'installation le remplace.",
+    "URL format error": "Saisissez une URL http(s) complète, comme https://example.com."
   },
   "invitation": {
     "1 day": "1 jour",
@@ -914,7 +923,10 @@
     "sign up now": "Inscrivez-vous maintenant",
     "username or Email": "identifiant ou adresse e-mail",
     "username or phone": "identifiant ou téléphone",
-    "username, Email or phone": "identifiant, adresse e-mail ou téléphone"
+    "username, Email or phone": "identifiant, adresse e-mail ou téléphone",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Un lien de connexion et un code ont été envoyés à votre adresse e-mail. Ouvrez le lien dans ce navigateur ou saisissez le code ci-dessous",
+    "Sign in again": "Se reconnecter",
+    "Sign-in interrupted": "La connexion a été interrompue. Veuillez vous reconnecter."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Chaque fois que vous vous connectez à votre compte, vous aurez besoin de votre mot de passe et d'un code d'authentification",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Vous avez activé l'authentification multi-facteur. Veuillez saisir le code de vérification de la notification push",
     "Your email is": "Votre e-mail est",
     "Your phone is": "Votre téléphone est",
-    "preferred": "préféré"
+    "preferred": "préféré",
+    "Approve": "Approuver",
+    "The sign-in request has expired": "La demande de connexion a expiré"
   },
   "model": {
     "Advanced Editor": "Éditeur avancé",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "L'endpoint de production est vide",
     "Scan server": "Scanner le serveur",
     "Scanned hosts": "Hôtes scannés",
-    "Token header": "En-tête du jeton"
+    "Token header": "En-tête du jeton",
+    "Agent": "Agent"
   },
   "setting": {
     "Cannot be more than the max open connections": "Ne peut pas dépasser le nombre max. de connexions ouvertes",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Adresses IP source ou plages CIDR de ce NAS, séparées par des virgules, par ex. 192.168.20.50,10.0.0.0/24. Si plusieurs clients correspondent, la plage la plus précise l'emporte",
     "Shared secret": "Secret partagé",
     "Shared secret - Tooltip": "Le secret partagé RADIUS configuré sur ce NAS. Les requêtes provenant d'IP ne correspondant à aucun client utilisent radiusSecret de app.conf"
+  },
+  "edition": {
+    "Done": "Terminé",
+    "Next": "Suivant"
+  },
+  "enterprise": {
+    "Completed": "Terminée",
+    "Skipped": "Ignorés"
+  },
+  "payment": {
+    "Message": "Message de paiement"
+  },
+  "subscription": {
+    "Group": "Groupe"
   }
 }

@@ -38,7 +38,9 @@
     "UserCode Invalid": "Nieprawidłowy kod użytkownika",
     "the application for user %s is not found": "aplikacja dla użytkownika %s nie została znaleziona",
     "the organization: %s is not found": "organizacja: %s nie została znaleziona",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Użytkownik: %s nie może zalogować się do aplikacji: %s zgodnie z uprawnieniami organizacji: %s"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Użytkownik: %s nie może zalogować się do aplikacji: %s zgodnie z uprawnieniami organizacji: %s",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "Do tej aplikacji można się zalogować tylko z zaufanego urządzenia, zainstaluj agenta urządzenia Casdoor i zarejestruj to urządzenie",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "Usługa %s i %s nie pasują do siebie"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "proszę dodać dostawcę email do listy \"Providers\" dla aplikacji: %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Ustaw \"origin\" w conf/app.conf, aby wysyłać magiczne linki",
     "the user does not exist, please sign up first": "użytkownik nie istnieje, najpierw się zarejestruj",
-    "you can only send one code in %ds": "możesz wysłać tylko jeden kod co %ds"
+    "you can only send one code in %ds": "możesz wysłać tylko jeden kod co %ds",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "Ten link został zamówiony w innej przeglądarce. Wróć do tamtej przeglądarki i wpisz kod: %s"
   },
   "webauthn": {
     "Found no credentials for this user": "Nie znaleziono danych uwierzytelniających dla tego użytkownika",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "Użytkownik nie ma kodów odzyskiwania",
     "The user has not enabled the MFA type: %s": "Użytkownik nie włączył typu MFA: %s",
     "This code has already been used, please wait for the next one": "Ten kod został już użyty, poczekaj na następny"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "Urządzenie: %s nie istnieje",
+    "The enrollment code is wrong or has expired": "Kod rejestracji jest błędny lub wygasł",
+    "The flow: %s doesn't exist": "Przepływ: %s nie istnieje"
   }
 }

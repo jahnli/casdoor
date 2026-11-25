@@ -38,7 +38,9 @@
     "UserCode Invalid": "用户代码无效",
     "the application for user %s is not found": "未找到用户 %s 的应用程序",
     "the organization: %s is not found": "组织: %s 不存在",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "用户: %s 不能登录应用: %s，被组织: %s 的权限拒绝"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "用户: %s 不能登录应用: %s，被组织: %s 的权限拒绝",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "该应用只能从受信任的设备登录，请安装 Casdoor 设备代理并登记本机",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "此次登录需要多因素认证，但账户没有可验证的邮箱、手机号或验证器，请联系管理员"
   },
   "cas": {
     "Service %s and %s do not match": "服务%s与%s不匹配"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "请添加一个Email提供商到应用： %s 的 \"提供商 \"列表",
     "please set \"origin\" in conf/app.conf to send magic links": "发送魔法链接前，请先在 conf/app.conf 中设置 \"origin\"",
     "the user does not exist, please sign up first": "用户不存在，请先注册",
-    "you can only send one code in %ds": "您在 %d 秒内只能发送一次验证码"
+    "you can only send one code in %ds": "您在 %d 秒内只能发送一次验证码",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "此链接是在另一个浏览器中申请的，请回到那个浏览器并输入验证码：%s"
   },
   "webauthn": {
     "Found no credentials for this user": "无法找到此用户的证书",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "用户没有恢复码",
     "The user has not enabled the MFA type: %s": "用户没有开启 %s 方式的多因素认证",
     "This code has already been used, please wait for the next one": "这个验证码已经用过了，请等下一个"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "设备：%s 不存在",
+    "The enrollment code is wrong or has expired": "登记码错误或已过期",
+    "The flow: %s doesn't exist": "流程：%s 不存在"
   }
 }

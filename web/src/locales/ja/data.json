@@ -245,7 +245,8 @@
     "Valid": "有効",
     "We will send a code to": "コードの送信先:",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "このアプリが受け付ける多要素認証が有効になっていません。先にアカウントページで設定してください",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "証明トークンは {seconds} 秒後に失効し、1 回だけ使えます"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "証明トークンは {seconds} 秒後に失効し、1 回だけ使えます",
+    "Deleted": "削除済み"
   },
   "cert": {
     "Access secret": "アクセスシークレット",
@@ -718,7 +719,8 @@
     "You must select a picture first": "まず画像を選択してください",
     "empty": "空",
     "remove": "削除",
-    "RADIUS Clients": "RADIUS クライアント"
+    "RADIUS Clients": "RADIUS クライアント",
+    "Loading": "読み込み中"
   },
   "group": {
     "Edit Group": "グループを編集",
@@ -760,7 +762,7 @@
     "Provider installed description": "このプロバイダーが作成されました。サインインページに表示するには、アプリケーションのプロバイダーに追加してください。",
     "Provider installed in application description": "このプロバイダーが作成され、アプリケーションのサインインページに追加されました。",
     "Sources": "出典",
-    "Theme application help": "テーマを適用するアプリケーションです。テーマをアンインストールすると現在の見た目に戻ります。",
+    "Theme application help": "テーマを適用するアプリケーションです。アンインストールすると、Marketplace のテーマを入れる前の見た目に戻ります。",
     "Theme install summary": "アプリケーションのサインインページの見た目を置き換えます。アンインストールすると元に戻ります。",
     "Theme installed description": "このテーマはアプリケーションのサインインページに適用されています。",
     "Theme preview note": "未入力の項目は例の値でプレビューします。インストールするまで何も変わりません。",
@@ -782,7 +784,14 @@
     "Install from file help": "Marketplace にない連携をインストールします。ビルドで生成された bundle.json を選択し、アクションの場合は .wasm モジュールも選択してください",
     "Install from file warning": "Casdoor Marketplace ではなくファイルからインストールするため、誰も審査していません。信頼できる連携だけをインストールしてください。",
     "Installed from file": "ファイルからインストール済み",
-    "Not a bundle file": "連携の bundle.json を選択してください。casdoor-integrations のビルドで生成されます（dist/integrations/<id>/<version>/bundle.json）。"
+    "Not a bundle file": "連携の bundle.json を選択してください。casdoor-integrations のビルドで生成されます（dist/integrations/<id>/<version>/bundle.json）。",
+    "Application name taken": "{name} という名前のアプリケーションはすでにあります。別の名前にしてください。",
+    "Color format error": "#7c3aed のような色を入力してください。",
+    "Integration name taken": "この組織にはすでに {name} という名前のインテグレーションがあります。別の名前にしてください。",
+    "Name format error": "英字か数字で始め、英字、数字、- と _ だけを使ってください。",
+    "Provider name taken": "{name} という名前のプロバイダーはすでにあります。別の名前にしてください。",
+    "Theme replaces": "このアプリケーションにはすでにテーマ {name} があります。インストールすると置き換えられます。",
+    "URL format error": "https://example.com のような完全な http(s) URL を入力してください。"
   },
   "invitation": {
     "1 day": "1 日",
@@ -914,7 +923,10 @@
     "sign up now": "今すぐサインアップ",
     "username or Email": "ユーザー名またはメールアドレス",
     "username or phone": "ユーザー名または電話番号",
-    "username, Email or phone": "ユーザー名、メールアドレス、または電話番号"
+    "username, Email or phone": "ユーザー名、メールアドレス、または電話番号",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "ログインリンクと確認コードをメールで送信しました。このブラウザでリンクを開くか、下にコードを入力してください",
+    "Sign in again": "もう一度サインイン",
+    "Sign-in interrupted": "サインインが中断されました。もう一度サインインしてください。"
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "アカウントにサインインするたびに、パスワードと認証コードが必要です",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "多要素認証が有効になっています。プッシュ通知の確認コードを入力してください",
     "Your email is": "あなたのメールは",
     "Your phone is": "あなたの電話は",
-    "preferred": "優先"
+    "preferred": "優先",
+    "Approve": "承認",
+    "The sign-in request has expired": "サインイン要求の有効期限が切れました"
   },
   "model": {
     "Advanced Editor": "詳細エディター",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "本番エンドポイントが空です",
     "Scan server": "サーバーをスキャン",
     "Scanned hosts": "スキャン済みホスト",
-    "Token header": "トークンヘッダー"
+    "Token header": "トークンヘッダー",
+    "Agent": "エージェント"
   },
   "setting": {
     "Cannot be more than the max open connections": "最大オープン接続数を超えることはできません",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "この NAS の送信元 IP アドレスまたは CIDR 範囲（カンマ区切り）。例: 192.168.20.50,10.0.0.0/24。複数のクライアントが一致する場合は最も狭い範囲が優先されます",
     "Shared secret": "共有シークレット",
     "Shared secret - Tooltip": "この NAS に設定した RADIUS 共有シークレット。どのクライアントにも一致しない IP からのリクエストは app.conf の radiusSecret を使います"
+  },
+  "edition": {
+    "Done": "完了",
+    "Next": "次へ"
+  },
+  "enterprise": {
+    "Completed": "終了",
+    "Skipped": "スキップ"
+  },
+  "payment": {
+    "Message": "メッセージ"
+  },
+  "subscription": {
+    "Group": "グループ"
   }
 }

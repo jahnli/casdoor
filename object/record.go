@@ -42,7 +42,7 @@ var secretRecordKeys = []string{
 	"clientSecret", "client_secret", "clientSecret2", "accessSecret", "secret", "secretKey", "privateKey", "sslKey", "kerberosKeytab",
 	"token", "accessToken", "access_token", "refreshToken", "refresh_token", "idToken", "id_token", "registrationAccessToken",
 	"originalToken", "originalRefreshToken", "totpSecret", "masterVerificationCode",
-	"code_verifier", "passcode", "recoveryCode", "recoveryCodes",
+	"code_verifier", "passcode", "recoveryCode", "recoveryCodes", "ticket",
 }
 
 // secretRecordKeyPatterns match the per-provider OAuth tokens kept in a user's properties
@@ -171,6 +171,23 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 		return nil, err
 	}
 
+	// the OAuth endpoints answer errors as {error, error_description} (RFC 6749 section 5.2)
+	if resp.Status == "" {
+		var tokenError TokenError
+		if json.Unmarshal(respBytes, &tokenError) == nil && tokenError.Error != "" {
+			resp.Status = "error"
+			resp.Msg = tokenError.Error
+			if tokenError.ErrorDescription != "" {
+				resp.Msg = fmt.Sprintf("%s: %s", tokenError.Error, tokenError.ErrorDescription)
+			}
+		}
+	}
+
+	statusCode := 200
+	if ctx.ResponseWriter.Status != 0 {
+		statusCode = ctx.ResponseWriter.Status
+	}
+
 	languageCode := conf.GetAcceptLanguage(ctx.Request.Header.Get("Accept-Language"))
 
 	record := Record{
@@ -183,7 +200,7 @@ func NewRecord(ctx *context.Context) (*Record, error) {
 		Action:      action,
 		Language:    languageCode,
 		Object:      object,
-		StatusCode:  200,
+		StatusCode:  statusCode,
 		Response:    fmt.Sprintf("{status:\"%s\", msg:\"%s\"}", resp.Status, resp.Msg),
 		IsTriggered: false,
 	}

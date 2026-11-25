@@ -150,6 +150,9 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 	if !c.checkApplicationSignin(application, user) || !c.checkCredentialApplication(user, application, form) {
 		return
 	}
+	if c.checkSigninRiskOnLoggedIn(application, user, form.SigninMethod) {
+		return
+	}
 
 	userId := user.GetId()
 	c.renewSessionIdForUser(userId)
@@ -345,6 +348,9 @@ func (c *ApiController) HandleLoggedIn(application *object.Application, user *ob
 		if err != nil {
 			c.ResponseError(err.Error(), nil)
 			return
+		}
+		if c.Ctx.Input.Param("sessionSignin") != "true" {
+			object.RunSigninFlows(user, application.Name, clientIp, c.Ctx.Request, object.FlowTriggerPostSignin, nil)
 		}
 
 		if authTime != 0 {
@@ -585,11 +591,26 @@ func (c *ApiController) promptMfaSetupAfterMfa(user *object.User) bool {
 }
 
 func checkMfaEnable(c *ApiController, user *object.User, organization *object.Organization, verificationType string) bool {
-	if user.IsMfaEnabled() && !object.IsMfaRemembered(user, c.Ctx.GetCookie(object.MfaRememberCookieName)) {
+	assessment, denied := c.assessSigninRisk(user)
+	if denied {
+		return true
+	}
+	// a risky sign-in takes the MFA challenge even on a device that remembers the MFA
+	isRiskMfa := assessment != nil && assessment.Decision == "Mfa"
+	// a trusted device is the second factor of a password, not of a sign-in that the device itself is the credential of
+	deviceSatisfiesMfa, _ := c.Ctx.Input.GetData("deviceSatisfiesMfa").(bool)
+	if isDeviceSignin, _ := c.Ctx.Input.GetData("deviceSignin").(bool); isDeviceSignin {
+		deviceSatisfiesMfa = false
+	}
+
+	if user.IsMfaEnabled() && (isRiskMfa || (!deviceSatisfiesMfa && !object.IsMfaRemembered(user, c.Ctx.GetCookie(object.MfaRememberCookieName)))) {
 		c.setMfaUserSession(user.GetId())
 		mfaList := object.GetAllMfaProps(user, true)
 		mfaAllowList := []*object.MfaProps{}
 		mfaRememberInHours := organization.MfaRememberInHours
+		if isRiskMfa {
+			mfaRememberInHours = 0
+		}
 		for _, prop := range mfaList {
 			if prop.MfaType == verificationType || !prop.Enabled {
 				continue
@@ -600,9 +621,26 @@ func checkMfaEnable(c *ApiController, user *object.User, organization *object.Or
 		if len(mfaAllowList) >= 1 {
 			c.SetSession("verificationCodeType", verificationType)
 			c.Ctx.Input.CruSession.SessionRelease(context.Background(), c.Ctx.ResponseWriter)
+			c.rememberSigninFlow(user)
 			c.ResponseOk(object.NextMfa, mfaAllowList)
 			return true
 		}
+	}
+
+	if isRiskMfa {
+		// without an MFA of their own, the user proves the email or the phone of the account
+		props := getRiskMfaProps(user, verificationType)
+		if len(props) == 0 {
+			c.ResponseErrorWithCode(riskDeniedCode, c.T("auth:This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"))
+			return true
+		}
+		c.setMfaUserSession(user.GetId())
+		c.SetSession(riskMfaSessionKey, user.GetId())
+		c.SetSession("verificationCodeType", verificationType)
+		c.Ctx.Input.CruSession.SessionRelease(context.Background(), c.Ctx.ResponseWriter)
+		c.rememberSigninFlow(user)
+		c.ResponseOk(object.NextMfa, props)
+		return true
 	}
 
 	return c.promptMfaSetup(user, organization)
@@ -612,7 +650,13 @@ func checkMfaEnable(c *ApiController, user *object.User, organization *object.Or
 // admin trusts, the MFA enrollment the organization requires is still asked for
 func checkMfaEnableForSignin(c *ApiController, user *object.User, organization *object.Organization, verificationType string, skipMfa bool) bool {
 	if skipMfa {
-		return c.promptMfaSetup(user, organization)
+		assessment, denied := c.assessSigninRisk(user)
+		if denied {
+			return true
+		}
+		if assessment == nil || assessment.Decision != "Mfa" {
+			return c.promptMfaSetup(user, organization)
+		}
 	}
 
 	return checkMfaEnable(c, user, organization, verificationType)
@@ -763,6 +807,7 @@ func (c *ApiController) Login() {
 		return
 	}
 	defer c.recordLoginMetric(&authForm)
+	c.Ctx.Input.SetData("signinApplication", authForm.Application)
 
 	// the callback of a third-party provider posts no organization, the authorization request it comes back to carries it
 	if authForm.Organization == "" {
@@ -776,8 +821,10 @@ func (c *ApiController) Login() {
 	// a magic link posts no username, the one-time token in the link is the credential.
 	// The passcode of a sign-in that already asked for MFA is answered further below
 	isMagicLinkSignin := authForm.SigninMethod == "Magic link" && c.GetMfaUserSession() == ""
+	// The enrolled device signs the login challenge.
+	isDeviceSignin := authForm.SigninMethod == object.SigninMethodDevice && c.GetMfaUserSession() == ""
 
-	if authForm.Username != "" || isMagicLinkSignin {
+	if authForm.Username != "" || isMagicLinkSignin || isDeviceSignin {
 		var user *object.User
 		if isMagicLinkSignin {
 			// the one-time link in the email is the credential, it proves the address
@@ -785,6 +832,12 @@ func (c *ApiController) Login() {
 			if err == nil {
 				verificationType = "email"
 				mfaSigninMethod = "Magic link"
+			}
+		} else if isDeviceSignin {
+			user, err = object.CheckDeviceSignin(c.Ctx.Request, authForm.Organization)
+			if err == nil {
+				mfaSigninMethod = object.SigninMethodDevice
+				c.Ctx.Input.SetData("deviceSignin", true)
 			}
 		} else if authForm.SigninMethod == "Face ID" {
 			var application *object.Application
@@ -1277,7 +1330,7 @@ func (c *ApiController) Login() {
 
 					properties := map[string]string{}
 					var count int64
-					count, err = object.GetUserCount(application.Organization, "", "", "")
+					count, err = object.GetUserCount(application.Organization, "", "", "", "")
 					if err != nil {
 						c.ResponseError(err.Error())
 						return
@@ -1330,11 +1383,19 @@ func (c *ApiController) Login() {
 
 					application.ApplySignupApproval(user)
 
+					if deny := object.RunSignupFlows(user, application.Name, util.GetClientIpFromRequest(c.Ctx.Request), c.Ctx.Request, object.FlowTriggerPreSignup); deny != "" {
+						c.ResponseError(deny)
+						return
+					}
+
 					var affected bool
 					affected, err = object.AddUser(user, c.GetAcceptLanguage())
 					if err != nil {
 						c.ResponseError(err.Error())
 						return
+					}
+					if affected {
+						object.RunSignupFlows(user, application.Name, util.GetClientIpFromRequest(c.Ctx.Request), c.Ctx.Request, object.FlowTriggerPostSignup)
 					}
 
 					if !affected {
@@ -1477,7 +1538,7 @@ func (c *ApiController) Login() {
 				return
 			}
 			user.CountryCode = user.GetCountryCode(user.CountryCode)
-			mfaProps := user.GetMfaProps(authForm.MfaType, false)
+			mfaProps := c.getMfaAuthProps(user, authForm.MfaType)
 			if !mfaProps.Enabled {
 				c.ResponseError("Invalid multi-factor authentication type")
 				return
@@ -1526,6 +1587,7 @@ func (c *ApiController) Login() {
 			return
 		}
 
+		c.Ctx.Input.SetData("signinMfaVerified", true)
 		resp = c.HandleLoggedIn(application, user, &authForm)
 		c.setMfaUserSession("")
 

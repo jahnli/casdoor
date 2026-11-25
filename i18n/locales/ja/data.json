@@ -38,7 +38,9 @@
     "UserCode Invalid": "ユーザーコードが無効です",
     "the application for user %s is not found": "ユーザー「%s」のアプリケーションが見つかりません",
     "the organization: %s is not found": "組織「%s」が見つかりません",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "ユーザー: %s はアプリケーション: %s へのサインインを組織: %s の権限で許可されていません"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "ユーザー: %s はアプリケーション: %s へのサインインを組織: %s の権限で許可されていません",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "このアプリには信頼済みデバイスからのみサインインできます。Casdoor デバイスエージェントをインストールしてこのデバイスを登録してください",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "サービス%sと%sは一致しません"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "アプリケーション「%s」の「Providers」リストにメールプロバイダを追加してください",
     "please set \"origin\" in conf/app.conf to send magic links": "マジックリンクを送信するには、conf/app.conf に \"origin\" を設定してください",
     "the user does not exist, please sign up first": "ユーザーは存在しません。まず登録してください",
-    "you can only send one code in %ds": "%d秒に1回しかコードを送信できません"
+    "you can only send one code in %ds": "%d秒に1回しかコードを送信できません",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "このリンクは別のブラウザで申請されました。そのブラウザに戻って次のコードを入力してください：%s"
   },
   "webauthn": {
     "Found no credentials for this user": "このユーザーの認証情報が見つかりませんでした",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "ユーザーにはリカバリーコードがありません",
     "The user has not enabled the MFA type: %s": "ユーザーは MFA 方式 %s を有効にしていません",
     "This code has already been used, please wait for the next one": "このコードは使用済みです。次のコードを待ってください"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "デバイス: %s は存在しません",
+    "The enrollment code is wrong or has expired": "登録コードが間違っているか、有効期限が切れています",
+    "The flow: %s doesn't exist": "フロー: %s は存在しません"
   }
 }

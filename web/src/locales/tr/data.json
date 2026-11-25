@@ -245,7 +245,8 @@
     "Valid": "Geçerli",
     "We will send a code to": "Kodu şuraya göndereceğiz:",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Bu uygulamanın kabul ettiği hiçbir çok faktörlü kimlik doğrulamayı etkinleştirmediniz, lütfen önce hesap sayfanızda ayarlayın",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "kanıt belirtecinin süresi {seconds} saniye içinde dolar ve bir kez kullanılabilir"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "kanıt belirtecinin süresi {seconds} saniye içinde dolar ve bir kez kullanılabilir",
+    "Deleted": "Silindi"
   },
   "cert": {
     "Access secret": "Erişim sırrı",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Önce bir resim seçmelisiniz",
     "empty": "boş",
     "remove": "kaldır",
-    "RADIUS Clients": "RADIUS İstemcileri"
+    "RADIUS Clients": "RADIUS İstemcileri",
+    "Loading": "Yükleniyor"
   },
   "group": {
     "Edit Group": "Grubu Düzenle",
@@ -760,7 +762,7 @@
     "Provider installed description": "Bu sağlayıcı oluşturuldu. Giriş sayfasında görünmesi için bir uygulamanın sağlayıcılarına ekleyin.",
     "Provider installed in application description": "Bu sağlayıcı oluşturuldu ve uygulamanın giriş sayfasına eklendi.",
     "Sources": "Kaynaklar",
-    "Theme application help": "Temanın uygulanacağı uygulama. Temayı kaldırdığınızda mevcut görünümü geri gelir.",
+    "Theme application help": "Temanın uygulanacağı uygulama. Kaldırıldığında uygulamanın herhangi bir Marketplace temasından önceki görünümü geri gelir.",
     "Theme install summary": "Bir uygulamanın giriş sayfalarının görünümünü değiştirir. Kaldırınca önceki görünüm geri yüklenir.",
     "Theme installed description": "Bu tema uygulamanın giriş sayfalarına uygulandı.",
     "Theme preview note": "Boş alanlar örnek değerleriyle gösterilir. Kurana kadar hiçbir şey değişmez.",
@@ -782,7 +784,14 @@
     "Install from file help": "Marketplace'te olmayan bir entegrasyonu yükleyin: derlemenin oluşturduğu bundle.json dosyasını, eylemler için ayrıca .wasm modülünü seçin",
     "Install from file warning": "Casdoor Marketplace'ten değil dosyadan yüklendiği için kimse incelemedi. Yalnızca güvendiğiniz entegrasyonları yükleyin.",
     "Installed from file": "Dosyadan yüklendi",
-    "Not a bundle file": "Bir entegrasyonun casdoor-integrations derlemesiyle oluşturulan bundle.json dosyasını seçin (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Bir entegrasyonun casdoor-integrations derlemesiyle oluşturulan bundle.json dosyasını seçin (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "{name} adlı bir uygulama zaten var, başka bir ad seçin.",
+    "Color format error": "#7c3aed gibi bir renk kullanın.",
+    "Integration name taken": "Bu kuruluşta zaten {name} adlı bir entegrasyon var, başka bir ad seçin.",
+    "Name format error": "Bir harf veya rakamla başlayın ve yalnızca harf, rakam, - ve _ kullanın.",
+    "Provider name taken": "{name} adlı bir sağlayıcı zaten var, başka bir ad seçin.",
+    "Theme replaces": "Bu uygulamada zaten {name} teması var. Yükleme onu değiştirir.",
+    "URL format error": "https://example.com gibi tam bir http(s) adresi girin."
   },
   "invitation": {
     "1 day": "1 gün",
@@ -914,7 +923,10 @@
     "sign up now": "hemen kaydolun",
     "username or Email": "kullanıcı adınız veya Eposta adresiniz",
     "username or phone": "kullanıcı adınız veya telefon numaranız",
-    "username, Email or phone": "kullanıcı adınız, Eposta adresiniz ve telefon numaranız"
+    "username, Email or phone": "kullanıcı adınız, Eposta adresiniz ve telefon numaranız",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Giriş bağlantısı ve kod e-postanıza gönderildi. Bağlantıyı bu tarayıcıda açın veya kodu aşağıya girin",
+    "Sign in again": "Tekrar giriş yap",
+    "Sign-in interrupted": "Giriş yarıda kesildi. Lütfen tekrar giriş yapın."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Hesabınıza her oturum açtığınızda şifreniz ve bir doğrulama kodu gerekecek",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Çok Faktörlü Kimlik Doğrulamayı etkinleştirdiniz, lütfen push bildiriminden doğrulama kodunu girin",
     "Your email is": "E-posta adresiniz",
     "Your phone is": "Telefon numaranız",
-    "preferred": "tercih edilen"
+    "preferred": "tercih edilen",
+    "Approve": "Onayla",
+    "The sign-in request has expired": "Giriş isteğinin süresi doldu"
   },
   "model": {
     "Advanced Editor": "Gelişmiş Düzenleyici",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "Üretim uç noktası boş",
     "Scan server": "Tarama sunucusu",
     "Scanned hosts": "Taranan hostlar",
-    "Token header": "Belirteç başlığı"
+    "Token header": "Belirteç başlığı",
+    "Agent": "Ajan"
   },
   "setting": {
     "Cannot be more than the max open connections": "Maks. açık bağlantı sayısından fazla olamaz",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Bu NAS'ın kaynak IP adresleri veya CIDR aralıkları, virgülle ayrılmış, ör. 192.168.20.50,10.0.0.0/24. Birden çok istemci eşleşirse en dar aralık kazanır",
     "Shared secret": "Paylaşılan gizli anahtar",
     "Shared secret - Tooltip": "Bu NAS üzerinde yapılandırılan RADIUS paylaşılan gizli anahtarı. Hiçbir istemciyle eşleşmeyen IP'lerden gelen istekler app.conf'taki radiusSecret'i kullanır"
+  },
+  "edition": {
+    "Done": "Bitti",
+    "Next": "İleri"
+  },
+  "enterprise": {
+    "Completed": "Tamamlandı",
+    "Skipped": "Atlananlar"
+  },
+  "payment": {
+    "Message": "Mesaj"
+  },
+  "subscription": {
+    "Group": "Grup"
   }
 }

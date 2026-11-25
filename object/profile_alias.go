@@ -15,6 +15,11 @@ func GetMaskedProfileOrganization(organization *Organization, isGlobalAdmin bool
 	profile.Name = CurrentOrganizationAlias
 	profile.DisplayName = ""
 	profile.DefaultApplication = ""
+	if organization.DeviceTrust != nil {
+		policy := *organization.DeviceTrust
+		policy.Applications = nil
+		profile.DeviceTrust = &policy
+	}
 	return &profile
 }
 

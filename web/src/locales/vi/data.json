@@ -245,7 +245,8 @@
     "Valid": "Còn hiệu lực",
     "We will send a code to": "Chúng tôi sẽ gửi mã đến",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Bạn chưa bật xác thực đa yếu tố nào mà ứng dụng này chấp nhận, hãy thiết lập trong trang tài khoản trước",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "token chứng minh hết hạn sau {seconds} giây và chỉ dùng được một lần"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "token chứng minh hết hạn sau {seconds} giây và chỉ dùng được một lần",
+    "Deleted": "Đã xóa"
   },
   "cert": {
     "Access secret": "Bí mật truy cập",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Bạn phải chọn một hình ảnh trước",
     "empty": "trống",
     "remove": "xóa",
-    "RADIUS Clients": "Máy khách RADIUS"
+    "RADIUS Clients": "Máy khách RADIUS",
+    "Loading": "Đang tải"
   },
   "group": {
     "Edit Group": "Chỉnh sửa nhóm",
@@ -760,7 +762,7 @@
     "Provider installed description": "Đã tạo nhà cung cấp này. Thêm nó vào danh sách nhà cung cấp của một ứng dụng để hiển thị trên trang đăng nhập.",
     "Provider installed in application description": "Đã tạo nhà cung cấp này và thêm vào trang đăng nhập của ứng dụng.",
     "Sources": "Nguồn",
-    "Theme application help": "Ứng dụng có trang đăng nhập nhận giao diện. Giao diện hiện tại sẽ quay lại khi bạn gỡ giao diện.",
+    "Theme application help": "Ứng dụng có trang đăng nhập nhận giao diện. Khi gỡ, giao diện trước khi cài bất kỳ giao diện Marketplace nào sẽ quay lại.",
     "Theme install summary": "Thay giao diện các trang đăng nhập của một ứng dụng. Gỡ cài đặt sẽ khôi phục giao diện cũ.",
     "Theme installed description": "Giao diện này đã được áp dụng cho các trang đăng nhập của ứng dụng.",
     "Theme preview note": "Các trường trống được hiển thị bằng giá trị mẫu. Không có gì thay đổi cho đến khi bạn cài đặt.",
@@ -782,7 +784,14 @@
     "Install from file help": "Cài một tích hợp không có trong Marketplace: chọn bundle.json do bản build tạo ra, với hành động thì chọn thêm mô-đun .wasm",
     "Install from file warning": "Cài từ tệp, không phải từ Casdoor Marketplace, nên chưa ai kiểm duyệt. Chỉ cài các tích hợp bạn tin tưởng.",
     "Installed from file": "Đã cài từ tệp",
-    "Not a bundle file": "Hãy chọn bundle.json của một tích hợp, do bản build của casdoor-integrations tạo ra (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Hãy chọn bundle.json của một tích hợp, do bản build của casdoor-integrations tạo ra (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Đã có ứng dụng tên {name}, hãy chọn tên khác.",
+    "Color format error": "Hãy dùng màu dạng #7c3aed.",
+    "Integration name taken": "Tổ chức này đã có tích hợp tên {name}, hãy chọn tên khác.",
+    "Name format error": "Bắt đầu bằng chữ cái hoặc chữ số, chỉ dùng chữ cái, chữ số, - và _.",
+    "Provider name taken": "Đã có nhà cung cấp tên {name}, hãy chọn tên khác.",
+    "Theme replaces": "Ứng dụng này đã có giao diện {name}. Cài đặt sẽ thay thế nó.",
+    "URL format error": "Hãy nhập địa chỉ http(s) đầy đủ, ví dụ https://example.com."
   },
   "invitation": {
     "1 day": "1 ngày",
@@ -914,7 +923,10 @@
     "sign up now": "Đăng ký ngay bây giờ",
     "username or Email": "Tên đăng nhập hoặc Email",
     "username or phone": "Tên đăng nhập hoặc điện thoại",
-    "username, Email or phone": "Tên đăng nhập, Email hoặc điện thoại"
+    "username, Email or phone": "Tên đăng nhập, Email hoặc điện thoại",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Liên kết đăng nhập và mã đã được gửi đến email của bạn. Hãy mở liên kết trong trình duyệt này hoặc nhập mã bên dưới",
+    "Sign in again": "Đăng nhập lại",
+    "Sign-in interrupted": "Quá trình đăng nhập đã bị gián đoạn. Vui lòng đăng nhập lại."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Mỗi lần đăng nhập vào Tài khoản của bạn, bạn sẽ cần mật khẩu và mã xác thực",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Bạn đã bật xác thực đa yếu tố, vui lòng nhập mã xác minh từ thông báo đẩy",
     "Your email is": "Email của bạn là",
     "Your phone is": "Số điện thoại của bạn là",
-    "preferred": "ưu tiên"
+    "preferred": "ưu tiên",
+    "Approve": "Đồng ý",
+    "The sign-in request has expired": "Yêu cầu đăng nhập đã hết hạn"
   },
   "model": {
     "Advanced Editor": "Editor nâng cao",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "Điểm cuối production trống",
     "Scan server": "Máy chủ quét",
     "Scanned hosts": "Máy chủ đã quét",
-    "Token header": "Header token"
+    "Token header": "Header token",
+    "Agent": "Agent"
   },
   "setting": {
     "Cannot be more than the max open connections": "Không được lớn hơn số kết nối mở tối đa",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Địa chỉ IP nguồn hoặc dải CIDR của NAS này, phân tách bằng dấu phẩy, ví dụ 192.168.20.50,10.0.0.0/24. Khi nhiều máy khách khớp, dải cụ thể nhất được dùng",
     "Shared secret": "Khóa bí mật dùng chung",
     "Shared secret - Tooltip": "Khóa bí mật dùng chung RADIUS được cấu hình trên NAS này. Yêu cầu từ IP không khớp với máy khách nào dùng radiusSecret trong app.conf"
+  },
+  "edition": {
+    "Done": "Xong",
+    "Next": "Tiếp"
+  },
+  "enterprise": {
+    "Completed": "Đã kết thúc",
+    "Skipped": "Đã bỏ qua"
+  },
+  "payment": {
+    "Message": "Thông điệp"
+  },
+  "subscription": {
+    "Group": "Nhóm"
   }
 }

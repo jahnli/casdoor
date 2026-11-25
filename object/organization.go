@@ -106,6 +106,8 @@ type Organization struct {
 	DcrPolicy    string                 `xorm:"varchar(100)" json:"dcrPolicy"`
 	IdJagIssuers []*FederatedCredential `xorm:"mediumtext" json:"idJagIssuers"`
 
+	DeviceTrust *DeviceTrustPolicy `xorm:"json" json:"deviceTrust"`
+
 	LdapAttributes     []string `xorm:"mediumtext" json:"ldapAttributes"`
 	EnableLdapPassword bool     `xorm:"bool" json:"enableLdapPassword"`
 	EnableRadius       bool     `xorm:"bool" json:"enableRadius"`
@@ -336,6 +338,7 @@ func UpdateOrganization(id string, organization *Organization, isGlobalAdmin boo
 	if err != nil {
 		return false, err
 	}
+	clearDeviceTrustPolicyCache(name)
 
 	return affected != 0, nil
 }

@@ -29,6 +29,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/casdoor/casdoor/action"
 	"github.com/casdoor/casdoor/conf"
 	"github.com/casdoor/casdoor/util"
@@ -129,6 +130,11 @@ type actionFile struct {
 	Abi    int    `json:"abi"`
 	Module string `json:"module"`
 	Sha256 string `json:"sha256"`
+}
+
+var actionKindCategories = map[string]string{
+	"sms": "SMS",
+	"import": "",
 }
 
 type IntegrationInstallRequest struct {
@@ -756,7 +762,7 @@ func getActionFile(bundle *IntegrationBundle) (*actionFile, error) {
 	if file.Abi != action.Abi {
 		return nil, fmt.Errorf("the action is built for abi %d, this Casdoor runs abi %d", file.Abi, action.Abi)
 	}
-	if file.Kind != "sms" {
+	if _, ok := actionKindCategories[file.Kind]; !ok {
 		return nil, fmt.Errorf("this Casdoor cannot run actions of kind: %s", file.Kind)
 	}
 	if file.Module == "" || strings.ContainsAny(file.Module, "/\\") || file.Sha256 == "" {
@@ -782,6 +788,15 @@ func installActionIntegration(integration *Integration, bundle *IntegrationBundl
 	err = action.Check(module)
 	if err != nil {
 		return err
+	}
+
+	integration.Kind = file.Kind
+	integration.Wasm = module
+
+	// the syncers and the security settings of the organization pick these actions themselves
+	category := actionKindCategories[file.Kind]
+	if category == "" {
+		return nil
 	}
 
 	existing := &Provider{Name: integration.Name}
@@ -815,7 +830,6 @@ func installActionIntegration(integration *Integration, bundle *IntegrationBundl
 	}
 
 	integration.Provider = provider.Name
-	integration.Module = base64.StdEncoding.EncodeToString(module)
 	return nil
 }
 
@@ -825,13 +839,16 @@ func getActionModule(owner string, name string) ([]byte, []string, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	if integration == nil || integration.Type != "action" || integration.Module == "" {
+	if integration == nil || integration.Type != "action" || (len(integration.Wasm) == 0 && integration.Module == "") {
 		return nil, nil, fmt.Errorf("the action: %s is not installed in %s", name, owner)
 	}
 
-	module, err := base64.StdEncoding.DecodeString(integration.Module)
-	if err != nil {
-		return nil, nil, err
+	module := integration.Wasm
+	if len(module) == 0 {
+		module, err = base64.StdEncoding.DecodeString(integration.Module)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
 
 	bundle := &IntegrationBundle{}
@@ -846,29 +863,28 @@ func getActionModule(owner string, name string) ([]byte, []string, error) {
 	return module, hosts, nil
 }
 
-func installThemeIntegration(integration *Integration, item *MarketplaceIntegration, bundle *IntegrationBundle, variables map[string]string, req *IntegrationInstallRequest, isGlobalAdmin bool, lang string) error {
+// installThemeIntegration returns the themes the application already had, which the new theme replaces:
+// their records are deleted once the new one is saved, and the new one keeps the look from before them.
+func installThemeIntegration(integration *Integration, item *MarketplaceIntegration, bundle *IntegrationBundle, variables map[string]string, req *IntegrationInstallRequest, isGlobalAdmin bool, lang string) ([]*Integration, error) {
 	if req.Application == "" {
-		return fmt.Errorf("choose the application to apply the theme to")
+		return nil, fmt.Errorf("choose the application to apply the theme to")
 	}
 
 	application, err := getIntegrationApplication(integration.Owner, req.Application, isGlobalAdmin)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	installed := []*Integration{}
-	err = ormer.Engine.Find(&installed, &Integration{Type: "theme", Application: application.Name})
+	err = ormer.Engine.Asc("created_time").Find(&installed, &Integration{Type: "theme", Application: application.Name})
 	if err != nil {
-		return err
-	}
-	if len(installed) > 0 {
-		return fmt.Errorf("the application: %s already has the theme: %s, uninstall it first", application.Name, installed[0].Name)
+		return nil, err
 	}
 
 	theme := themeFields{}
 	err = renderIntegrationFile(bundle, "theme.json", variables, &theme)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// refuse the theme by its own name, before the application's save refuses it by field
@@ -877,36 +893,46 @@ func installThemeIntegration(integration *Integration, item *MarketplaceIntegrat
 		isSafe := isCssSafeFor(theme.FormCss, prefixes) && isCssSafeFor(theme.FormCssMobile, prefixes) &&
 			isHtmlSafeFor(theme.FormSideHtml, prefixes) && isHtmlSafeFor(theme.FooterHtml, prefixes)
 		if !isSafe {
-			return fmt.Errorf("the theme: %s uses HTML or loads files that this Semi only lets a global admin set", item.Id)
+			return nil, fmt.Errorf("the theme: %s uses HTML or loads files that this Semi only lets a global admin set", item.Id)
 		}
 	}
 
-	backup, err := json.Marshal(themeFields{
-		ThemeData:     application.ThemeData,
-		FormOffset:    application.FormOffset,
-		FormCss:       application.FormCss,
-		FormCssMobile: application.FormCssMobile,
-		FormSideHtml:  application.FormSideHtml,
-		FooterHtml:    application.FooterHtml,
+	backup := ""
+	for _, old := range installed {
+		if old.Backup != "" {
+			backup = old.Backup
+			break
+		}
+	}
+	if backup == "" {
+		data, err := json.Marshal(themeFields{
+			ThemeData:     application.ThemeData,
+			FormOffset:    application.FormOffset,
+			FormCss:       application.FormCss,
+			FormCssMobile: application.FormCssMobile,
+			FormSideHtml:  application.FormSideHtml,
+			FooterHtml:    application.FooterHtml,
 
-		FormBackgroundUrl:       application.FormBackgroundUrl,
-		FormBackgroundUrlMobile: application.FormBackgroundUrlMobile,
-		FormBackgroundUrlDark:   application.FormBackgroundUrlDark,
-		FormBackgroundUrls:      application.FormBackgroundUrls,
-	})
-	if err != nil {
-		return err
+			FormBackgroundUrl:       application.FormBackgroundUrl,
+			FormBackgroundUrlMobile: application.FormBackgroundUrlMobile,
+			FormBackgroundUrlDark:   application.FormBackgroundUrlDark,
+			FormBackgroundUrls:      application.FormBackgroundUrls,
+		})
+		if err != nil {
+			return nil, err
+		}
+		backup = string(data)
 	}
 
 	setApplicationTheme(application, &theme)
 	_, err = UpdateApplication(application.GetId(), application, isGlobalAdmin, lang, themeColumns)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	integration.Application = application.Name
-	integration.Backup = string(backup)
-	return nil
+	integration.Backup = backup
+	return installed, nil
 }
 
 func setApplicationTheme(application *Application, theme *themeFields) {
@@ -993,13 +1019,14 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 		Bundle:        bundleText,
 	}
 
+	var replaced []*Integration
 	switch item.Type {
 	case "app":
 		err = installAppIntegration(integration, bundle, variables, lang)
 	case "provider":
 		err = installProviderIntegration(integration, bundle, variables, req, isGlobalAdmin, lang)
 	case "theme":
-		err = installThemeIntegration(integration, item, bundle, variables, req, isGlobalAdmin, lang)
+		replaced, err = installThemeIntegration(integration, item, bundle, variables, req, isGlobalAdmin, lang)
 	case "action":
 		err = installActionIntegration(integration, bundle, req)
 	default:
@@ -1011,7 +1038,19 @@ func InstallIntegration(req *IntegrationInstallRequest, isGlobalAdmin bool, host
 
 	_, err = addIntegration(integration)
 	if err != nil {
-		return nil, err
+		// otherwise the provider or application it created stays behind and blocks installing it again
+		undoErr := undoIntegration(integration, isGlobalAdmin, lang)
+		if undoErr != nil {
+			logs.Warn("failed to undo the integration %s that could not be saved: %v", integration.GetId(), undoErr)
+		}
+		return nil, fmt.Errorf("the integration was downloaded but could not be saved to the database of this Semi, try again later or ask its administrator: %w", err)
+	}
+
+	for _, old := range replaced {
+		_, err := deleteIntegration(old)
+		if err != nil {
+			logs.Warn("failed to remove the replaced theme %s: %v", old.GetId(), err)
+		}
 	}
 	return integration, nil
 }
@@ -1026,11 +1065,26 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 		return false, nil
 	}
 
+	err = undoIntegration(integration, isGlobalAdmin, lang)
+	if err != nil {
+		return false, err
+	}
+
+	affected, err := deleteIntegration(integration)
+	if err != nil {
+		return false, err
+	}
+	return affected, nil
+}
+
+// undoIntegration deletes the application or provider the integration created, or restores the theme it replaced
+func undoIntegration(integration *Integration, isGlobalAdmin bool, lang string) error {
+	var err error
 	var application *Application
 	if integration.Application != "" {
 		application, err = getApplication("admin", integration.Application)
 		if err != nil {
-			return false, err
+			return err
 		}
 		if application != nil && application.Organization != integration.Owner {
 			application = nil
@@ -1044,12 +1098,12 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 				bundle := &IntegrationBundle{}
 				err = json.Unmarshal([]byte(integration.Bundle), bundle)
 				if err != nil {
-					return false, err
+					return err
 				}
 				template := applicationTemplate{}
 				err = renderIntegrationFile(bundle, "application.json", integration.Variables, &template)
 				if err != nil {
-					return false, err
+					return err
 				}
 				if template.Agent {
 					agent := &Agent{}
@@ -1079,7 +1133,7 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 			application.Providers = providers
 			_, err = UpdateApplication(application.GetId(), application, isGlobalAdmin, lang, []string{"providers"})
 			if err != nil {
-				return false, err
+				return err
 			}
 		}
 		if integration.Provider != "" {
@@ -1090,7 +1144,7 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 			theme := themeFields{}
 			err = json.Unmarshal([]byte(integration.Backup), &theme)
 			if err != nil {
-				return false, err
+				return err
 			}
 			setApplicationTheme(application, &theme)
 			_, err = UpdateApplication(application.GetId(), application, isGlobalAdmin, lang, themeColumns)
@@ -1100,9 +1154,5 @@ func UninstallIntegration(integration *Integration, isGlobalAdmin bool, lang str
 			}
 		}
 	}
-	if err != nil {
-		return false, err
-	}
-
-	return deleteIntegration(integration)
+	return err
 }

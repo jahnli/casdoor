@@ -78,6 +78,30 @@ type callState struct {
 	result []byte
 }
 
+func getImportHosts(hosts []string, config *Config) []string {
+	configuredHost := ""
+	if config != nil {
+		host := strings.TrimSpace(config.Host)
+		if host != "" && !strings.Contains(host, "://") {
+			host = "https://" + host
+		}
+		if u, err := url.Parse(host); err == nil {
+			configuredHost = u.Hostname()
+		}
+	}
+	resolved := make([]string, 0, len(hosts))
+	for _, host := range hosts {
+		if host == "{host}" {
+			if configuredHost != "" {
+				resolved = append(resolved, configuredHost)
+			}
+			continue
+		}
+		resolved = append(resolved, host)
+	}
+	return resolved
+}
+
 type callStateKey struct{}
 
 var (
@@ -283,7 +307,15 @@ func (w logWriter) Write(p []byte) (int, error) {
 
 // Call runs method in a new instance of the module, which can only send requests to hosts.
 func Call(name string, module []byte, hosts []string, method string, config *Config, params interface{}, out interface{}) error {
-	ctx, cancel := context.WithTimeout(context.Background(), callTimeout)
+	timeout := callTimeout
+	// Imports may page through a remote system under its rate limit.
+	if method == "import.list" {
+		timeout = 10 * time.Minute
+	}
+	if strings.HasPrefix(method, "import.") {
+		hosts = getImportHosts(hosts, config)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	ctx = context.WithValue(ctx, callStateKey{}, &callState{name: name, hosts: hosts})
 
@@ -297,6 +329,7 @@ func Call(name string, module []byte, hosts []string, method string, config *Con
 		WithStartFunctions("_initialize").
 		WithSysWalltime().
 		WithSysNanotime().
+		WithSysNanosleep().
 		WithRandSource(rand.Reader).
 		WithStdout(logWriter{name: name}).
 		WithStderr(logWriter{name: name})

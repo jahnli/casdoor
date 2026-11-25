@@ -46,6 +46,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
       {key: "/", label: i18next.t("general:Dashboard")},
       {key: "/shortcuts", label: i18next.t("general:Shortcuts")},
       {key: "/apps", label: i18next.t("general:Apps")},
+      ...(account.organization?.deviceTrust?.mode ? [{key: "/device-enroll", label: i18next.t("device:My devices")}] : []),
     ],
   });
 
@@ -70,6 +71,8 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
     items: [
       {key: "/applications", label: i18next.t("general:Applications")},
       {key: "/providers", label: i18next.t("application:Providers")},
+      ...(Setting.isAdminUser(account) ? [{key: "/flows", label: i18next.t("flow:Flows")}] : []),
+      {key: "/devices", label: i18next.t("device:Devices")},
       {key: "/marketplace", label: i18next.t("general:Marketplace")},
       {key: "/integrations", label: i18next.t("general:Integrations")},
       {key: "/resources", label: i18next.t("general:Resources")},
@@ -133,6 +136,7 @@ export function getNavGroups(account: Account | null | undefined): NavGroup[] {
   adminItems.push(
     {key: "/forms", label: i18next.t("general:Forms")},
     {key: "/syncers", label: i18next.t("general:Syncers")},
+    ...(Setting.isAdminUser(account) ? [{key: "/migrations", label: i18next.t("general:Migrations")}] : []),
     {key: "/webhooks", label: i18next.t("general:Webhooks")},
     {key: "/webhook-events", label: i18next.t("general:Webhook Events")},
     {key: "/tickets", label: i18next.t("general:Tickets")},

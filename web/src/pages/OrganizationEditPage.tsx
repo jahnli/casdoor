@@ -28,6 +28,7 @@ import * as LdapBackend from "@/backend/LdapBackend";
 import {ConfirmButton} from "@/components/common/ConfirmButton";
 import * as OrganizationBackend from "@/backend/OrganizationBackend";
 import * as Setting from "@/lib/setting";
+import {OrganizationDeviceTrustTab} from "@/components/organization/OrganizationDeviceTrustTab";
 
 const PASSWORD_TYPES = ["plain", "salt", "sha512-salt", "md5-salt", "bcrypt", "pbkdf2-salt", "argon2id", "pbkdf2-django"];
 const TOKEN_FORMATS = ["JWT", "JWT-Empty", "JWT-Custom", "JWT-Standard"];
@@ -187,6 +188,7 @@ export default function OrganizationEditPage() {
           <TabsTrigger value="basic">{i18next.t("application:Basic")}</TabsTrigger>
           <TabsTrigger value="password">{i18next.t("general:Password type")}</TabsTrigger>
           <TabsTrigger value="account">{i18next.t("organization:Account items")}</TabsTrigger>
+          <TabsTrigger value="device-trust">{i18next.t("organization:Device trust")}</TabsTrigger>
           <TabsTrigger value="advanced">{i18next.t("provider:Advanced")}</TabsTrigger>
         </TabsList>
 
@@ -505,6 +507,10 @@ export default function OrganizationEditPage() {
               ]}
             />
           </FormRow>
+        </TabsContent>
+
+        <TabsContent value="device-trust" className={formGridClass}>
+          <OrganizationDeviceTrustTab owner={organization.name} policy={organization.deviceTrust} onChange={(policy) => update("deviceTrust", policy)} />
         </TabsContent>
 
         <TabsContent value="advanced" className={formGridClass}>

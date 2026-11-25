@@ -14,6 +14,7 @@
 
 import {authConfig} from "@/auth/Auth";
 import * as Setting from "@/lib/setting";
+import {getDeviceAssertion} from "@/lib/device-agent";
 
 export function getAccount(query: any = "") {
   return fetch(`${authConfig.serverUrl}/api/get-account${query}`, {
@@ -178,27 +179,34 @@ export function completeDeviceLogin(deviceCode, oAuthParams) {
   }).then(res => res.json());
 }
 
-export function login(values, oAuthParams) {
+// the device agent signs a challenge for each sign-in of an organization that uses device trust
+async function getLoginHeaders(values): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "Accept-Language": Setting.getAcceptLanguage(),
+  };
+  const assertion = await getDeviceAssertion(values?.organization);
+  if (assertion) {
+    headers["X-Casdoor-Device-Assertion"] = assertion;
+  }
+  return headers;
+}
+
+export async function login(values, oAuthParams) {
   return fetch(`${authConfig.serverUrl}/api/login${oAuthParamsToQuery(oAuthParams)}`, {
     method: "POST",
     credentials: "include",
     body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
+    headers: await getLoginHeaders(values),
   }).then(res => res.json());
 }
 
-export function loginCas(values, params) {
+export async function loginCas(values, params) {
   return fetch(`${authConfig.serverUrl}/api/login?service=${params.service}`, {
     method: "POST",
     credentials: "include",
     body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
+    headers: await getLoginHeaders(values),
   }).then(res => res.json());
 }
 

@@ -38,7 +38,9 @@
     "UserCode Invalid": "Mã người dùng không hợp lệ",
     "the application for user %s is not found": "không tìm thấy ứng dụng cho người dùng %s",
     "the organization: %s is not found": "không tìm thấy tổ chức: %s",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Người dùng: %s không được phép đăng nhập vào ứng dụng: %s theo quyền của tổ chức: %s"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Người dùng: %s không được phép đăng nhập vào ứng dụng: %s theo quyền của tổ chức: %s",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "Chỉ có thể đăng nhập ứng dụng này từ thiết bị tin cậy, hãy cài đặt Casdoor device agent và đăng ký thiết bị này",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "Dịch sang tiếng Việt: Dịch vụ %s và %s không khớp"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "vui lòng thêm nhà cung cấp Email vào danh sách \"Providers\" cho ứng dụng: %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Vui lòng đặt \"origin\" trong conf/app.conf để gửi liên kết ma thuật",
     "the user does not exist, please sign up first": "Người dùng không tồn tại, vui lòng đăng ký trước",
-    "you can only send one code in %ds": "bạn chỉ có thể gửi một mã mỗi %ds"
+    "you can only send one code in %ds": "bạn chỉ có thể gửi một mã mỗi %ds",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "Liên kết này được yêu cầu từ một trình duyệt khác. Hãy quay lại trình duyệt đó và nhập mã: %s"
   },
   "webauthn": {
     "Found no credentials for this user": "Không tìm thấy thông tin xác thực cho người dùng này",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "Người dùng không có mã khôi phục",
     "The user has not enabled the MFA type: %s": "Người dùng chưa bật loại MFA: %s",
     "This code has already been used, please wait for the next one": "Mã này đã được dùng, vui lòng chờ mã tiếp theo"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "Thiết bị: %s không tồn tại",
+    "The enrollment code is wrong or has expired": "Mã đăng ký sai hoặc đã hết hạn",
+    "The flow: %s doesn't exist": "Luồng: %s không tồn tại"
   }
 }

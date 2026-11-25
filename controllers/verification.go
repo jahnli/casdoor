@@ -16,7 +16,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -348,7 +347,7 @@ func (c *ApiController) SendVerificationCode() {
 		}
 	}
 
-	sendResp := errors.New("invalid dest type")
+	sendResp := fmt.Errorf("the verification type: %q is invalid, it should be %q or %q", vform.Type, object.VerifyTypeEmail, object.VerifyTypePhone)
 	var provider *object.Provider
 
 	switch vform.Type {
@@ -454,7 +453,7 @@ func (c *ApiController) SendVerificationCode() {
 				c.ResponseError(c.T("general:Please sign in first"))
 				return
 			}
-			mfaProps := user.GetMfaProps(object.EmailType, false)
+			mfaProps := c.getMfaAuthProps(user, object.EmailType)
 			if util.GetMaskedEmail(mfaProps.Secret) == vform.Dest {
 				vform.Dest = mfaProps.Secret
 			}
@@ -538,7 +537,7 @@ func (c *ApiController) SendVerificationCode() {
 				c.ResponseError(c.T("general:Please sign in first"))
 				return
 			}
-			mfaProps := user.GetMfaProps(object.SmsType, false)
+			mfaProps := c.getMfaAuthProps(user, object.SmsType)
 			if util.GetMaskedPhone(mfaProps.Secret) == vform.Dest {
 				vform.Dest = mfaProps.Secret
 			}

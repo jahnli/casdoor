@@ -85,6 +85,14 @@ p, *, *, POST, /api/init-admin-password, *, *
 p, *, *, POST, /api/send-verification-code, *, *
 p, *, *, GET, /api/get-my-sessions, *, *
 p, *, *, POST, /api/delete-my-session, *, *
+p, *, *, POST, /api/device/enroll, *, *
+p, *, *, POST, /api/device/status, *, *
+p, *, *, POST, /api/device/report, *, *
+p, *, *, GET, /api/device/challenge, *, *
+p, *, *, GET, /api/get-device-enrollment, *, *
+p, *, *, POST, /api/approve-device-enrollment, *, *
+p, *, *, GET, /api/get-my-devices, *, *
+p, *, *, POST, /api/delete-device, *, *
 p, *, *, GET, /api/get-captcha, *, *
 p, *, *, GET, /api/get-altcha-challenge, *, *
 p, *, *, POST, /api/verify-captcha, *, *

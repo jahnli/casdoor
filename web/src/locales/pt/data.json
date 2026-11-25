@@ -245,7 +245,8 @@
     "Valid": "Válido",
     "We will send a code to": "Enviaremos um código para",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Você não ativou nenhuma autenticação multifator aceita por esta aplicação, configure-a primeiro na página da sua conta",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "o token de prova expira em {seconds} segundos e pode ser resgatado uma vez"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "o token de prova expira em {seconds} segundos e pode ser resgatado uma vez",
+    "Deleted": "Excluída"
   },
   "cert": {
     "Access secret": "Segredo de acesso",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Você deve selecionar uma imagem primeiro",
     "empty": "vazio",
     "remove": "remover",
-    "RADIUS Clients": "Clientes RADIUS"
+    "RADIUS Clients": "Clientes RADIUS",
+    "Loading": "Carregando"
   },
   "group": {
     "Edit Group": "Editar Grupo",
@@ -760,7 +762,7 @@
     "Provider installed description": "Este provedor foi criado. Adicione-o aos provedores de um aplicativo para exibi-lo na página de login.",
     "Provider installed in application description": "Este provedor foi criado e adicionado à página de login do aplicativo.",
     "Sources": "Fontes",
-    "Theme application help": "O aplicativo cujas páginas de login recebem o tema. A aparência atual volta quando você desinstala o tema.",
+    "Theme application help": "O aplicativo cujas páginas de login recebem o tema. Ao desinstalar, volta a aparência que ele tinha antes de qualquer tema do Marketplace.",
     "Theme install summary": "Substitui a aparência das páginas de login de um aplicativo. Desinstalar restaura a aparência anterior.",
     "Theme installed description": "Este tema está aplicado às páginas de login do aplicativo.",
     "Theme preview note": "Campos vazios são mostrados com seus exemplos. Nada muda até você instalar.",
@@ -782,7 +784,14 @@
     "Install from file help": "Instalar uma integração que não está no Marketplace: escolha o bundle.json gerado pelo build e, para uma ação, também o módulo .wasm",
     "Install from file warning": "Instalada a partir de um arquivo, não do Casdoor Marketplace, por isso ninguém a revisou. Instale apenas integrações em que confia.",
     "Installed from file": "Instalada de arquivo",
-    "Not a bundle file": "Escolha o bundle.json de uma integração, gerado pelo build do casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Escolha o bundle.json de uma integração, gerado pelo build do casdoor-integrations (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Já existe um aplicativo chamado {name}, escolha outro nome.",
+    "Color format error": "Use uma cor como #7c3aed.",
+    "Integration name taken": "Esta organização já tem uma integração chamada {name}, escolha outro nome.",
+    "Name format error": "Comece com uma letra ou um dígito e use apenas letras, dígitos, - e _.",
+    "Provider name taken": "Já existe um provedor chamado {name}, escolha outro nome.",
+    "Theme replaces": "Este aplicativo já tem o tema {name}. A instalação o substitui.",
+    "URL format error": "Digite uma URL http(s) completa, como https://example.com."
   },
   "invitation": {
     "1 day": "1 dia",
@@ -914,7 +923,10 @@
     "sign up now": "Inscreva-se agora",
     "username or Email": "Nome de usuário ou email",
     "username or phone": "Nome de usuário ou telefone",
-    "username, Email or phone": "Nome de usuário, email ou telefone"
+    "username, Email or phone": "Nome de usuário, email ou telefone",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Um link de login e um código foram enviados para o seu e-mail. Abra o link neste navegador ou digite o código abaixo",
+    "Sign in again": "Entrar novamente",
+    "Sign-in interrupted": "O login foi interrompido. Entre novamente."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Cada vez que você entrar na sua conta, precisará da sua senha e de um código de autenticação",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Você ativou a autenticação multifator. Por favor, insira o código de verificação da notificação push",
     "Your email is": "Seu e-mail é",
     "Your phone is": "Seu telefone é",
-    "preferred": "preferido"
+    "preferred": "preferido",
+    "Approve": "Aprovar",
+    "The sign-in request has expired": "A solicitação de login expirou"
   },
   "model": {
     "Advanced Editor": "Editor Avançado",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "O ponto de extremidade de produção está vazio",
     "Scan server": "Servidor de varredura",
     "Scanned hosts": "Hosts verificados",
-    "Token header": "Cabeçalho do token"
+    "Token header": "Cabeçalho do token",
+    "Agent": "Agente"
   },
   "setting": {
     "Cannot be more than the max open connections": "Não pode ser maior que o máx. de conexões abertas",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Endereços IP de origem ou intervalos CIDR deste NAS, separados por vírgulas, p. ex. 192.168.20.50,10.0.0.0/24. Se vários clientes corresponderem, vence o intervalo mais específico",
     "Shared secret": "Segredo compartilhado",
     "Shared secret - Tooltip": "O segredo compartilhado RADIUS configurado neste NAS. Solicitações de IPs que não correspondem a nenhum cliente usam radiusSecret do app.conf"
+  },
+  "edition": {
+    "Done": "Concluir",
+    "Next": "Próximo"
+  },
+  "enterprise": {
+    "Completed": "Concluída",
+    "Skipped": "Ignorados"
+  },
+  "payment": {
+    "Message": "Mensagem"
+  },
+  "subscription": {
+    "Group": "Grupo"
   }
 }

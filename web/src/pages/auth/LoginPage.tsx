@@ -14,6 +14,8 @@ import {SigninMethodTabs} from "@/components/auth/SigninMethodTabs";
 import {MfaVerify, NextMfa, RequiredMfa} from "@/components/auth/MfaVerify";
 import {AgreementCheckbox, getAgreementDefaultValue, isSigninAgreementShown} from "@/components/auth/AgreementModal";
 import {DeviceLoginPanel} from "@/components/auth/DeviceLoginPanel";
+import {TrustedDeviceSignin} from "@/components/auth/TrustedDeviceSignin";
+import {enableDeviceAgent} from "@/lib/device-agent";
 import {GoogleOneTap} from "@/components/auth/GoogleOneTap";
 import {FaceRecognitionCommonModal} from "@/components/common/FaceRecognitionCommonModal";
 import {FaceRecognitionModal} from "@/components/common/FaceRecognitionModal";
@@ -331,6 +333,10 @@ export default function LoginPage({type = "login", application: applicationProp,
   // the magic-link method ends on "check your email" instead of signing in right away
   const [magicLinkSent, setMagicLinkSent] = React.useState(false);
   const [magicLinkVerifying, setMagicLinkVerifying] = React.useState(false);
+  // the code mailed with the link, for a mail read on another device
+  const [magicLinkCode, setMagicLinkCode] = React.useState("");
+  // why the link opened here could not sign in, e.g. the code to type into the browser that asked for it
+  const [magicLinkError, setMagicLinkError] = React.useState<string | null>(null);
   const [captchaForMagicLink, setCaptchaForMagicLink] = React.useState(false);
 
   const owner = params.owner;
@@ -870,8 +876,13 @@ export default function LoginPage({type = "login", application: applicationProp,
           goToCodeSignup(res.data2, values.code);
         } else if (res.status === "ok") {
           checkMfa(res, values, oAuthParams, (ok) => handleLoginResult(ok, values, oAuthParams));
+        } else if (values.signinMethod === "Magic link" && !values.username) {
+          setMagicLinkError(res.msg);
         } else {
           Setting.showMessage("error", `${i18next.t("application:Failed to sign in")}: ${res.msg}`);
+          if (values.signinMethod === "Magic link") {
+            setMagicLinkCode("");
+          }
           onRejected();
         }
       })
@@ -1069,6 +1080,11 @@ export default function LoginPage({type = "login", application: applicationProp,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [application, location.search, preview]);
 
+  // the device agent is asked to sign each sign-in only for an organization that uses device trust
+  React.useEffect(() => {
+    enableDeviceAgent(!preview && !!application?.organizationObj?.deviceTrust?.mode);
+  }, [application, preview]);
+
   // A popup host wants to know when the visitor closes the window without signing in.
   React.useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -1245,12 +1261,60 @@ export default function LoginPage({type = "login", application: applicationProp,
     return <AuthLoading application={application} preview={!!preview} />;
   }
 
-  if (magicLinkSent) {
+  if (magicLinkError !== null) {
     return (
       <AuthLayout preview={!!preview} application={application}>
         <Alert>
-          <AlertDescription>{i18next.t("login:A sign-in link has been sent to your email, it can only be opened in this browser")}</AlertDescription>
+          <AlertDescription>{magicLinkError}</AlertDescription>
         </Alert>
+        <Button variant="outline" className="mt-4 w-full" onClick={() => setMagicLinkError(null)}>
+          {i18next.t("login:Sign in again")}
+        </Button>
+      </AuthLayout>
+    );
+  }
+
+  if (magicLinkSent) {
+    const signInWithMagicLinkCode = () => {
+      if (magicLinkCode.length !== VerificationCodeLength || loading) {
+        return;
+      }
+      doLogin(applyRequestType({
+        application: application.name,
+        organization: application.organization,
+        signinMethod: "Magic link",
+        username: username.trim(),
+        code: magicLinkCode,
+        autoSignin: true,
+        language: Setting.getLanguage(),
+      }));
+    };
+
+    return (
+      <AuthLayout preview={!!preview} application={application}>
+        <Alert>
+          <AlertDescription>{i18next.t("login:A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below")}</AlertDescription>
+        </Alert>
+        <form
+          className="mt-4 space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            signInWithMagicLinkCode();
+          }}
+        >
+          <CodeInput
+            id="magicLinkCode"
+            className="verification-code-input"
+            autoFocus
+            value={magicLinkCode}
+            onChange={setMagicLinkCode}
+            onComplete={signInWithMagicLinkCode}
+            disabled={loading}
+          />
+          <Button type="submit" className="w-full" disabled={loading || magicLinkCode.length !== VerificationCodeLength}>
+            {i18next.t("login:Sign In")}
+          </Button>
+        </form>
       </AuthLayout>
     );
   }
@@ -1437,15 +1501,30 @@ export default function LoginPage({type = "login", application: applicationProp,
     case "Back button":
       return null;
     case "Signin methods":
-      return showTabs ? (
-        <SigninMethodTabs
-          key={key}
-          className="signin-methods"
-          methods={methods}
-          value={activeTab}
-          onChange={(v) => setLoginMethod(v as LoginMethod)}
-        />
-      ) : null;
+      return (
+        <React.Fragment key={key}>
+          <TrustedDeviceSignin
+            application={application}
+            onSignin={() =>
+              doLogin(applyRequestType({
+                application: application.name,
+                organization: application.organization,
+                signinMethod: "Trusted device",
+                autoSignin: true,
+                language: Setting.getLanguage(),
+              }))
+            }
+          />
+          {showTabs ? (
+            <SigninMethodTabs
+              className="signin-methods"
+              methods={methods}
+              value={activeTab}
+              onChange={(v) => setLoginMethod(v as LoginMethod)}
+            />
+          ) : null}
+        </React.Fragment>
+      );
     case "Select organization":
       return (
         <div key={key} className="login-organization-select">

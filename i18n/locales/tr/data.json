@@ -38,7 +38,9 @@
     "UserCode Invalid": "Kullanıcı Kodu Geçersiz",
     "the application for user %s is not found": "%s kullanıcısı için uygulama bulunamadı",
     "the organization: %s is not found": "Organizasyon: %s bulunamadı",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Kullanıcı: %s, uygulama: %s için oturum açamaz, kuruluş: %s izinleri buna izin vermiyor"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "Kullanıcı: %s, uygulama: %s için oturum açamaz, kuruluş: %s izinleri buna izin vermiyor",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "Bu uygulamaya yalnızca güvenilir bir cihazdan giriş yapılabilir, Casdoor cihaz aracısını yükleyin ve bu cihazı kaydedin",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "Servis %s ve %s eşleşmiyor"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "lütfen uygulama için \"Sağlayıcılar\" listesine bir E-posta sağlayıcı ekleyin: %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Sihirli bağlantı göndermek için conf/app.conf içinde \"origin\" ayarlayın",
     "the user does not exist, please sign up first": "kullanıcı mevcut değil, lütfen önce kaydolun",
-    "you can only send one code in %ds": "%d saniyede yalnızca bir kod gönderebilirsiniz"
+    "you can only send one code in %ds": "%d saniyede yalnızca bir kod gönderebilirsiniz",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "Bu bağlantı başka bir tarayıcıdan istendi. O tarayıcıya dönün ve şu kodu girin: %s"
   },
   "webauthn": {
     "Found no credentials for this user": "Bu kullanıcı için kimlik bilgisi bulunamadı",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "Kullanıcının kurtarma kodu yok",
     "The user has not enabled the MFA type: %s": "Kullanıcı %s MFA türünü etkinleştirmemiş",
     "This code has already been used, please wait for the next one": "Bu kod zaten kullanıldı, lütfen bir sonrakini bekleyin"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "Cihaz: %s mevcut değil",
+    "The enrollment code is wrong or has expired": "Kayıt kodu yanlış veya süresi dolmuş",
+    "The flow: %s doesn't exist": "Akış: %s mevcut değil"
   }
 }

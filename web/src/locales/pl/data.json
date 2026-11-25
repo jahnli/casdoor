@@ -245,7 +245,8 @@
     "Valid": "Ważny",
     "We will send a code to": "Wyślemy kod na",
     "You have not enabled any multi-factor authentication this application accepts, please set it up on your account page first": "Nie włączono żadnego uwierzytelniania wieloskładnikowego akceptowanego przez tę aplikację, najpierw skonfiguruj je na stronie konta",
-    "the proof token expires in {seconds} seconds and can be redeemed once": "token potwierdzenia wygasa za {seconds} s i można go użyć raz"
+    "the proof token expires in {seconds} seconds and can be redeemed once": "token potwierdzenia wygasa za {seconds} s i można go użyć raz",
+    "Deleted": "Usunięte"
   },
   "cert": {
     "Access secret": "Sekret dostępu",
@@ -718,7 +719,8 @@
     "You must select a picture first": "Najpierw musisz wybrać obraz",
     "empty": "pusty",
     "remove": "usuń",
-    "RADIUS Clients": "Klienci RADIUS"
+    "RADIUS Clients": "Klienci RADIUS",
+    "Loading": "Ładowanie"
   },
   "group": {
     "Edit Group": "Edytuj grupę",
@@ -760,7 +762,7 @@
     "Provider installed description": "Utworzono tego dostawcę. Dodaj go do dostawców aplikacji, aby pojawił się na stronie logowania.",
     "Provider installed in application description": "Utworzono tego dostawcę i dodano go do strony logowania aplikacji.",
     "Sources": "Źródła",
-    "Theme application help": "Aplikacja, której strony logowania otrzymają motyw. Jej obecny wygląd wróci po odinstalowaniu motywu.",
+    "Theme application help": "Aplikacja, której strony logowania otrzymają motyw. Po odinstalowaniu wróci wygląd sprzed jakiegokolwiek motywu z Marketplace.",
     "Theme install summary": "Zastępuje wygląd stron logowania aplikacji. Odinstalowanie przywraca poprzedni wygląd.",
     "Theme installed description": "Ten motyw jest zastosowany do stron logowania aplikacji.",
     "Theme preview note": "Puste pola są pokazane z przykładowymi wartościami. Nic się nie zmieni przed instalacją.",
@@ -782,7 +784,14 @@
     "Install from file help": "Zainstaluj integrację spoza Marketplace: wybierz bundle.json wygenerowany przez build, a dla akcji także jej moduł .wasm",
     "Install from file warning": "Zainstalowana z pliku, a nie z Casdoor Marketplace, więc nikt jej nie sprawdził. Instaluj tylko zaufane integracje.",
     "Installed from file": "Zainstalowana z pliku",
-    "Not a bundle file": "Wybierz bundle.json integracji, wygenerowany przez build casdoor-integrations (dist/integrations/<id>/<version>/bundle.json)."
+    "Not a bundle file": "Wybierz bundle.json integracji, wygenerowany przez build casdoor-integrations (dist/integrations/<id>/<version>/bundle.json).",
+    "Application name taken": "Aplikacja o nazwie {name} już istnieje, wybierz inną nazwę.",
+    "Color format error": "Użyj koloru w formacie #7c3aed.",
+    "Integration name taken": "Ta organizacja ma już integrację o nazwie {name}, wybierz inną nazwę.",
+    "Name format error": "Zacznij od litery lub cyfry i używaj tylko liter, cyfr, - i _.",
+    "Provider name taken": "Dostawca o nazwie {name} już istnieje, wybierz inną nazwę.",
+    "Theme replaces": "Ta aplikacja ma już motyw {name}. Instalacja go zastąpi.",
+    "URL format error": "Wpisz pełny adres http(s), np. https://example.com."
   },
   "invitation": {
     "1 day": "1 dzień",
@@ -914,7 +923,10 @@
     "sign up now": "zarejestruj się teraz",
     "username or Email": "nazwa użytkownika lub e-mail",
     "username or phone": "nazwa użytkownika lub telefon",
-    "username, Email or phone": "nazwa użytkownika, e-mail lub telefon"
+    "username, Email or phone": "nazwa użytkownika, e-mail lub telefon",
+    "A sign-in link and a code have been sent to your email. Open the link in this browser, or enter the code below": "Link logowania i kod zostały wysłane na Twój adres e-mail. Otwórz link w tej przeglądarce lub wpisz kod poniżej",
+    "Sign in again": "Zaloguj się ponownie",
+    "Sign-in interrupted": "Logowanie zostało przerwane. Zaloguj się ponownie."
   },
   "mfa": {
     "Each time you sign in to your Account, you'll need your password and a authentication code": "Za każdym razem, gdy logujesz się na swoje konto, potrzebujesz hasła i kodu uwierzytelniającego",
@@ -954,7 +966,9 @@
     "You have enabled Multi-Factor Authentication, please enter the verification code from push notification": "Włączyłeś uwierzytelnianie wieloskładnikowe, wprowadź kod weryfikacyjny z powiadomienia push",
     "Your email is": "Twój e-mail to",
     "Your phone is": "Twój telefon to",
-    "preferred": "preferowane"
+    "preferred": "preferowane",
+    "Approve": "Zatwierdź",
+    "The sign-in request has expired": "Żądanie logowania wygasło"
   },
   "model": {
     "Advanced Editor": "Zaawansowany edytor",
@@ -1332,7 +1346,8 @@
     "Production endpoint is empty": "Punkt końcowy produkcji jest pusty",
     "Scan server": "Serwer skanowania",
     "Scanned hosts": "Zeskanowane hosty",
-    "Token header": "Nagłówek tokenu"
+    "Token header": "Nagłówek tokenu",
+    "Agent": "Agent"
   },
   "setting": {
     "Cannot be more than the max open connections": "Nie może przekraczać maks. liczby otwartych połączeń",
@@ -1744,5 +1759,19 @@
     "IP ranges - Tooltip": "Źródłowe adresy IP lub zakresy CIDR tego NAS, oddzielone przecinkami, np. 192.168.20.50,10.0.0.0/24. Gdy pasuje kilku klientów, wygrywa najwęższy zakres",
     "Shared secret": "Wspólny sekret",
     "Shared secret - Tooltip": "Wspólny sekret RADIUS skonfigurowany na tym NAS. Żądania z adresów IP niepasujących do żadnego klienta używają radiusSecret z app.conf"
+  },
+  "edition": {
+    "Done": "Gotowe",
+    "Next": "Dalej"
+  },
+  "enterprise": {
+    "Completed": "Zakończony",
+    "Skipped": "Pominięte"
+  },
+  "payment": {
+    "Message": "Wiadomość"
+  },
+  "subscription": {
+    "Group": "Grupa"
   }
 }

@@ -38,7 +38,9 @@
     "UserCode Invalid": "Code utilisateur invalide",
     "the application for user %s is not found": "L'application pour l'utilisateur %s est introuvable",
     "the organization: %s is not found": "L'organisation : %s est introuvable",
-    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "L'utilisateur: %s n'est pas autorisé à se connecter à l'application: %s par les autorisations de l'organisation: %s"
+    "The user: %s is not allowed to sign in to the application: %s by the permissions of the organization: %s": "L'utilisateur: %s n'est pas autorisé à se connecter à l'application: %s par les autorisations de l'organisation: %s",
+    "This application can only be signed in to from a trusted device, install the Casdoor device agent and enroll this device": "On ne peut se connecter à cette application que depuis un appareil de confiance, installez l'agent d'appareil Casdoor et inscrivez cet appareil",
+    "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator": "This sign-in requires multi-factor authentication, but your account has no email, phone or authenticator to verify, please contact your administrator"
   },
   "cas": {
     "Service %s and %s do not match": "Les services %s et %s ne correspondent pas"
@@ -252,7 +254,8 @@
     "please add an Email provider to the \"Providers\" list for the application: %s": "veuillez ajouter un fournisseur d'e-mail à la liste \"Providers\" pour l'application : %s",
     "please set \"origin\" in conf/app.conf to send magic links": "Veuillez définir « origin » dans conf/app.conf pour envoyer des liens magiques",
     "the user does not exist, please sign up first": "L'utilisateur n'existe pas, veuillez vous inscrire d'abord",
-    "you can only send one code in %ds": "vous ne pouvez envoyer qu'un code toutes les %ds"
+    "you can only send one code in %ds": "vous ne pouvez envoyer qu'un code toutes les %ds",
+    "This link was requested from another browser. Go back to that browser and enter the code: %s": "Ce lien a été demandé depuis un autre navigateur. Retournez dans ce navigateur et saisissez le code : %s"
   },
   "webauthn": {
     "Found no credentials for this user": "Aucune information d'identification trouvée pour cet utilisateur",
@@ -268,5 +271,10 @@
     "The user has no recovery codes": "L'utilisateur n'a aucun code de récupération",
     "The user has not enabled the MFA type: %s": "L'utilisateur n'a pas activé le type de MFA : %s",
     "This code has already been used, please wait for the next one": "Ce code a déjà été utilisé, attendez le suivant"
+  },
+  "enterprise": {
+    "The device: %s doesn't exist": "L'appareil : %s n'existe pas",
+    "The enrollment code is wrong or has expired": "Le code d'inscription est erroné ou a expiré",
+    "The flow: %s doesn't exist": "Le flux : %s n'existe pas"
   }
 }
