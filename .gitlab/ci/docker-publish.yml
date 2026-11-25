@@ -1,4 +1,0 @@
-docker-publish:
-  extends: .docker-publish
-  rules:
-    - if: '$TASK_TYPE == "docker-publish"'

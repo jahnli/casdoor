@@ -1,6 +1,0 @@
-docker-multiarch:
-  extends: .docker-publish
-  rules:
-    - if: '$TASK_TYPE == "docker-multiarch"'
-  variables:
-    BUILD_PLATFORMS: linux/amd64,linux/arm64
