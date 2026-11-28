@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "The application does not allow to sign up new account"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username",
     "Challenge method should be S256": "Challenge method should be S256",
     "DeviceCode Invalid": "DeviceCode Invalid",
     "Failed to create user, user information is invalid: %s": "Failed to create user, user information is invalid: %s",

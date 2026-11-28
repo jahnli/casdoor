@@ -1430,6 +1430,11 @@ export default function LoginPage({type = "login", application: applicationProp,
   // Already signed in to this organization: offer the one-click path before the
   // form, which is how an OAuth or device request gets approved.
   const showSignedInBox = !promptLogin && !!account && account.owner === application.organization;
+  const accountNameIsGenerated = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(account?.name ?? "");
+  const accountTitle: string = account?.displayName || (accountNameIsGenerated ? account?.email : "") || account?.name || "";
+  const accountSubtitle: string = account?.name && account.name !== accountTitle && !accountNameIsGenerated
+    ? account.name
+    : account?.email && account.email !== accountTitle ? account.email : "";
 
   // The whole page can be replaced by the application's own markup.
   if (application.signinHtml) {
@@ -1795,15 +1800,15 @@ export default function LoginPage({type = "login", application: applicationProp,
             >
               <Avatar className="h-9 w-9 shrink-0">
                 {Setting.getEffectiveAvatarUrl(account) ? (
-                  <AvatarImage src={Setting.getEffectiveAvatarUrl(account)} alt={account.name} />
+                  <AvatarImage src={Setting.getEffectiveAvatarUrl(account)} alt={accountTitle} />
                 ) : null}
                 <AvatarFallback style={{backgroundColor: Setting.getAvatarColor(account.name), color: "#fff"}}>
-                  {(account.name || "?").charAt(0).toUpperCase()}
+                  {(accountTitle || "?").charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <span className="flex min-w-0 flex-1 flex-col font-normal">
-                {account.displayName && <span className="truncate">{account.displayName}</span>}
-                <span className="truncate text-[13px] text-[#4b5672]">{account.name}</span>
+                <span className="truncate">{accountTitle}</span>
+                {accountSubtitle ? <span className="truncate text-[13px] text-[#4b5672]">{accountSubtitle}</span> : null}
               </span>
             </Button>
             <AuthDivider label={i18next.t("login:Or sign in with another account")} />

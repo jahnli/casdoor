@@ -179,7 +179,7 @@ func (c *ApiController) Signup() {
 	userEmailVerified := false
 
 	if application.IsSignupFieldVisible("Email") && application.GetSignupFieldRule("Email") != "No verification" && authForm.Email != "" {
-		err = object.CheckVerifyCodeWithLimitAndIp(nil, clientIp, authForm.Email, authForm.EmailCode, c.GetAcceptLanguage())
+		err = object.CheckVerifyCodeWithLimitAndIp(organization.Name, nil, clientIp, authForm.Email, authForm.EmailCode, c.GetAcceptLanguage())
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -192,7 +192,7 @@ func (c *ApiController) Signup() {
 	if application.IsSignupFieldVisible("Phone") && application.GetSignupFieldRule("Phone") != "No verification" && authForm.Phone != "" {
 		checkPhone, _ = util.GetE164Number(authForm.Phone, authForm.CountryCode)
 
-		err = object.CheckVerifyCodeWithLimitAndIp(nil, clientIp, checkPhone, authForm.PhoneCode, c.GetAcceptLanguage())
+		err = object.CheckVerifyCodeWithLimitAndIp(organization.Name, nil, clientIp, checkPhone, authForm.PhoneCode, c.GetAcceptLanguage())
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -315,7 +315,7 @@ func (c *ApiController) Signup() {
 	}
 
 	if authForm.Email != "" {
-		err = object.DisableVerificationCode(authForm.Email)
+		err = object.DisableVerificationCode(organization.Name, nil, authForm.Email)
 		if err != nil {
 			c.ResponseError(err.Error())
 			return
@@ -323,7 +323,7 @@ func (c *ApiController) Signup() {
 	}
 
 	if checkPhone != "" {
-		err = object.DisableVerificationCode(checkPhone)
+		err = object.DisableVerificationCode(organization.Name, nil, checkPhone)
 		if err != nil {
 			c.ResponseError(err.Error())
 			return

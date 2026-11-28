@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "Uygulama yeni hesap kaydına izin vermiyor"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "Kullanıcı: %s mevcut değil. Hesabınız başka bir kuruluşa aitse /login/<kuruluş> sayfasından giriş yapın veya kullanıcı adı olarak <kuruluş>/<kullanıcı adı> girin",
     "Challenge method should be S256": "Challenge yöntemi S256 olmalı",
     "DeviceCode Invalid": "Cihaz Kodu Geçersiz",
     "Failed to create user, user information is invalid: %s": "Kullanıcı oluşturulamadı, kullanıcı bilgileri geçersiz: %s",

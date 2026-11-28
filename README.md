@@ -93,7 +93,7 @@ Open <http://localhost:8000> and sign in:
 | Username | `admin` |
 | Password | `123` |
 
-> The sign-in form has separate **organization** and **username** fields. Docs sometimes write this pair as `built-in/admin` — that is the same thing, not a username containing a slash.
+> On the default sign-in page, users of another organization can enter `organization/username`, or open `/login/<organization>` and enter their username.
 
 Prefer not to install anything? Use the hosted upstream Casdoor demos:
 
@@ -117,7 +117,7 @@ If all you need is a login screen in front of an existing reverse proxy, a small
 
 ## 📦 Installation
 
-Four supported paths, fastest first. All of them end up at <http://localhost:8000>.
+Four supported paths, fastest first: the all-in-one Docker image, Docker Compose with MySQL, Helm on Kubernetes, and building from source. All of them end up at <http://localhost:8000>.
 
 ### Docker — all-in-one (evaluation)
 
@@ -189,7 +189,7 @@ Organizations, applications, users, providers, roles and permissions can be kept
 
 ### From source — for development
 
-Use this if you intend to modify Semi. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 20 LTS**, **Yarn 1.x**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
+Use this if you intend to modify Semi. Prerequisites: **Go 1.26+** (see [`go.mod`](go.mod)), **Node.js 24+**, **pnpm 12.15.0**, and a supported database (MySQL, PostgreSQL, SQLite, SQL Server and others).
 
 ```bash
 git clone https://github.com/casdoor/casdoor.git
@@ -201,10 +201,10 @@ These commands clone upstream Casdoor. Use your Semi fork's repository when deve
 Set `driverName`, `dataSourceName` and `dbName` in [`conf/app.conf`](conf/app.conf). For MySQL, create the `casdoor` database first, or start the server with `--createDatabase=true`. Then build the frontend and run the server:
 
 ```bash
-cd web && yarn install && yarn build && cd .. && go run main.go
+cd web && pnpm install --frozen-lockfile && pnpm build && cd .. && go run main.go
 ```
 
-While working on the frontend, run `yarn start` in [`web/`](web) instead of `yarn build` to get hot reload on port 7001, with `go run main.go` serving the API from a second terminal.
+While working on the frontend, run `pnpm start` in [`web/`](web) instead of `pnpm build` to get hot reload on port 7001, with `go run main.go` serving the API from a second terminal.
 
 Guide: [Server installation](https://casdoor.ai/docs/basic/server-installation)
 
@@ -331,6 +331,22 @@ Casdoor is free and open source. If it saves you time, consider supporting its d
 <a href="https://opencollective.com/casdoor#sponsor"><img src="https://opencollective.com/casdoor/tiers/sponsor.svg?avatarHeight=74" alt="Sponsors on Open Collective"></a>
 
 <a href="https://opencollective.com/casdoor#backer"><img src="https://opencollective.com/casdoor/tiers/backer.svg?avatarHeight=36" alt="Backers on Open Collective"></a>
+
+## 📝 Citation
+
+If you use Casdoor in your research, please cite:
+
+```bibtex
+@article{luo2025perm,
+  title   = {PERM: Streamlining Cloud Authorization With Flexible and Scalable Policy Enforcement},
+  author  = {Luo, Yang and Shen, Qingni and Wu, Zhonghai},
+  journal = {IEEE Transactions on Information Forensics and Security},
+  volume  = {20},
+  pages   = {8481--8496},
+  year    = {2025},
+  doi     = {10.1109/TIFS.2025.3592519}
+}
+```
 
 ## 📄 License
 

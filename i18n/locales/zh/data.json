@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "该应用不允许注册新用户"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "用户：%s 不存在。如果你的账号属于其他组织，请在 /login/<组织名> 页面登录，或在用户名处输入 <组织名>/<用户名>",
     "Challenge method should be S256": "Challenge方法应该为S256",
     "DeviceCode Invalid": "DeviceCode 无效",
     "Failed to create user, user information is invalid: %s": "创建用户失败，用户信息无效: %s",

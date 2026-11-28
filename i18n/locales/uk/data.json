@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "Додаток не дозволяє реєструвати нові облікові записи"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "Користувач: %s не існує. Якщо ваш обліковий запис належить до іншої організації, увійдіть на сторінці /login/<організація> або введіть <організація>/<ім'я користувача> як ім'я користувача",
     "Challenge method should be S256": "Метод виклику має бути S256",
     "DeviceCode Invalid": "Недійсний DeviceCode",
     "Failed to create user, user information is invalid: %s": "Не вдалося створити користувача, інформація недійсна: %s",

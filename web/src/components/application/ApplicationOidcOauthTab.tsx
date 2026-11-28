@@ -465,15 +465,17 @@ export function ApplicationOidcOauthTab({application, updateField}: ApplicationT
       <FormRow labelKey="application:Token expire" label={`${i18next.t("application:Token expire")} (h)`}>
         <Input
           type="number"
+          step="any"
           value={application.expireInHours ?? 168}
-          onChange={(e) => updateField("expireInHours", Setting.myParseInt(e.target.value))}
+          onChange={(e) => updateField("expireInHours", Setting.myParseFloat(e.target.value))}
         />
       </FormRow>
       <FormRow labelKey="application:Refresh token expire" label={`${i18next.t("application:Refresh token expire")} (h)`}>
         <Input
           type="number"
+          step="any"
           value={application.refreshExpireInHours ?? 168}
-          onChange={(e) => updateField("refreshExpireInHours", Setting.myParseInt(e.target.value))}
+          onChange={(e) => updateField("refreshExpireInHours", Setting.myParseFloat(e.target.value))}
         />
       </FormRow>
       <FormRow labelKey="application:Disable refresh token rotation">

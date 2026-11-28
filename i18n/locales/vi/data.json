@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "Ứng dụng không cho phép đăng ký tài khoản mới"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "Người dùng: %s không tồn tại. Nếu tài khoản của bạn thuộc tổ chức khác, hãy đăng nhập tại trang /login/<tổ chức> hoặc nhập <tổ chức>/<tên người dùng> làm tên người dùng",
     "Challenge method should be S256": "Phương pháp thách thức nên là S256",
     "DeviceCode Invalid": "Mã thiết bị không hợp lệ",
     "Failed to create user, user information is invalid: %s": "Không thể tạo người dùng, thông tin người dùng không hợp lệ: %s",

@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "アプリケーションは新しいアカウントの登録を許可しません"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "ユーザー：%s は存在しません。アカウントが別の組織に属している場合は、/login/<組織名> のページでサインインするか、ユーザー名に <組織名>/<ユーザー名> と入力してください",
     "Challenge method should be S256": "チャレンジメソッドはS256である必要があります",
     "DeviceCode Invalid": "デバイスコードが無効です",
     "Failed to create user, user information is invalid: %s": "ユーザーの作成に失敗しました。ユーザー情報が無効です：%s",

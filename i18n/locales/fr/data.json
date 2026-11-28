@@ -4,6 +4,7 @@
     "The application does not allow to sign up new account": "L'application ne permet pas de créer un nouveau compte"
   },
   "auth": {
+    "The user: %s doesn't exist. If your account belongs to another organization, sign in on the page /login/<organization> or enter <organization>/<username> as the username": "L'utilisateur : %s n'existe pas. Si votre compte appartient à une autre organisation, connectez-vous sur la page /login/<organisation> ou saisissez <organisation>/<nom d'utilisateur> comme nom d'utilisateur",
     "Challenge method should be S256": "La méthode de défi doit être S256",
     "DeviceCode Invalid": "Code appareil invalide",
     "Failed to create user, user information is invalid: %s": "Échec de la création de l'utilisateur, les informations utilisateur sont invalides : %s",

@@ -573,7 +573,7 @@ func CheckApiPermission(userId string, organization string, path string, method 
 			continue
 		}
 
-		enforcer, err := getPermissionEnforcer(permission)
+		enforcer, err := getEnforcingPermissionEnforcer(permission)
 		if err != nil {
 			return false, err
 		}
@@ -818,7 +818,7 @@ func CheckLoginPermission(userId string, application *Application) (bool, error)
 			continue
 		}
 
-		enforcer, err := getPermissionEnforcer(permission)
+		enforcer, err := getEnforcingPermissionEnforcer(permission)
 		if err != nil {
 			return false, err
 		}
